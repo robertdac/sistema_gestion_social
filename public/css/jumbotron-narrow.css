@@ -1,0 +1,59 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.panel-heading {
+    text-align: center;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background: red;
+    cursor: inherit;
+    display: block;
+}
+
+input[readonly] {
+    background-color: white !important;
+    cursor: text !important;
+}
+
+/*
+bug de bootstrap con los background de las tablas
+*/
+
+.table tbody tr.success td {
+    background-color: #dff0d8;
+}
+
+.table tbody tr.error td {
+    background-color: #f2dede;
+}
+
+.table tbody tr.info th {
+    background-color: #d9edf7;
+}
+
+.table tbody tr.warning td {
+    background-color: lightgoldenrodyellow;
+}
+
+
