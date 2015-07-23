@@ -21,6 +21,15 @@ use Illuminate\Support\Facades\View;
 
 class UserController extends Controller {
 
+
+	public function __construct()
+	{
+		$this->middleware('auth');
+
+	}
+
+
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -28,7 +37,6 @@ class UserController extends Controller {
 	 */
 	public function index(Request $request){
    	//$user=User::where('id','<>',1);
-
 		$nemo=$request->get('lolo');
 		//dd($nemo);
 		$user=User::usuarios($nemo);

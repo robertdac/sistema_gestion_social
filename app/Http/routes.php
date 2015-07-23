@@ -18,14 +18,14 @@ Route::get('home', 'HomeController@index');
 Route::any('consulta', function(){
 
 
-	if(isset($_POST['sapo'])){
+	Mail::raw('que hay saltamontes', function($message)
+	{
+		$message->from('us@example.com', 'Laravel');
 
+		$message->to('arturo85000@gmail.com');
+	});
 
-		dd($_POST['sapo']);
-
-
-	}
-
+	exit;
 
 
 //var_dump($_POST['sapo']);

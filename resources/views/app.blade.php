@@ -20,8 +20,6 @@
         {!! HTML::image('cortes_agenda/instrucciones.png','banner', array("class"=>"img-responsive","style"=>"width: 1139px; height: 158px;" )) !!}
     </div>
     @if(Auth::check())
-
-
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
