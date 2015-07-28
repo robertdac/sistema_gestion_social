@@ -421,405 +421,114 @@
         <div class="panel-body">
 
 
-            <div class="col-xs-3">
+            <div class="row">
 
-                {!! Form::label('seleciones')  !!}
+                <div class="col-xs-3">
+
+                    {!! Form::label('Tipo de Vivienda')  !!}
+                    {!! Form::select('vivienda[]',$vivienda,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
 
 
-                {!! Form::select('misiones[]',$misiones,0,['class'=>'selectpicker','multiple data-selected-text-format'=>'count']); !!}
+                <div class="col-xs-3">
+
+                    {!! Form::label('Tipo de paredes')  !!}
+
+                    {!! Form::select('paredes[]',$paredes,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
 
-                {{--     <select class="selectpicker" multiple data-selected-text-format="count">
-                         <option>Mustard</option>
-                         <option>Ketchup</option>
-                         <option>Relish</option>
-                     </select>--}}
+                </div>
+                <div class="col-xs-3">
+
+                    {!! Form::label('Tipo de pisos')  !!}
+
+                    {!! Form::select('pisos[]',$pisos,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
+                <div class="col-xs-3">
+
+                    {!! Form::label('Tipo de techos')  !!}
+
+                    {!! Form::select('techos[]',$techos,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
+
 
             </div>
-            <div class="col-xs-3">
-
-                {!! Form::label('mortal kombatviend')  !!}
+            <br>
 
 
-                {!! Form::select('misiones[]',$misiones,0,['class'=>'selectpicker','multiple data-selected-text-format'=>'count']); !!}
+            <div class="row">
 
 
-                {{--     <select class="selectpicker" multiple data-selected-text-format="count">
-                         <option>Mustard</option>
-                         <option>Ketchup</option>
-                         <option>Relish</option>
-                     </select>--}}
+                <div class="col-xs-3">
+
+                    {!! Form::label('suministro de agua')  !!}
+                    {!! Form::select('suministro[]',$suministro_agua,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
+
+                <div class="col-xs-3">
+
+                    {!! Form::label('suministro de gas')  !!}
+                    {!! Form::select('gas[]',$gas,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
+
+
+                <div class="col-xs-3">
+
+                    {!! Form::label('desecho de basura')  !!}
+                    {!! Form::select('desecho[]',$desecho,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
+
+
+                <div class="col-xs-3">
+
+                    {!! Form::label('Aguas servidas')  !!}
+
+                    {!! Form::select('aguas_servidas[]',$agua_ser,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+
+                </div>
 
             </div>
+            <br>
 
+            <div class="row">
 
+                <div class="col-xs-3">
+                    {!! Form::label('servicios que presta la comunidad'); !!}
+                    {!! Form::select('aguas_comunidad[]',$servicios_comunidad,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
+                </div>
 
 
-            {{-- <table class="table table-bordered">
+                <div class="col-xs-4">
+                    {!! Form::label('programa que presta la comunidad (comites)'); !!}
+                    {!! Form::select('comites[]',$comites,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
-                 <tr class="info">
-                     <th class=" col-sm-1 text-center" colspan="12">TIPO DE VIVIENDA</th>
-                 </tr>
+                </div>
 
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>CASA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>RANCHO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>APARTAMENTO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>HABITACION</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>REFUGIO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>CASA DE ABRIGO</th>
 
-                 </tr>
+                <div class="col-xs-4">
+                    {!! Form::label('programa que presta la comunidad (misiones)'); !!}
+                    {!! Form::select('misiones[]',$misiones,0,['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
-                 <tr>
+                </div>
 
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>ESPACIOS IMPROVISADOS</th>
-                 </tr>
-                 <tr>
-                     <th class="text-center info" colspan="12">CARACTERISTICAS DE LA VIVIENDA</th>
-                 </tr>
-                 <tr class="info">
-                     <th class="text-center" colspan="12">PAREDES</th>
-                 </tr>
 
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th> FRISAR</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th> SIN FRISAR</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th> ZINC</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>LATON</th>
-                     <td>{!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>CARTON</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>MADERA</th>
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>BAHAREQUE</th>
-                 </tr>
-
-
-                 <tr class="info text-center ">
-                     <th colspan="12"> PISOS</th>
-                 </tr>
-
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>GRANITO</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>CERAMICA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>CEMENTO</th>
-                     <td>{!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>TIERRA</th>
-                     <td>{!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>PARKE</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>MADERA</th>
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>PLASTICO</th>
-
-                 </tr>
-
-
-                 <tr class="info">
-
-                     <th class="text-center" colspan="12">TECHO</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>PLATABANDA</th>
-                     <td>{!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ZINC</th>
-                     <td>{!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ACEROLIT</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ASBESTO</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>TEJAS</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>MACHIHEMBRADO</th>
-
-                 </tr>
-
-                 <tr class="info">
-                     <th class="text-center" colspan="12">TENENCIA DE LA VIVIENDA</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>PROPIA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ALQUILADA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>CEDIDA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>INVADIDA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ADJUDICADO</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>DE FAMILIAR</th>
-
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ARRIMADO</th>
-
-                 </tr>
-
-
-                 <tr class="info">
-                     <th class="text-center" colspan="12">ESPACIOS DE LOS QUE DISPONE LA VIVIENDA</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>COCINA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>SALA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>DORMITORIOS</th>
-                     --}}{{-- <td>{!! Form::select('tipo_vivienda',['1','2'],0,['class'=>'form-control'])  !!}</td>--}}{{--
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>BAÑO</th>
-                     --}}{{--        <td>{!! Form::select('tipo_vivienda',['1','2'],0,['class'=>'form-control'])  !!}</td>--}}{{--
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>LAVADERO</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>ESTACIONAMIENTO</th>
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>TERRAZA</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>JARDIN</th>
-
-                 </tr>
-
-                 <tr class="info">
-                     <th class="text-center" colspan="12">SERVICIOS DE LOS QUE DISPONE LA VIVIENDA</th>
-                 </tr>
-
-                 <tr>
-                     <td>{!! Form::select('tipo_vivienda',['TUBERIA','LLUVIA','MANANTIAL','POZO','TANQUE','CISTERNA'],0,['class'=>'form-control'])  !!}</td>
-                     <th class="text-center">SUMINISTRO DE AGUA</th>
-                     <td>{!! Form::select('tipo_vivienda',['DIRECTO','BOMBONA'],0,['class'=>'form-control'])  !!}</td>
-                     <th class="text-center">GAS</th>
-                     <td>{!! Form::select('tipo_vivienda',['CAMION','CAMIONETA','CONTAINER','CONTAINER','AL AIRE LIBRE'],0,['class'=>'form-control'])  !!}</td>
-                     <th class="text-center">DESECHO DE BASURA</th>
-                     <td>{!! Form::select('tipo_vivienda',['CLOACAS','POZO SEPTICO','LETRINA'],0,['class'=>'form-control'])  !!}</td>
-                     <th class="text-center">AGUAS SERVIDAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>TELEVISIÓN POR SUSCRIPCION</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>TELEFONO:</th>
-
-
-                 </tr>
-                 <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                 <th>INTERNET:</th>
-                 <tr>
-
-
-                 </tr>
-
-
-                 <tr class="info">
-                     <th class="text-center" colspan="12">SERVICIOS DE LOS QUE DISPONE LA COMUNIDAD</th>
-                 </tr>
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>ESCALERAS Y CAMINERIAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>ALUMBRADO PUBLICO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>AREAS RECREATIVAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>CENTROS DE SALUD</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>VIGILANCIA POLICIAL</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>TELEFONOS PUBLICOS</th>
-                 </tr>
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>TRANSPORTE PUBLICO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>AREAS DEPORTIVAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>SIMONCITO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>ESCUELA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>LICEO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>UNIVERSIDAD</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>BIBLIOTECA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>INFOCENTRO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>DRENAJE FLUVIAL</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>CONSEJOS COMUNALES</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>ORGANIZACIONES COMUNITARIAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MOVIMIENTOS SOCIALES</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>COMUNAS</th>
-
-                 </tr>
-                 <tr class="info">
-                     <th class="text-center" colspan="12">PROGRAMAS EN LA COMUNIDAD</th>
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::select('tipo_vivienda',['SELECCIONE','COMITÉ DE SALUD,COMITÉ DE TIERRA URBANA','COMITÉ DE VIVIENDA Y HÁBITAT','COMITÉ DE ECONOMÍA COMUNAL','COMITÉ DE SEGURIDAD Y DEFENSA INTEGRAL','COMITÉ DE MEDIOS ALTERNATIVOS COMUNITARIOS','COMITÉ DE RECREACIÓN Y DEPORTES','COMITÉ DE ALIMENTACIÓN Y DEFENSA DEL CONSUMIDOR','COMITÉ DE MESA TÉCNICA DE AGUA','COMITÉ DE MESA TÉCNICA DE ENERGÍA Y GAS','COMITÉ DE PROTECCIÓN SOCIAL DE NIÑOS, NIÑAS Y ADOLESCENTES','COMITÉ COMUNITARIO DE PERSONAS CON DISCAPACIDAD','COMITÉ DE EDUCACIÓN, CULTURA Y FORMACIÓN CIUDADANA','COMITÉ DE FAMILIA E IGUALDAD DE GÉNERO'],0,['class'=>'form-control'])  !!}</td>
-                     <th>COMITE</th>
-
-                     <th>
-                     <td></td>
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN RÓBINSON</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN SUCRE</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN RIBAS</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN CULTURA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN BARRIO ADENTRO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISIÓN SABER Y TRABAJO</th>
-
-                 </tr>
-
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN JOSÉ GREGORIO HERNÁNDEZ</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN MILAGRO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN NEGRA HIPÓLITA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN JOVENES DE LA PATRIA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN JOSÉ GREGORIO HERNÁNDEZ</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN MILAGRO</th>
-
-                 </tr>
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN ÁRBOL</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN CHE GUEVARA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN ALIMENTACIÓN</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISIÓN A TODA VIDA VENEZUELA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISIÓN AGROVENEZUELA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN SONRISA</th>
-
-                 </tr>
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN GUAICAIPURO</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN CIENCIA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN PIAR</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN IDENTIDAD</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>MISIÓN REVOLUCIÓN ENERGÉTICA</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISIÓN VIVIENDA</th>
-
-                 </tr>
-                 <tr>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISIÓN AMOR MAYOR</th>
-                     <td> {!! Form::checkbox('tipo_vivienda','casa')  !!}</td>
-                     <th>GRAN MISION HOGARES DE LA PATRIA</th>
-
-                 </tr>
-
-                 <tr class="info">
-                     <th class="text-center" colspan="12">DONDE UBICA LA REALIDAD SOCIOECONOMICA DEL GRUPO FAMILIAR</th>
-
-
-                 </tr>
-                 <tr>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>VIVIENDA EN OPTIMAS CONDICIONES SANITARIAS EN AMBIENTES DE GRAN LUJO</th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>VIVIENDA EN OPTIMAS CONDICIONES SANITARIAS EN AMBIENTES CON LUJO SIN EXCESO Y SUFICIENTES
-                     </th>
-
-
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>VIVIENDAS CON BUENAS CONDICIONES SANITARIAS EN ESPACIOS REDUCIDOS O NO, PERO SIEMPRE MENORES QUE
-                         EN LAS VIVIENDAS 1 Y 2
-                     </th>
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>VIVIENDAS CON AMBIENTES ESPACIOSOS O REDUCIDOS Y/O CON DEFICIENCIAS EN ALGUNAS CONDICIONES
-                         SANITARIAS
-                     </th>
-
-
-                     <td> {!! Form::radio('tipo_vivienda','casa')  !!}</td>
-                     <th>RANCHO O VIVIENDA CON CONDICIONES SANITARIAS MARCADAMENTE INADECUADAS Y REFUGIOS</th>
-
-                 </tr>
-
-
-             </table>--}}
+            </div>
 
 
         </div>
+
     </div>
 
 
     <div class="panel panel-primary">
-        <div class=" panel-heading">V.PARTICIPACIÓN POLÍTICA Y SOCIO-COMUNITARIA:</div>
+        <div class=" text-center  panel-heading">V.PARTICIPACIÓN POLÍTICA Y SOCIO-COMUNITARIA:</div>
         <div class="panel-body">
 
             <p class="text-center">¿Usted o alǵun miembro de su grupo familiar participa en alguna
@@ -842,7 +551,7 @@
 
                 <div style="display:none" class="misiones col-xs-3">
 
-                    {!! Form::select('misiones',$misiones,1,['class'=>'form-control muestra_misiones ']); !!}
+                    {!! Form::select('misiones[]',$misiones,0,['class'=>'selectpicker','multiple data-selected-text-format'=>'count']); !!}
 
 
                 </div>
@@ -859,7 +568,7 @@
 
 
                 <div style="display:none" class="comites col-xs-3">
-                    {!! Form::select('comites',$comites,1,['class'=>'form-control']); !!}
+                    {!! Form::select('comites[]',$comites,0,['class'=>'selectpicker','multiple data-selected-text-format'=>'count']); !!}
                 </div>
 
 
@@ -873,6 +582,12 @@
 
 
 </div>
+
+
+
+
+
+
 
 
 

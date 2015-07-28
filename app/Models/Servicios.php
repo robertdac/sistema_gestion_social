@@ -2,9 +2,16 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class tipoParedes extends Model {
+class Servicios extends Model
+{
+    protected $table = 'servicios';
 
-    protected $table='paredes';
 
 
 }
+
+
+
+
+
+

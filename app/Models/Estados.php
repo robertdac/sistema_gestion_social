@@ -17,25 +17,4 @@ protected $table="estado";
 
 
 
-
-
-
-
-/*    static function estados(){
-
-        $estao=Estados::all()->toArray();
-
-        foreach($estao as $esta) {
-
-            $pow[$esta['id']]=$esta['nombre'];
-
-        }
-
-        return $pow;
-
-
-
-    }*/
-
-
 }

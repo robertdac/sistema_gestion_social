@@ -27,6 +27,16 @@ class SolicitudesController extends Controller
             $discapacidad = \App\Models\discapacidad::all()->lists('nombre', 'id');
             $comites = \App\Models\Comites::all()->lists('nombre', 'id');
             $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
+            $vivienda = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
+            $pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
+            $paredes = \App\Models\tipoParedes::all()->lists('nombre', 'id');
+            $techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
+            $suministro_agua = \App\Models\Servicios::where('padre', '=', 1)->lists('nombre', 'id');
+            $gas = \App\Models\Servicios::where('padre', '=', 2)->lists('nombre', 'id');
+            $desecho = \App\Models\Servicios::where('padre', '=', 3)->lists('nombre', 'id');
+            $agua_ser = \App\Models\Servicios::where('padre', '=', 8)->lists('nombre', 'id');
+            $servicios = \App\Models\Servicios::where('padre', '=', null)->lists('nombre', 'id');
+            $servicios_comunidad = \App\Models\Servicios_comunidad::all()->lists('nombre', 'id');
             array_unshift($discapacidad, 'SELECCIONE...');
 
             return view('solicitudes.solicitud', [
@@ -37,7 +47,19 @@ class SolicitudesController extends Controller
                 'recepcion' => $recepcion,
                 'discapacidad' => $discapacidad,
                 'comites' => $comites,
-                'misiones' => $misiones
+                'misiones' => $misiones,
+                'vivienda' => $vivienda,
+                'paredes' => $paredes,
+                'pisos' => $pisos,
+                'techos' => $techos,
+                'servicios' => $servicios,
+                'suministro_agua' => $suministro_agua,
+                'gas' => $gas,
+                'desecho' => $desecho,
+                'agua_ser' => $agua_ser,
+                'servicios_comunidad' => $servicios_comunidad
+
+
             ]);
 
         }
