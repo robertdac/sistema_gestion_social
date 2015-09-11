@@ -35,8 +35,8 @@ class CoordinacionController extends Controller
             return view('coordinacion.index', ['coordinacion' => $coordinacion]);
 
         }
-
-        $coordinacion = \App\Models\Coordinacion::with('subsecretaria')->paginate(10);
+        $coordinacion = \App\Models\Coordinacion::with('subsecretaria')->paginate(2);
+        $coordinacion->setPath('coordinacion');
         return view('coordinacion.index', ['coordinacion' => $coordinacion]);
 
     }

@@ -13,9 +13,41 @@
 
 //Route::get('/', 'WelcomeController@index');
 
-Route::get('home', 'HomeController@index');
+Route::get('/', 'HomeController@index');
+
+
+
+Route::get('sendemail', function () {
+
+	$data = array(
+		'name' => "Learning Laravel",
+	);
+
+	Mail::send('success', $data, function ($message) {
+
+		$message->from('robertdac@hotmail.com', 'Learning Laravel');
+
+		$message->to('deabreu.robert@gmail.com')->subject('Learning Laravel test email');
+
+
+
+
+	});
+
+	return "Your email has been sent successfully";
+
+});
+
+
+
+
 
 Route::any('consulta', function(){
+
+
+
+	return view('app_old');
+
 
 
 	Mail::raw('que hay saltamontes', function($message)
@@ -38,12 +70,8 @@ Route::any('consulta', function(){
 	$value = Request::cookie('laravel_session');
 
 	dd($value);
-
-
-
     $input  = '1989-08-21 00:00:00';
     $format = 'd/m/Y';
-
 	$fecha= date('Y-m-d') - $input;
 
 	dd($fecha);
@@ -54,11 +82,6 @@ Route::any('consulta', function(){
 
     $date=Carbon\Carbon::parse($input)->format('d/m/Y');
     echo $date;
-
-
-
-
-
 
 });
 
@@ -79,9 +102,9 @@ Route::get('parroquias',function(){
 });
 
 
-Route:get('coordinacion',function(){
+Route::get('coordinaciones',function(){
     $id=Input::get('option');
-	$coor=App\Models\Sub_secretaria::find($id)->coordinacion->lists('nombre','id');
+	$coor=App\Models\Sub_secretaria::find(2)->coordinacion->lists('nombre','id');
 	return $coor;
 
 });
@@ -92,8 +115,27 @@ Route:get('coordinacion',function(){
 	var_dump($posts);
 });*/
 
-Route::get('nueva_solicitud','SolicitudesController@index');
-Route::post('nueva_solicitud','SolicitudesController@index');
+
+Route::any('filtro', function () {
+
+	$cedula=Input::get('cedula');
+
+	if (!empty($cedula)) {
+
+	$cedula=Crypt::encrypt(Input::get('cedula'));
+		return redirect('solicitudes/'.$cedula);
+		//return redirect('solicitudes/');
+	}
+	return view('solicitudes.nueva_solicitud');
+
+});
+
+
+
+//Route::any('nueva_solicitud','SolicitudesController@index');
+//Route::post('nueva_solicitud','SolicitudesController@index');
+Route::get('solicitudes/{ci}','SolicitudesController@create');
+Route::post('solicitudes','SolicitudesController@store');
 
 Route::get('usuarios','UserController@index');
 Route::get('ver_usuario/{id}','UserController@show');

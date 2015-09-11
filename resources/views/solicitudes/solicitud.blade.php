@@ -4,300 +4,366 @@
 
     <h2 class="text-center">REGISTRO DE LA SOLICITUD</h2>
 
-    <form role="form">
+    {!!  Form::open(['url'=>'solicitudes'])   !!}
 
-        <div role="tabpanel">
-            <!-- Nav tabs -->
-            <ul style="margin-bottom:20px" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
-                                                          data-toggle="tab">Solicitante y Beneficiario</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Descripcion
-                        del caso y Anexos</a></li>
-                <li role="presentation"><a href="#socioEco" aria-controls="socioEco" role="tab" data-toggle="tab">Informe
-                        Socio Economico</a></li>
-            </ul>
+    <div role="tabpanel">
 
 
-            <div class="tab-content">
+        @if($errors->has())
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+                @endif
 
 
-                <div id="home" role="tabpanel" class="tab-pane active">
+                        <!-- Nav tabs -->
+                <ul style="margin-bottom:20px" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Solicitante y Beneficiario</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Descripcion del caso y Anexos</a></li>
+                    <li role="presentation"><a href="#socioEco" aria-controls="socioEco" role="tab" data-toggle="tab">Informe Socio Economico</a></li>
+                </ul>
 
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">DATOS DEL BENEFICIARIO</div>
-                        <div class="panel-body">
 
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <label for="email">Nacionalidad:</label>
-                                    <?php $nac = str_replace('(', '', $datos[0]);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
-                                    {!! Form::text('naci',$naci,['class'=>'form-control','readonly'=>'true']) !!}
-                                    {!! Form::hidden('nacionalidad',$nac)  !!}
+                <div class="tab-content">
 
-                                </div>
-                                <div class="col-xs-3">
+                    <div id="home" role="tabpanel" class="tab-pane active">
 
-                                    {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                    {!! Form::text('cedula',$datos[1],['class'=>"form-control","readonly"=>"true"]) !!}
 
-                                </div>
+                        <div class="panel panel-primary">
+                            <div class=" text-center panel-heading">SECRETARIA DE GESTION SOCIAL</div>
+                            <div class="panel-body">
 
+                                <div class="row">
+                                 <div class="col-xs-3">
+                                     {!! Form::label('sub secretaria') !!}
 
-                                <div class="col-xs-3">
-                                    {!! Form::label('nombre','Nombre:');   !!}
-                                    {!! Form::text('nombre',$datos[2],['class'=>'form-control' ]) !!}
 
-                                </div>
+                                     {!! Form::select('subSecretaria',$sub_secretaria,0,['class'=>'form-control']) !!}
 
-                                <div class="col-xs-3 ">
 
-                                    {!! Form::label('apellido','Apellido')   !!}
-                                    {!! Form::text('apellido',$datos[4],['class'=>'form-control' ])  !!}
+                                 </div>
 
-                                </div>
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Coordinacion') !!}
 
-                            </div>
-                            <br>
+                                        <select class="form-control coordinacion" name="parroquias_be">
+                                            <option name="coordinacion">Debe Seleccionar una Parroquia</option>
+                                        </select>
 
-                            <div class="row">
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                    {!! Form::select('Edocivil',$EdoCivil,$datos[8],['class'=>'form-control'])   !!}
-
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('masculimo','Masculino')   !!}
-                                    {!! Form::radio('sexo','M')  !!}
-                                    <br>
-
-                                    {!! Form::label('femenino','Femenino')   !!}
-                                    {!! Form::radio('sexo','F')  !!}
-
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                    {!! Form::text('fecha_nacimiento',Carbon\Carbon::parse(str_replace('"','',$datos[6]))->format('d-m-Y'),['class'=>'form-control'])    !!}
-                                </div>
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                    {!! Form::select('ocupacion',$ocupacion,'',['class'=>'form-control']);  !!}
-                                </div>
-
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Estado','Estado:')   !!}
-                                    {!! Form::select('estado',$estados,0,['class'=>'form-control','id'=>'estado']);  !!}
-                                </div>
-                                <div class="col-xs-3">
-                                    {!! Form::label('Municipio','Municipio:')   !!}
-                                    <select class="form-control" id="municipio" name="municipio">
-                                        <option>Debe Seleccionar un Municipio</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Parroquia','Parroquias:')   !!}
-
-                                    <select class="form-control" id="parroquias" name="parroquias">
-                                        <option name="parroquias">Debe Seleccionar una Parroquia</option>
-                                    </select>
-
-                                </div>
-
-
-                            </div>
-                            <br>
-
-
-                            <div class="row">
-
-                                <div class="col-xs-6">
-                                    <label for="comment">Sector:</label>
-                                    <textarea id='municipio' class="form-control" rows="3" id="comment"></textarea>
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    <label for="email">Celular:</label>
-                                    <input type="email" class="form-control">
-
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label for="email">Telefono(Casa):</label>
-                                    <input type="email" class="form-control">
-
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">DATOS DEL SOLICITANTE</div>
-                        <div class="panel-body">
-
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <label for="email">Nacionalidad:</label>
-                                    <?php $nac = str_replace('(', '', $datos[0]);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
-                                    {!! Form::text('naci',$naci,['class'=>'form-control','readonly'=>'true']) !!}
-                                    {!! Form::hidden('nacionalidad',$nac)  !!}
-
-                                </div>
-                                <div class="col-xs-3">
-
-                                    {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                    {!! Form::text('cedula',null,['class'=>"form-control","readonly"=>"true"]) !!}
-
-                                </div>
-
-
-                                <div class="col-xs-3">
-                                    {!! Form::label('nombre','Nombre:');   !!}
-                                    {!! Form::text('nombre',null,['class'=>'form-control' ]) !!}
-
-                                </div>
-
-                                <div class="col-xs-3 ">
-
-                                    {!! Form::label('apellido','Apellido')   !!}
-                                    {!! Form::text('apellido',null,['class'=>'form-control' ])  !!}
-
-                                </div>
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                    {!! Form::select('Edocivil',$EdoCivil,$datos[8],['class'=>'form-control'])   !!}
-
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('masculimo','Masculino')   !!}
-                                    {!! Form::radio('sexo','M')  !!}
-                                    <br>
-
-                                    {!! Form::label('femenino','Femenino')   !!}
-                                    {!! Form::radio('sexo','F')  !!}
-
-                                </div>
-
-                             {{--   <div class="col-xs-3 ">
-                                    {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                    {!! Form::text('fecha_nacimiento',null,['class'=>'datepicker form-control'])    !!}
-                                </div>
---}}
-
-                                <div class="well">
-                                    <div class="input-append date" id="dpMonths" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                        <input class="span2" size="16" type="text" value="02/2012" readonly>
-                                        <span class="add-on"><i class="icon-calendar"></i></span>
                                     </div>
-                                </div>
 
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Tipo de solicitud') !!}
+
+                                        <select class="form-control tipo_solicitud" name="parroquias_be">
+                                            <option name="tipo_solicitud">Debe Seleccionar una Parroquia</option>
+                                        </select>
+
+                                    </div>
+
+
+
+
+
+
+
+
+                                </div>
 
 
 
                             </div>
-                            <br>
-
-                            <div class="row">
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                    {!! Form::select('ocupacion',$ocupacion,'',['class'=>'form-control']);  !!}
-                                </div>
-
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Estado','Estado:')   !!}
-                                    {!! Form::select('estado',$estados,0,['class'=>'form-control','id'=>'estado']);  !!}
-                                </div>
-                                <div class="col-xs-3">
-                                    {!! Form::label('Municipio','Municipio:')   !!}
-                                    <select class="form-control" id="municipio" name="municipio">
-                                        <option>Debe Seleccionar un Municipio</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    {!! Form::label('Parroquia','Parroquias:')   !!}
-
-                                    <select class="form-control" id="parroquias" name="parroquias">
-                                        <option name="parroquias">Debe Seleccionar una Parroquia</option>
-                                    </select>
-
-                                </div>
-
-
-                            </div>
-                            <br>
-
-
-                            <div class="row">
-
-                                <div class="col-xs-6">
-                                    <label for="comment">Sector:</label>
-                                    <textarea id='municipio' class="form-control" rows="3" id="comment"></textarea>
-                                </div>
-
-                                <div class="col-xs-3 ">
-                                    <label for="email">Celular:</label>
-                                    <input type="email" class="form-control">
-
-                                </div>
-                                <div class="col-xs-3 ">
-                                    <label for="email">Telefono(Casa):</label>
-                                    <input type="email" class="form-control">
-
-                                </div>
-
-
-                            </div>
-
-
                         </div>
+
+
+                        <div class="panel panel-primary">
+                            <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="email">Nacionalidad:</label>
+                                        <?php $nac = str_replace('(', '', $datos[0]);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                        {!! Form::text('naci_be',$naci,['class'=>'form-control','readonly'=>'true']) !!}
+                                        {!! Form::hidden('nacionalidad',$nac)  !!}
+
+                                    </div>
+                                    <div class="col-xs-3">
+
+                                        {!! Form::label('cedula','Cedula de identidad:');  !!}
+                                        {!! Form::text('cedula_be',$datos[1],['class'=>"form-control","readonly"=>"true"]) !!}
+
+                                    </div>
+
+
+                                    <div class="col-xs-3">
+                                        {!! Form::label('nombre','Nombre:');   !!}
+                                        {!! Form::text('nombre_be',$datos[2],['class'=>'form-control' ]) !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('apellido','Apellido')   !!}
+                                        {!! Form::text('apellido_be',$datos[4],['class'=>'form-control' ])  !!}
+
+                                    </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Edo.Civil','Edo.Civil')   !!}
+                                        {!! Form::select('Edocivil_be',$EdoCivil,$datos[8],['class'=>'form-control'])   !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('masculimo','Masculino')   !!}
+                                        {!! Form::radio('sexo_be','M')  !!}
+                                        <br>
+
+                                        {!! Form::label('femenino','Femenino')   !!}
+                                        {!! Form::radio('sexo_be','F')  !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
+                                        {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$datos[6]))->format('d-m-Y'),['class'=>'form-control'])    !!}
+                                    </div>
+
+
+
+                                    <div class="col-xs-3">
+
+                                        {!! Form::label('Tipo','Presenta alguna discapacidad:'); !!}
+                                        {!! Form::select('discapacidad',$discapacidad,0,['class'=>'form-control']) !!}
+
+                                    </div>
+
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Ocupacion','Ocupacion:')   !!}
+                                        {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control']);  !!}
+                                    </div>
+
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Estado','Estado:')   !!}
+                                        {!! Form::select('estado_be',$estados,0,['class'=>'form-control estado']);  !!}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        {!! Form::label('Municipio','Municipio:')   !!}
+                                        <select class="form-control municipio" name="municipio_be">
+                                            <option>Debe Seleccionar un Municipio</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Parroquia','Parroquias:')   !!}
+
+                                        <select class="form-control parroquias" name="parroquias_be">
+                                            <option name="parroquias">Debe Seleccionar una Parroquia</option>
+                                        </select>
+
+                                    </div>
+
+
+                                </div>
+                                <br>
+
+
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <label for="comment">Sector:</label>
+                                    <textarea name="sector_be" id='municipio' class="mayusculas form-control" rows="3"
+                                              id="comment"></textarea>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        <label for="email">Celular:</label>
+                                        <input name="celular_be" type="email" class="form-control">
+
+                                    </div>
+                                    <div class="col-xs-3 ">
+                                        <label for="email">Telefono(Casa):</label>
+                                        <input name="telefono_be" type="email" class="form-control">
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-primary">
+                            <div class=" text-center panel-heading">DATOS DEL SOLICITANTE</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="email">Nacionalidad:</label>
+                                        <?php $nac = str_replace('(', '', $datos[0]);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                        {!! Form::text('naci_so',$naci,['class'=>'form-control','readonly'=>'true']) !!}
+                                        {!! Form::hidden('nacionalidad',$nac)  !!}
+
+                                    </div>
+                                    <div class="col-xs-3">
+
+                                        {!! Form::label('cedula','Cedula de identidad:');  !!}
+                                        {!! Form::text('cedula_so',null,['class'=>"form-control"]) !!}
+
+                                    </div>
+
+
+                                    <div class="col-xs-3">
+                                        {!! Form::label('nombre','Nombre:');   !!}
+                                        {!! Form::text('nombre_so',null,['class'=>'form-control' ]) !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('apellido','Apellido')   !!}
+                                        {!! Form::text('apellido_so',null,['class'=>'form-control' ])  !!}
+
+                                    </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Edo.Civil','Edo.Civil')   !!}
+                                        {!! Form::select('edocivil_so',$EdoCivil,$datos[8],['class'=>'form-control'])   !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('masculimo','Masculino')   !!}
+                                        {!! Form::radio('sexo_so','M')  !!}
+                                        <br>
+
+                                        {!! Form::label('femenino','Femenino')   !!}
+                                        {!! Form::radio('sexo_so','F')  !!}
+
+                                    </div>
+
+                                       <div class="col-xs-3 ">
+                                           {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
+                                           {!! Form::text('fecha_nacimiento_so',null,['class'=>'datepicker form-control'])    !!}
+                                       </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Ocupacion','Ocupacion:')   !!}
+                                        {!! Form::select('ocupacion_so',$ocupacion,'',['class'=>'form-control']);  !!}
+                                    </div>
+
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Estado','Estado:')   !!}
+                                        {!! Form::select('estado_so',$estados,0,['class'=>'form-control estado2']);  !!}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        {!! Form::label('Municipio','Municipio:')   !!}
+                                        <select class="form-control municipio2"  name="municipio_so">
+                                            <option>Debe Seleccionar un Municipio</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Parroquia','Parroquias:')   !!}
+
+                                        <select class="form-control parroquias2" name="parroquia_so">
+                                            <option name="parroquias">Debe Seleccionar una Parroquia</option>
+                                        </select>
+
+                                    </div>
+
+
+                                </div>
+                                <br>
+
+
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <label for="comment">Sector:</label>
+                                        <textarea name="sector_so"  id='municipio' class="form-control" rows="3" id="comment"></textarea>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        <label for="email">Celular:</label>
+                                        <input name="celular_so" type="email" class="form-control">
+
+                                    </div>
+                                    <div class="col-xs-3 ">
+                                        <label for="email">Telefono(Casa):</label>
+                                        <input name="telefono_so" type="email" class="form-control">
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                 {{--   <div class="col-xs-12 text-center">
+
+
+                        <a href="#profile" class="btn btn-info btn-lg" aria-controls="profile" role="tab" data-toggle="tab">SIGUIENTE</a>
+
+
+                        --}}{{--<a href="#profile" class="btn btn-info btn-lg" role="button">SIGUIENTE</a>--}}{{--
+
+                        --}}{{--{!! Form::submit('Registrar',['class'=>'btn btn-primary btn-lg']);   !!}--}}{{--
+
+                    </div>--}}
                     </div>
+
+                    @include('solicitudes.socio_economico')
+                    @include('solicitudes.descripcion')
+
+
+
+
+
                 </div>
-
-                @include('solicitudes.descripcion')
-
-                @include('solicitudes.socio_economico')
-
-
-            </div>
-        </div>
+    </div>
 
 
 
 
-        {{--   <div style="display: none" class=" muestrax row">
-               <div class="col-xs-2">
-                   {!! Form::select('ingresos',['SELECCIONE..','SALARIO','CESTA TICKETS','OTRO'],0,['class'=>'form-control'])  !!}
-               </div>
 
-           </div>--}}
+    {{--   <div style="display: none" class=" muestrax row">
+           <div class="col-xs-2">
+               {!! Form::select('ingresos',['SELECCIONE..','SALARIO','CESTA TICKETS','OTRO'],0,['class'=>'form-control'])  !!}
+           </div>
+
+       </div>--}}
 
 
-        {{--  <div class="input_fields_wrap">
-              <button class="add_field_button">Add More Fields</button>
-              <div><input type="text" name="mytext[]"></div>
-          </div>--}}
+    {{--  <div class="input_fields_wrap">
+          <button class="add_field_button">Add More Fields</button>
+          <div><input type="text" name="mytext[]"></div>
+      </div>--}}
 
 
     </form>
@@ -308,8 +374,6 @@
         $(document).ready(function () {
 
             $('#dpMonths').datepicker();
-
-
 
 
             /*        $('#cambia').on('change', function () {
@@ -324,29 +388,93 @@
              });*/
 
 
-            $('#estado').change(function () {
+
+
+
+
+
+
+
+
+            $('.estado').change(function () {
                 $.get("{{ url('municipios')}}",
                         {option: $(this).val()},
                         function (data) {
-                            $('#municipio').empty();
+                            $('.municipio').empty();
                             $.each(data, function (key, element) {
-                                $('#municipio').append("<option value='" + key + "'>" + element + "</option>");
+                                $('.municipio').append("<option value='" + key + "'>" + element + "</option>");
+
+                            });
+                        });
+            });
+
+
+
+
+
+
+
+            $('.estado').change(function () {
+                $.get("{{ url('municipios')}}",
+                        {option: $(this).val()},
+                        function (data) {
+                            $('.municipio').empty();
+                            $.each(data, function (key, element) {
+                                $('.municipio').append("<option value='" + key + "'>" + element + "</option>");
+
                             });
                         });
             });
 
 
             //municipios
-            $('#municipio').change(function () {
+            $('.municipio').click(function () {
                 $.get("{{ url('parroquias')}}",
                         {option: $(this).val()},
                         function (data) {
-                            $('#parroquias').empty();
+                            $('.parroquias').empty();
                             $.each(data, function (key, element) {
-                                $('#parroquias').append("<option value='" + key + "'>" + element + "</option>");
+                                $('.parroquias').append("<option value='" + key + "'>" + element + "</option>");
                             });
                         });
             });
+
+
+            $('.estado').change(function () {
+                $('.parroquias').empty();
+                $('.parroquias').append("<option value='' >Debe Seleccionar una Parroquia</option>");
+            });
+            $('.estado2').change(function () {
+                $.get("{{ url('municipios')}}",
+                        {option: $(this).val()},
+                        function (data) {
+                            $('.municipio2').empty();
+                            $.each(data, function (key, element) {
+                                $('.municipio2').append("<option value='" + key + "'>" + element + "</option>");
+
+                            });
+                        });
+            });
+
+
+            //municipios
+            $('.municipio2').click(function () {
+                $.get("{{ url('parroquias')}}",
+                        {option: $(this).val()},
+                        function (data) {
+                            $('.parroquias2').empty();
+                            $.each(data, function (key, element) {
+                                $('.parroquias2').append("<option value='" + key + "'>" + element + "</option>");
+                            });
+                        });
+            });
+
+
+            $('.estado2').change(function () {
+                $('.parroquias2').empty();
+                $('.parroquias2').append("<option value='' >Debe Seleccionar una Parroquia</option>");
+            });
+
 
 
             //============================DUPLICA CAMPOS=============================================
@@ -356,14 +484,15 @@
             var add_button = $(".add_field_button"); //Add button ID
 
             var x = 1; //initlal text box count
-
-
-            $(add_button).click(function (e) { //on add input button click
+             $(add_button).click(function (e) { //on add input button click
                 e.preventDefault();
+
+
+
                 if (x < max_fields) { //max input box allowed
                     x++; //text box increment
-                    // $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-                    $(wrapper).append('<tr><td>{!! Form::text("nombre_Apellido[]",null,["class"=>"mayusculas form-control"]);  !!}</td><td> {!! Form::text("edad[]",null,["class"=>"form-control"]);  !!}</td><td>{!! Form::select('parentesco[]',[''=>'SELECCIONE...','CONYUGE','HIJO(A)','NIETO(A)','MADRE','PADRE','SUEGRO','HERMANO(A)','SOBRINO(A)','PRIMO(A)','YERNO(A)','NUERO(A)'],'',['class'=>'form-control']);!!}</td><td>{!! Form::select('ocupacion',$ocupacion,'',[ 'id'=>'cambia', 'class'=>'form-control']);  !!}</td><td>{!! Form::select("nivel_instruccion[]",[''=>'SELECCIONE','UNIVERSITARIO','TECNICO','BACHILLERATO','PRIMARIA COMPLETA','PRIMARIA INCOMPLETA'],'',[ "id"=>'cambia', "class"=>"form-control"]);  !!}</td><td> {!! Form::select('ingresos[]',[''=>'SELECCIONE...','FORTUNA HEREDADADA O ADQUIRIDA','GANANCIAS O BENEFICIOS, HONORARIOS PROFESIONALES','SUELDO MENSUAL','SALARIO SEMANAL , POR DIA, ENTRADA A DESTAJO','DONACIONES DE ORIGEN PUBLICO O PRIVADO, PENSIONES, JUBILACIONES'],'',['class'=>'form-control']);  !!}</td><td>{!! Form::text("cantidad[]",null,["class"=>"suma form-control"]);  !!}</td><td><a href="#" class="remove_field">Remover</a></td></tr>'); //add input box
+                    // $(wrapper).append('<div><input type="text" name="mytext['+ x +'  ]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+                   // $(wrapper).append('<tr><td>{!! Form::text("nombre_Apellidonombre",null,["class"=>"mayusculas form-control"]);  !!}</td><td> {!! Form::text("edad[edad]",null,["class"=>"form-control"]);  !!}</td><td>{!! Form::select('parentesco[parentesco]',[''=>'SELECCIONE...','CONYUGE','HIJO(A)','NIETO(A)','MADRE','PADRE','SUEGRO','HERMANO(A)','SOBRINO(A)','PRIMO(A)','YERNO(A)','NUERO(A)'],'',['class'=>'form-control']);!!}</td><td>{!! Form::select('ocupacion[ocupacion]',$ocupacion,'',[ 'id'=>'cambia', 'class'=>'form-control']);  !!}</td><td>{!! Form::select("nivel_instruccion[nivelI]",[''=>'SELECCIONE','UNIVERSITARIO','TECNICO','BACHILLERATO','PRIMARIA COMPLETA','PRIMARIA INCOMPLETA'],'',[ "id"=>'cambia', "class"=>"form-control"]);  !!}</td><td> {!! Form::select('ingresos[ingresos]',[''=>'SELECCIONE...','FORTUNA HEREDADADA O ADQUIRIDA','GANANCIAS O BENEFICIOS, HONORARIOS PROFESIONALES','SUELDO MENSUAL','SALARIO SEMANAL , POR DIA, ENTRADA A DESTAJO','DONACIONES DE ORIGEN PUBLICO O PRIVADO, PENSIONES, JUBILACIONES'],'',['class'=>'form-control']);  !!}</td><td>{!! Form::text("cantidad[cantidad]",null,["class"=>"suma form-control"]);  !!}</td><td><a href="#" class="remove_field">Remover</a></td></tr>'); //add input box
                 }
             });
 
@@ -410,7 +539,6 @@
 
             });
             $('#activo_gas').click(function () {
-
                 if ($(this).is(":checked")) {
                     $('#gas').removeAttr("disabled");
                 } else {
@@ -421,7 +549,6 @@
 
             });
             $('#activo_agua').click(function () {
-
                 if ($(this).is(":checked")) {
                     $('#agua').removeAttr("disabled");
                 } else {
@@ -433,7 +560,6 @@
             });
 
             $('#activo_salud').click(function () {
-
                 if ($(this).is(":checked")) {
                     $('#salud').removeAttr("disabled");
                 } else {
@@ -464,6 +590,44 @@
                     $(".comites").slideUp();
                 }
             });
+
+          //SUMA INGRESOS
+            var $form = $('#ingresos'),
+                    $summands = $form.find('.income_count'),
+                    $sumDisplay = $('#income_sum');
+
+            $form.delegate('.income_count', 'change', function () {
+                var sum = 0;
+                $summands.each(function () {
+                    var value = Number($(this).val());
+                    if (!isNaN(value)) sum += value;
+                });
+
+                $sumDisplay.val(sum + ' Bs.');
+            });
+
+
+            //SUMA EGRESOS
+            var $form2 = $('#egresos'),
+                    $summands2 = $form2.find('.income_count2'),
+                    $sumDisplay2 = $('#income_sum2');
+
+            $form2.delegate('.income_count2', 'change', function () {
+                var sum = 0;
+                $summands2.each(function () {
+                    var value = Number($(this).val());
+                    if (!isNaN(value)) sum += value;
+                });
+
+                $sumDisplay2.val(sum + ' Bs.');
+            });
+
+
+
+
+
+
+
 
             //SUMAR CAMPOS DE INGRESOS Y EGRESOS FAMILIAR
 

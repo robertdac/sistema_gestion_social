@@ -114,7 +114,6 @@ return [
 		 * Laravel Framework Service Providers...
 		 */
 
-
 		'Collective\Html\HtmlServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',

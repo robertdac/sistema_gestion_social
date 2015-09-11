@@ -15,7 +15,6 @@ class Sub_secretaria extends Model {
 
 
     public function secretaria(){
-
         return $this->belongsTo('\App\Models\Secretaria','idsecretaria');
 
     }

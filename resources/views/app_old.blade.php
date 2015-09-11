@@ -2,7 +2,39 @@
 @extends('app')
 @section('content')
 
-	{!! Form::open()   !!}
+	<select id="name" >
+		<option value="">select all</option>
+		<option value="1">Text 1</option>
+		<option value="2">Text 2</option>
+		<option value="3">Text 3</option>
+	</select>
+
+	<select id="name2" >
+		<option value="">select all</option>
+		<option value="1">Text 1</option>
+		<option value="2">Text 2</option>
+		<option value="3">Text 3</option>
+	</select>
+
+
+	<script>
+
+		$(document).ready(function () {
+
+		$('#name2').change(function(){
+			$('#name').prop('selectedIndex',0);
+		});
+
+
+		$('#name').change(function(){
+			$('#name2').prop('selectedIndex',0);
+		});
+
+});
+	</script>
+
+
+{{--	{!! Form::open()   !!}
 
 	<select name="sapo[]" class="selectpicker" multiple>
 		<option value="0">Mustard</option>
@@ -19,7 +51,7 @@
 
 
 
-	{!! Form::close()   !!}
+	{!! Form::close()   !!}--}}
 
 
 

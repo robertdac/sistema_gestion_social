@@ -2,13 +2,13 @@
 
 
     <div class="panel panel-primary">
-        <div class="panel-heading">DESCRIPCION DEL CASO</div>
+        <div class=" text-center panel-heading">DESCRIPCION DEL CASO</div>
         <div class="panel-body">
             <div class="row">
 
                 <div class="col-xs-12 text-center">
                     <label for="comment">Breve descripcion del caso:</label>
-                    <textarea class="form-control" rows="3" id="comment"></textarea>
+                    <textarea name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -19,7 +19,7 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Observaciones de la solicitud:</label>
-                    <textarea class="form-control" rows="3" id="comment"></textarea>
+                    <textarea name="observacion_caso " class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -28,11 +28,6 @@
             <br>
 
             <div class="row">
-                <div class=" col-xs-3">
-                    <label for="email">Monto Solicitado:</label>
-
-                    <input type="text" placeholder="Bs." class="form-control">
-                </div>
 
                 <div class=" col-xs-3">
                     {!!  Form::label('Recepcion');    !!}
@@ -46,13 +41,14 @@
 
 
     <div role="tabpanel" class="panel panel-primary">
-        <div class="panel-heading">INFORME MEDICO ORIGINAL:</div>
+        <div class=" text-center panel-heading">INFORME MEDICO ORIGINAL:</div>
         <div class="panel-body">
 
 
             <div class=" col-xs-3">
                 {!!  Form::label('Centro de salud');    !!}
-                {!!  Form::select('recepcion',$recepcion,"",['class'=>'form-control']);    !!}
+                {!! Form::select('centro_salud',['SELECCIONE'],0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
+
             </div>
 
 
@@ -75,12 +71,17 @@
 
 
     <div role="tabpanel" class="panel panel-primary">
-        <div class="panel-heading">PRESUPUESTO ORIGINAL:</div>
+        <div class=" text-center panel-heading">PRESUPUESTO ORIGINAL:</div>
         <div class="panel-body">
 
             <div class=" col-xs-3">
-                {!!  Form::label('Centro de salud');    !!}
-                {!!  Form::select('recepcion',$recepcion,"",['class'=>'form-control']);    !!}
+                {!!  Form::label('Casa comercial');    !!}
+                {!! Form::select('centro_salud2',$casa_comercial,0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
+            </div>
+
+            <div class=" col-xs-3">
+                {!! Form::label('Monto Solicitado') !!}
+                {!! Form::text('monto_solicitado',null,['class'=>'form-control','placeholder'=>'BS.'])   !!}
             </div>
 
 
@@ -88,26 +89,26 @@
     </div>
 
     <div role="tabpanel" class="panel panel-primary">
-        <div class="panel-heading">ANEXOS</div>
+        <div class="text-center panel-heading">ANEXOS</div>
         <div class="panel-body">
 
             <div class="row">
 
                 <div class=" col-xs-3">
                     {!! Form::label('Copia','Copia de la cedula:')   !!}
-                    {!! Form::file('cedula',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('cedula_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
                 </div>
                 <div class=" col-xs-3">
                     {!! Form::label('Copia','Carta de Solicitud:')   !!}
-                    {!! Form::file('cartaSol',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('cartaSol_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
                 </div>
                 <div class=" col-xs-3">
                     {!! Form::label('Copia','Certificado de discapacidad:')   !!}
-                    {!! Form::file('cerDis',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('cerDis_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
                 </div>
                 <div class="col-xs-3">
                     {!! Form::label('partida','Partida de Nacimiento')   !!}
-                    {!! Form::file('parNac',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('parNac_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
                 </div>
 
             </div>
@@ -118,13 +119,13 @@
                 <div class=" col-xs-3">
 
                     {!! Form::label('Presupuesto','Infome Medico:')   !!}
-                    {!! Form::file('infMed',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('infMed_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
 
                 </div>
                 <div class=" col-xs-3">
 
                     {!! Form::label('Presupuesto','Presupuesto Original:')   !!}
-                    {!! Form::file('presupuesto',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    {!! Form::file('presupuesto_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
 
                 </div>
             </div>

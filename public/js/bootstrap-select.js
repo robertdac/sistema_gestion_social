@@ -240,10 +240,12 @@
 
   // part of this is duplicated in i18n/defaults-en_US.js. Make sure to update both.
   Selectpicker.DEFAULTS = {
-    noneSelectedText: 'Nothing selected',
+    //noneSelectedText: 'Nothing selected',
+    noneSelectedText: 'Nada seleccionado',
     noneResultsText: 'No results matched {0}',
     countSelectedText: function (numSelected, numTotal) {
-      return (numSelected == 1) ? "{0} item selected" : "{0} items selected";
+      //return (numSelected == 1) ? "{0} item selected" : "{0} items selected";
+      return (numSelected == 1) ? "{0} elemento seleccionado" : "{0} elemento seleccionado";
     },
     maxOptionsText: function (numAll, numGroup) {
       return [

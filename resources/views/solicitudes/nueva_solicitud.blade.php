@@ -25,7 +25,7 @@
                             </div>
                         @endif
 
-                        <form class="form-horizontal" role="form" method="POST" action="{{asset('nueva_solicitud')  }}">
+                        <form class="form-horizontal" role="form" method="POST">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="form-group">

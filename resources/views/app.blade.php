@@ -118,7 +118,7 @@
     $(document).ready(function() {
 
 //MAYUSCULAS
-        $('.mayusculas').keyup(function()
+        $('.form-control').keyup(function()
         {
             $(this).val($(this).val().toUpperCase());
         });

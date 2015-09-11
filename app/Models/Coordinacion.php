@@ -19,25 +19,4 @@ class Coordinacion extends Model {
 
 
 
-    static function coordinacion(){
-
-        $estao=Coordinacion::all()->toArray();
-
-        $pow['']='SELECCIONE...';
-
-        foreach($estao as $esta) {
-
-            $pow[$esta['id']]=$esta['nombre'];
-
-        }
-
-        return $pow;
-
-
-
-    }
-
-
-
-
 }

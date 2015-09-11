@@ -1,156 +1,154 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\SecretariasRequest;
 
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+class SecretariaController extends Controller
+{
 
-class SecretariaController extends Controller {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index()
+    {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()	{
+        if (trim(Input::get('lolo')) != "") {
 
-		if(trim(Input::get('lolo')) != ""  ){
+            $nombre = Input::get('lolo');
 
-			$nombre=Input::get('lolo');
+            $secretaria = \App\Models\Secretaria::where('descripcion', 'like', '%' . $nombre . '%')->paginate(5);
 
-			$secretaria=\App\Models\Secretaria::where('descripcion','like','%'.$nombre.'%')->paginate(5);
+            return view('secretaria.index', ['secretaria' => $secretaria]);
 
-			return view('secretaria.index',['secretaria'=>$secretaria]);
+        }
 
-		}
+        $secretaria = \App\Models\Secretaria::paginate(5);
+        return view('secretaria.index', ['secretaria' => $secretaria]);
 
-		$secretaria=\App\Models\Secretaria::paginate(5);
-		return view('secretaria.index',['secretaria'=>$secretaria]);
+    }
 
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('secretaria.nueva_secretaria');
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		return view('secretaria.nueva_secretaria');
-	}
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store(SecretariasRequest $secretariasRequest)
+    {
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
+       /* $rules = array(
 
-		$rules =array(
+            'descripcion' => 'required'
 
-			'descripcion'=>'required'
+        );
+        $validator = Validator::make(Input::all(), $rules);
 
-		);
-		$validator = Validator::make(Input::all(),$rules);
-
-		if($validator->fails()){
-
-			return Redirect::to('nueva_secretaria/')
-				->withErrors($validator);
+        if ($validator->fails()) {
+            return Redirect::to('nueva_secretaria/')
+                ->withErrors($validator);
 
 
-		}else{
-
-			$secretaria= new \App\Models\Secretaria;
-			$secretaria->descripcion = Input::get('descripcion');
-			$secretaria->save();
-
-			Session::flash('mensaje','Se Ha Registrado Una Nueva secretaria');
-			return Redirect::to('secretaria');
-
-		}
+        } else {
 
 
-	}
+        }*/
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
+            $secretaria = new \App\Models\Secretaria;
+            $secretaria->descripcion =\Request::input('descripcion');
+            $secretaria->save();
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		$secretaria=\App\Models\Secretaria::find($id);
-		return view('secretaria.editar_secretaria',['secretaria'=>$secretaria]);
+            Session::flash('mensaje', 'Se Ha Registrado Una Nueva secretaria');
+            return Redirect::to('secretaria');
 
-	}
+    }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
-		$rules =array(
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        $secretaria = \App\Models\Secretaria::find($id);
+        return view('secretaria.editar_secretaria', ['secretaria' => $secretaria]);
 
-			'descripcion'=>'required',
-			'estatus'=>'required'
+    }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function update($id)
+    {
 
-		);
-		$validator = Validator::make(Input::all(),$rules);
+        $rules = array(
 
-		if($validator->fails()){
-
-			return Redirect::to('editar_secretaria/'.$id)
-				->withErrors($validator);
-
-		}else{
-
-			$secretaria=\App\Models\Secretaria::find($id);
-			$secretaria->descripcion= Input::get('descripcion');
-			$secretaria->estatus= Input::get('estatus');
-			$secretaria->save();
+            'descripcion' => 'required',
+            'estatus' => 'required'
 
 
-			Session::flash('mensaje','Se Ha actualizado el tipo de secretaria correctamente');
-			return Redirect::to('secretaria');
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+
+            return Redirect::to('editar_secretaria/' . $id)
+                ->withErrors($validator);
+
+        } else {
+
+            $secretaria = \App\Models\Secretaria::find($id);
+            $secretaria->descripcion = Input::get('descripcion');
+            $secretaria->estatus = Input::get('estatus');
+            $secretaria->save();
 
 
+            Session::flash('mensaje', 'Se Ha actualizado el tipo de secretaria correctamente');
+            return Redirect::to('secretaria');
 
-		}
-	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 
 }

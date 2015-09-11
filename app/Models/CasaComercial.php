@@ -2,12 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cargos extends Model {
+class CasaComercial extends Model {
 
-	protected  $table='cargos';
-
-
-
-
+	protected  $table='casa_comercial';
 
 }

@@ -1,7 +1,10 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request as Peticion;
+use Illuminate\Support\Facades\Crypt;
+use App\Http\Requests\SolicitudesRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class SolicitudesController extends Controller
 {
@@ -11,13 +14,37 @@ class SolicitudesController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Peticion $request)
     {
+        $uri = $request->all();
 
-        if (Input::get('cedula')) {
+       // dd($uri);
 
-            $ci = intval(Input::get('cedula'));
-            $data = \App\Models\Saime::datos("'V'", $ci);
+        if (!empty($uri['cedula']))   {
+            $ci=$uri['cedula'];
+
+            return $this->create($ci);
+
+        }
+        return view('solicitudes.nueva_solicitud');
+
+
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create($ci)
+    {
+        $cedula=Crypt::decrypt($ci);
+        // $ci=19387290;
+        //if (Input::get('cedula')) {
+
+            //$ci = intval(Input::get('cedula'));
+            $data = \App\Models\Saime::datos("'V'", $cedula);
             $datos = explode(",", $data[0]->buscar_diex);
             $edo_civil = \App\Models\EdoCivil::all_edo_civil();
             $estados = \App\Models\Estados::all()->lists('nombre', 'id');
@@ -37,7 +64,17 @@ class SolicitudesController extends Controller
             $agua_ser = \App\Models\Servicios::where('padre', '=', 8)->lists('nombre', 'id');
             $servicios = \App\Models\Servicios::where('padre', '=', null)->lists('nombre', 'id');
             $servicios_comunidad = \App\Models\Servicios_comunidad::all()->lists('nombre', 'id');
-            array_unshift($discapacidad, 'SELECCIONE...');
+            $realidad = \App\Models\RealidadSocioeconomica::all()->lists('pregunta', 'id');
+            $casa_comercial = \App\Models\CasaComercial::all()->lists('nombre', 'id');
+            $sub_secretaria=\App\Models\Sub_secretaria::where('estatus','=',1)->lists('descripcion','id');
+
+        array_unshift($discapacidad, 'SELECCIONE...');
+        array_unshift($sub_secretaria,'SELECCIONE...');
+
+           // dd($sub_secretaria);
+
+              //dd($estados);
+
 
             return view('solicitudes.solicitud', [
                 'datos' => $datos,
@@ -57,28 +94,20 @@ class SolicitudesController extends Controller
                 'gas' => $gas,
                 'desecho' => $desecho,
                 'agua_ser' => $agua_ser,
-                'servicios_comunidad' => $servicios_comunidad
-
+                'servicios_comunidad' => $servicios_comunidad,
+                'realidad' => $realidad,
+                'casa_comercial' => $casa_comercial,
+                'sub_secretaria'=>$sub_secretaria
 
             ]);
 
-        }
+//        }
 
 
         //$menu = opciones_perfiles::menu();
-        return view('solicitudes.nueva_solicitud');
-
-    }
+  //      return view('solicitudes.nueva_solicitud');
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -86,9 +115,13 @@ class SolicitudesController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(SolicitudesRequest $solicitudesRequest)
     {
-        //
+       $all=$solicitudesRequest->all();
+
+        dd($all);
+
+
     }
 
     /**
