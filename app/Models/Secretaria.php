@@ -12,29 +12,14 @@ class Secretaria extends Model {
 
     public function Subsecretaria(){
 
-        $this->hasMany('\App\Models\Sub_secretaria','idsecretaria');
+       return $this->hasMany('\App\Models\Sub_secretaria','idsecretaria');
 
     }
 
 
 
 
-    static function secretaria(){
 
-        $estao=Secretaria::all()->toArray();
-
-        $pow['']='SELECCIONE...';
-        foreach($estao as $esta) {
-
-            $pow[$esta['id']]=$esta['descripcion'];
-
-        }
-
-        return $pow;
-
-
-
-    }
 
 
 

@@ -20,11 +20,11 @@ class Saime extends Model {
     static function datos($nac,$ci){
 
 
-        $datos = DB::connection('pgsql')->select("SELECT saime.buscar_diex($nac,$ci)");
+        $datos = DB::connection('pgsql')->select("SELECT * FROM saime.buscar_diex($nac,$ci)");
 
         /** validamos si la cedula existe*/
 
-        ( $datos[0]->buscar_diex == "(,,,,,,,,,)" ) ?  $datos= array(NULL,'No existe el ciudadano') : $datos;
+        //( $datos[0]->buscar_diex == "(,,,,,,,,,)" ) ?  $datos= array(NULL,'No existe el ciudadano') : $datos;
 
           return $datos;
 

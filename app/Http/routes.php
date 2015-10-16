@@ -19,6 +19,9 @@ Route::get('/', 'HomeController@index');
 
 Route::get('sendemail', function () {
 
+	return view('welcome');
+
+
 	$data = array(
 		'name' => "Learning Laravel",
 	);
@@ -42,22 +45,56 @@ Route::get('sendemail', function () {
 
 
 
-Route::any('consulta', function(){
+Route::get('consulta', function(){
+/*
+
+
+	dd(App\User::find([1,2]));
+
+	$array = array("foo", "bar", "hello", "world");
 
 
 
-	return view('app_old');
+	echo"<pre>";
+	var_dump(serialize($array));
+echo"<br>";
+
+	var_dump(unserialize(serialize($array)));
+
+	exit;*/
 
 
 
-	Mail::raw('que hay saltamontes', function($message)
-	{
-		$message->from('us@example.com', 'Laravel');
 
-		$message->to('arturo85000@gmail.com');
-	});
 
+
+/*
+
+	$path = public_path().'/documentos/vencida';
+	File::makeDirectory($path, $mode = 0777, true, true);
 	exit;
+
+	//dd(base_path('public/documentos'));
+
+	$mes =\Carbon\Carbon::now()->format('DMY');
+
+	//dd();
+
+
+	$id=[19387292,123456];
+
+	$solicitudes=\App\Models\Solicitudes::find(1);
+	$solicitudes->usuarios()->attach(2,['estatus'=> 2,'fecha_registro'=>\Carbon\Carbon::now()]);*/
+
+
+
+//dd($cedula);
+
+
+	$id=Input::get('id');
+	  return \App\Models\Saime::datos("'V'",$id);
+	//dd(\App\Models\TipoSolicitud::all());
+
 
 
 //var_dump($_POST['sapo']);
@@ -104,10 +141,26 @@ Route::get('parroquias',function(){
 
 Route::get('coordinaciones',function(){
     $id=Input::get('option');
-	$coor=App\Models\Sub_secretaria::find(2)->coordinacion->lists('nombre','id');
+	if($id <> 0){
+	$coor=App\Models\Sub_secretaria::find($id)->coordinacion->lists('nombre','id');
 	return $coor;
+	}
+	return $coor=[0=>'Debe Seleccionar una coordinacion'];
 
 });
+
+
+Route::get('tipo_solicitud',function(){
+		$id=Input::get('option');
+        $sol=\App\Models\Coordinacion::find($id)->tipo_solicitud->lists('nombre','id');
+	return $sol;
+});
+
+
+
+
+
+
 
 
 /*Route::get("posts", function(){
@@ -118,9 +171,21 @@ Route::get('coordinaciones',function(){
 
 Route::any('filtro', function () {
 
-	$cedula=Input::get('cedula');
+	$perdonas=\App\Models\Personas::find(43)->solicitud;
+	//$perdonas=\App\Models\Secretaria::find(1)->Subsecretaria;
 
+	dd($perdonas);
+
+	$cedula=Input::get('cedula');
 	if (!empty($cedula)) {
+
+		$perdonas=\App\Models\Personas::where('cedula','=',$cedula)->get();
+
+		dd($perdonas);
+
+
+
+
 
 	$cedula=Crypt::encrypt(Input::get('cedula'));
 		return redirect('solicitudes/'.$cedula);

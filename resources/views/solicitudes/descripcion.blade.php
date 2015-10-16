@@ -19,7 +19,7 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Observaciones de la solicitud:</label>
-                    <textarea name="observacion_caso " class="form-control" rows="3" id="comment"></textarea>
+                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -76,7 +76,7 @@
 
             <div class=" col-xs-3">
                 {!!  Form::label('Casa comercial');    !!}
-                {!! Form::select('centro_salud2',$casa_comercial,0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
+                {!! Form::select('casa_comercial',$casa_comercial,0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
             </div>
 
             <div class=" col-xs-3">
@@ -94,40 +94,36 @@
 
             <div class="row">
 
-                <div class=" col-xs-3">
-                    {!! Form::label('Copia','Copia de la cedula:')   !!}
-                    {!! Form::file('cedula_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
-                </div>
-                <div class=" col-xs-3">
-                    {!! Form::label('Copia','Carta de Solicitud:')   !!}
-                    {!! Form::file('cartaSol_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
-                </div>
-                <div class=" col-xs-3">
-                    {!! Form::label('Copia','Certificado de discapacidad:')   !!}
-                    {!! Form::file('cerDis_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
-                </div>
-                <div class="col-xs-3">
-                    {!! Form::label('partida','Partida de Nacimiento')   !!}
-                    {!! Form::file('parNac_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
-                </div>
+                @foreach($anexos as $inde => $nom)
+                    @if($inde <> 5 && $inde <> 6 )
+                        <div class=" col-xs-3">
+                            {!! Form::label('nombre', $nom.':')   !!}
+                            {!! Form::file("file[$inde]",['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                        </div>
+                    @endif
+
+
+                @endforeach
 
             </div>
             <br>
-
             <div class="row">
 
-                <div class=" col-xs-3">
+                @foreach($anexos as $inde => $nom)
 
-                    {!! Form::label('Presupuesto','Infome Medico:')   !!}
-                    {!! Form::file('infMed_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                    @if($inde <> 1 && $inde <> 2 && $inde <> 3 && $inde <> 4 )
+                        <div class=" col-xs-3">
+                            {!! Form::label('nombre', $nom.':')   !!}
+                            {!! Form::file("file[$inde]",['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                        </div>
+                    @endif
 
-                </div>
-                <div class=" col-xs-3">
 
-                    {!! Form::label('Presupuesto','Presupuesto Original:')   !!}
-                    {!! Form::file('presupuesto_file',['class'=>'filestyle',"data-buttonText"=>"Buscar"])  !!}
+                @endforeach
 
-                </div>
+
+
+
             </div>
 
 

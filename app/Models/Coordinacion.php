@@ -9,11 +9,21 @@ class Coordinacion extends Model {
 
 
 
+    public function tipo_solicitud(){
+
+        return $this->hasMany('App\Models\TipoSolicitud','id_coordinacion');
+
+
+    }
+
+
     public function subsecretaria(){
 
         return $this->belongsTo('\App\Models\Sub_secretaria','idsubsecretaria');
 
     }
+
+
 
 
 

@@ -1,46 +1,70 @@
-<html>
-	<head>
-		<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+@extends('app')
+@section('content')
 
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				height: 100%;
-				color: #B0BEC5;
-				display: table;
-				font-weight: 100;
-				font-family: 'Lato';
-			}
+    <div class="container">
+        <div class="content">
 
-			.container {
-				text-align: center;
-				display: table-cell;
-				vertical-align: middle;
-			}
 
-			.content {
-				text-align: center;
-				display: inline-block;
-			}
 
-			.title {
-				font-size: 96px;
-				margin-bottom: 40px;
-			}
+            {!! Form::text('cedula1',null,['id'=>'valor','onblur'=>"getData($('#valor').val())"])   !!}
+            <br>
+            {!! Form::text('cedula',null,['class'=>'aqui'])   !!}
 
-			.quote {
-				font-size: 24px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="content">
-				<div class="title">Laravel 5 </div>
-				<div class="quote">{{ Inspiring::quote() }}</div>
-			</div>
-		</div>
-	</body>
-</html>
+
+            <button id="action-button">Click me to load info!</button>
+            <div id="info"></div>
+
+
+        </div>
+    </div>
+    </body>
+
+
+    <script>
+
+        [{  "strnacionalidad": "V",
+            "intcedula": 1,
+            "strnombre_primer": "ISAIAS",
+            "strnombre_segundo": "",
+            "strapellido_primer": "MEDINA",
+            "strapellido_segundo": "ANGARITA",
+            "dtmnacimiento": "1897-07-06 00:00:00",
+            "strgenero": "F",
+            "clvestado_civil": 0,
+            "strestado_civil": null
+        }]
+
+
+        //$(document).ready(function () {
+
+            function getData(id) {
+
+                        $.ajax({
+                        url: "{{ url('consulta') }}",
+                        data: "id=" + id
+                        ,
+                        error: function () {
+                            $('#info').html('<p>An error has occurred</p>');
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $("[name=cedula]").val(data[0].strnombre_primer);
+
+                        },
+                        type: 'GET'
+                    });
+               // });
+
+
+            }
+       // });
+    </script>
+
+
+
+
+
+@endsection
+
+
+
