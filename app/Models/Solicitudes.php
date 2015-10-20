@@ -10,16 +10,32 @@ class Solicitudes extends Model
     {
         return $this->belongsToMany('App\User', 'usuarios_solicitudes', 'id_solicitud', 'id_usuario')
             ->withPivot('estatus', 'fecha_registro');
+    }
+
+    public function socio_demografico()
+    {
+
+        return $this->hasMany('App\Models\SocioDemografico', 'id_solicitud');
+
 
     }
 
-    public function socio_demografico(){
+    public function coordinacion()
+    {
 
-        return  $this->hasMany('App\Models\SocioDEmografico');
+        return $this->belongsTo('App\Models\Coordinacion', 'id_coordinaciones');
+
+
+    }
+
+    public function tipoSolicitud(){
+
+        return $this->belongsTo('App\Models\TipoSolicitud','id_tsolicitud');
 
 
 
     }
+
 
 
 

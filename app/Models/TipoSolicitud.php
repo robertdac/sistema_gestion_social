@@ -13,6 +13,14 @@ class TipoSolicitud extends Model {
 
     }
 
+  public function solicitudes(){
+
+      return $this->hasMany('App\Models\Solicitudes','id_tsolicitud');
+
+
+  }
+
+
 
 
 

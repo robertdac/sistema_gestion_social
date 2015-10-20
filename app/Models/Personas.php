@@ -6,16 +6,13 @@ class Personas extends Model
 {
 
     protected $table = 'personas';
-
+    protected $primaryKey = 'cedula';
     public $timestamps = false;
 
 
     public function  beneficiario_discapacidad()
     {
-
         $this->hasMany('\App\Models\BeneficiarioDiscapacidad', 'id_beneficiario');
-
-
     }
 
 

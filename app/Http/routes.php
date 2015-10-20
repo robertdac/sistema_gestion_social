@@ -171,26 +171,32 @@ Route::get('tipo_solicitud',function(){
 
 Route::any('filtro', function () {
 
-	$perdonas=\App\Models\Personas::find(43)->solicitud;
-	//$perdonas=\App\Models\Secretaria::find(1)->Subsecretaria;
 
-	dd($perdonas);
 
-	$cedula=Input::get('cedula');
+	$cedula = Input::get('cedula');
 	if (!empty($cedula)) {
+		$personas = \App\Models\Personas::find($cedula);
+		$id = \App\Models\Solicitudes::where('id_beneficiario', '=', $personas->id)->lists('id');
 
-		$perdonas=\App\Models\Personas::where('cedula','=',$cedula)->get();
+		if ($personas != null && empty($id) != true) {
+			$solicitudes = \App\Models\Solicitudes::find($id[0])->usuarios;
+			if (count($solicitudes) == 3) {
 
-		dd($perdonas);
+				return redirect('filtro')->with('mensaje','la solicitud ya ha sido aprobada tiene que esperar 6 meses para otra solicitud');
 
+			} else {
 
+				return redirect('filtro')->with('mensaje','la solicitud esta en proceso');
 
+			}
 
-
-	$cedula=Crypt::encrypt(Input::get('cedula'));
-		return redirect('solicitudes/'.$cedula);
-		//return redirect('solicitudes/');
+		}
+		$cedula = Crypt::encrypt(Input::get('cedula'));
+		return redirect('solicitudes/' . $cedula);
 	}
+
+	//return redirect('solicitudes/');
+
 	return view('solicitudes.nueva_solicitud');
 
 });
@@ -199,6 +205,7 @@ Route::any('filtro', function () {
 
 //Route::any('nueva_solicitud','SolicitudesController@index');
 //Route::post('nueva_solicitud','SolicitudesController@index');
+Route::get('solicitudes','SolicitudesController@index');
 Route::get('solicitudes/{ci}','SolicitudesController@create');
 Route::post('solicitudes','SolicitudesController@store');
 

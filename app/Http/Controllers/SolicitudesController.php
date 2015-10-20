@@ -1,7 +1,11 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitudesRequest;
-use Illuminate\Http\Request as Peticion;
+use App\Models\Coordinacion;
+use App\Models\Personas;
+use App\Models\Secretaria;
+use App\Models\Solicitudes;
+use App\Models\TipoSolicitud;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
@@ -15,19 +19,27 @@ class SolicitudesController extends Controller
 
     }
 
-    public function index(Peticion $request)
+    public function index()
     {
-        $uri = $request->all();
 
-        // dd($uri);
+        //dd(Secretaria::with('Subsecretaria')->get());
 
-        if (!empty($uri['cedula'])) {
-            $ci = $uri['cedula'];
+        dd(\App\Models\Solicitudes::with('coordinacion','tipoSolicitud')->get());
+        //dd(\App\Models\Coordinacion::with('solicitudes')->get());
 
-            return $this->create($ci);
 
-        }
-        return view('solicitudes.nueva_solicitud');
+        $id=Auth::user()->id_coordinacion;
+        dd(Auth::user()->id_coordinacion);
+        $sol=Solicitudes::where('id_coordinaciones','=',$id)->get();
+        TipoSolicitud::find($sol->id_tsolicitud);
+        Personas::find($sol->id_beneficiario);
+
+
+
+
+        dd($sol);
+
+
 
 
     }
@@ -127,7 +139,7 @@ class SolicitudesController extends Controller
         //dd($request->egreso);
 
 
-       // dd(is_array($request->egreso));
+        // dd(is_array($request->egreso));
 
 
         $cumple_be = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento_be'));
@@ -212,15 +224,13 @@ class SolicitudesController extends Controller
                 $ingresos->cantidad = $request->cantidad[$i];
                 ($i == $request->jefe_familia) ? $ingresos->jefe_familia = 1 : $ingresos->jefe_familia = 0;
                 $ingresos->save();
-
-
             }
         }
 
 
         //Egreso grupo familiar
         if (is_array($request->egreso)) {
-            foreach($request->egreso as $ind => $val) {
+            foreach ($request->egreso as $ind => $val) {
                 $egreso = new \App\Models\EgresoGrupo;
                 //$egreso->id_solicitud = $solicitudes->id;
                 $egreso->id_solicitud = 10;
@@ -250,8 +260,8 @@ class SolicitudesController extends Controller
 
 
         //Session::flash('mensaje','Se Ha Registrado Una Nueva discapacidad');
-         //return Redirect::to('solicitudes/' . Crypt::encrypt($request->input('cedula_be')));
-         return Redirect::to('filtro');
+        //return Redirect::to('solicitudes/' . Crypt::encrypt($request->input('cedula_be')));
+        return Redirect::to('filtro');
 
 
     }
