@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recepcion extends Model {
 
@@ -8,22 +9,14 @@ class Recepcion extends Model {
     public $timestamps = false;
 
 
-    static function recepcion(){
+    public function solicitudes()
+    {
 
-        $estao=Recepcion::all()->toArray();
-
-        $pow[]='SELECCIONE..';
-        foreach($estao as $esta) {
-
-            $pow[$esta['id']]=$esta['nombre'];
-
-        }
-
-        return $pow;
-
-
+        return $this->hasMany('App\Models\Solicitudes', 'id_trecepcion');
 
     }
+
+
 
 
 }

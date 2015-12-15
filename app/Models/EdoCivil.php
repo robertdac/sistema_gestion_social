@@ -6,19 +6,18 @@ class EdoCivil extends Model {
 
     protected $table="edo_civil";
 
-static function all_edo_civil(){
 
-    $estao=EdoCivil::all()->toArray();
 
-    foreach($estao as $esta) {
+    public  function personas(){
 
-    $pow[$esta['id']]=$esta['descripcion'];
+        return $this->belongsTo('App\Models\Personas','id_edocivil');
+
+
+
+
 
     }
 
-return $pow;
 
 
-
-}
 }

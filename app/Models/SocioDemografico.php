@@ -8,4 +8,15 @@ class SocioDemografico extends Model {
     public $timestamps=false;
 
 
+
+    public function solicitudes(){
+
+        return $this->belongsto('App\Models\Solicitudes','id_solicitud');
+
+
+
+    }
+
+
+
 }

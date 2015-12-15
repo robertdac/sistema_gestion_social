@@ -3,7 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Saime extends Model {
+class Saime extends Model
+{
 
     //protected $connection = 'pgsql';
     //protected  $table ="tabla2";
@@ -15,10 +16,10 @@ class Saime extends Model {
      * @param  string $nac
      * @param int $ci
      *
-    */
+     */
 
-    static function datos($nac,$ci){
-
+    static function datos($nac, $ci)
+    {
 
         $datos = DB::connection('pgsql')->select("SELECT * FROM saime.buscar_diex($nac,$ci)");
 
@@ -26,13 +27,10 @@ class Saime extends Model {
 
         //( $datos[0]->buscar_diex == "(,,,,,,,,,)" ) ?  $datos= array(NULL,'No existe el ciudadano') : $datos;
 
-          return $datos;
+        return $datos;
 
 
     }
-
-
-
 
 
 }

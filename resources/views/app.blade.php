@@ -23,6 +23,9 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
+
+
+
                     <span class="navbar-brand">Bienvenido: {{ Auth::user()->nombres .' '.Auth::user()->apellidos }} </span>
                 </div>
 

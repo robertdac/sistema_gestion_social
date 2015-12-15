@@ -2,29 +2,19 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ocupacion extends Model {
+class Ocupacion extends Model
+{
 
-protected  $table='ocupacion';
+    protected $table = 'ocupacion';
 
 
-    static function ocupacion(){
+    public function ingresos()
+    {
 
-        $estao=Ocupacion::all()->toArray();
-
-        $pow['']='SELECCIONE..';
-        foreach($estao as $esta) {
-
-            $pow[$esta['id']]=$esta['nombre'];
-
-        }
-
-        return $pow;
-
+        return $this->hasMany('App\Models\IngresosGrupo', 'id_ocupacion');
 
 
     }
-
-
 
 
 }

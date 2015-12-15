@@ -432,7 +432,7 @@
                             $('.quitar').removeAttr("disabled");
                         } else {
                             $('.discapacidad').hide("slow");
-                            $('.quitar').attr("disabled",true);
+                            $('.quitar').attr("disabled", true);
 
                         }
 

@@ -104,9 +104,7 @@
                     <select  class="form-control"  id="coordinacion" name="coordinacion">
                         <option>Debe Seleccionar una Subsecretaria</option>
                     </select>
-
                     <br>
-
                     {!! Form::submit('Registrar',['class'=>'btn btn-primary']);   !!}
                     {!! link_to('usuarios', 'Volver', ['class' => 'btn btn-primary']) !!}
 

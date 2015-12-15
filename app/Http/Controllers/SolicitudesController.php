@@ -1,11 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitudesRequest;
-use App\Models\Coordinacion;
-use App\Models\Personas;
-use App\Models\Secretaria;
-use App\Models\Solicitudes;
-use App\Models\TipoSolicitud;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
@@ -21,26 +18,19 @@ class SolicitudesController extends Controller
 
     public function index()
     {
-
         //dd(Secretaria::with('Subsecretaria')->get());
+        $solicitudes = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
+            ->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)
+            ->where('id_estatus', '=', '1')
+            //->select('id','estatus','id_coordinaciones')
+            ->get();
 
-        dd(\App\Models\Solicitudes::with('coordinacion','tipoSolicitud')->get());
-        //dd(\App\Models\Coordinacion::with('solicitudes')->get());
-
-
-        $id=Auth::user()->id_coordinacion;
-        dd(Auth::user()->id_coordinacion);
-        $sol=Solicitudes::where('id_coordinaciones','=',$id)->get();
-        TipoSolicitud::find($sol->id_tsolicitud);
-        Personas::find($sol->id_beneficiario);
+        //dd($solicitudes[0]->estatus);
 
 
+        return view('solicitudes.index', ['solicitud' => $solicitudes]);
 
-
-        dd($sol);
-
-
-
+        // dd($solicitudes);
 
     }
 
@@ -53,12 +43,13 @@ class SolicitudesController extends Controller
     public function create($ci)
     {
         $cedula = Crypt::decrypt($ci);
+        // dd($cedula);
         $datos = \App\Models\Saime::datos("'V'", $cedula);
-        $edo_civil = \App\Models\EdoCivil::all_edo_civil();
+        $edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
         $estados = \App\Models\Estados::all()->lists('nombre', 'id');
         array_unshift($estados, 'Seleccione un Estado');
-        $ocupacion = \App\Models\Ocupacion::ocupacion();
-        $recepcion = \App\Models\Recepcion::recepcion();
+        $ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
+        $recepcion = \App\Models\Recepcion::all()->lists('nombre', 'id');
         $discapacidad = \App\Models\discapacidad::all()->lists('nombre', 'id');
         $gradoDis = \App\Models\GradoDiscapacidad::where('estatus', '=', 1)->lists('nombre', 'id');
         $comites = \App\Models\Comites::all()->lists('nombre', 'id');
@@ -80,13 +71,6 @@ class SolicitudesController extends Controller
         $nivel_instruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
         $parenteso = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
         $anexos = \App\Models\Anexos::where('estatus', '=', 1)->lists('nombre', 'id');
-
-        //array_unshift($discapacidad, 'SELECCIONE...');
-        array_unshift($sub_secretaria, 'SELECCIONE...');
-
-        // dd($sub_secretaria);
-
-        //dd($estados);
 
 
         return view('solicitudes.solicitud', [
@@ -110,7 +94,7 @@ class SolicitudesController extends Controller
             'servicios_comunidad' => $servicios_comunidad,
             'realidad' => $realidad,
             'casa_comercial' => $casa_comercial,
-            'sub_secretaria' => $sub_secretaria,
+            'sub_secretaria' => ['' => 'SELECIONE...'] + $sub_secretaria,
             'consulta_ingreso' => ['' => 'SELECCIONE..'] + $consulta_ingreso,
             'nivel_instruccion' => ['' => 'SELECCIONE..'] + $nivel_instruccion,
             'parentesco' => ['' => 'SELECCIONE..'] + $parenteso,
@@ -136,12 +120,6 @@ class SolicitudesController extends Controller
     public function store(SolicitudesRequest $request)
     {
 
-        //dd($request->egreso);
-
-
-        // dd(is_array($request->egreso));
-
-
         $cumple_be = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento_be'));
         $cumple_so = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento_so'));
 
@@ -163,20 +141,28 @@ class SolicitudesController extends Controller
         $ben->id_edocivil = $request->input('Edocivil_be');
         $ben->save();
 
-        $sol = new \App\Models\Personas;
-        $sol->nacionalidad = $request->input('nacionalidad');
-        $sol->nombres = $request->input('nombre_so');
-        $sol->apellidos = $request->input('apellido_so');
-        $sol->cedula = $request->input('cedula_so');
-        $sol->fecha_nacimiento = $cumple_so;
-        $sol->sexo = $request->input('sexo_so');
-        $sol->direccion = $request->input('sector_so');
-        $sol->id_ocupacion = $request->input('ocupacion_so');
-        $sol->id_estado = $request->input('estado_so');
-        $sol->id_municipio = $request->input('municipio_so');
-        $sol->id_parroquia = $request->input('parroquia_so');
-        $sol->id_edocivil = $request->input('edocivil_so');
-        $sol->save();
+
+        // si la cedula existe en la tabla personas , si existe solo obtenemos el id
+
+        $solicitante = \App\Models\Personas::where('cedula', '=', $request->input('cedula_so'))->first();
+
+        if ($solicitante == null) {
+
+            $sol = new \App\Models\Personas;
+            $sol->nacionalidad = $request->input('nacionalidad');
+            $sol->nombres = $request->input('nombre_so');
+            $sol->apellidos = $request->input('apellido_so');
+            $sol->cedula = $request->input('cedula_so');
+            $sol->fecha_nacimiento = $cumple_so;
+            $sol->sexo = $request->input('sexo_so');
+            $sol->direccion = $request->input('sector_so');
+            $sol->id_ocupacion = $request->input('ocupacion_so');
+            $sol->id_estado = $request->input('estado_so');
+            $sol->id_municipio = $request->input('municipio_so');
+            $sol->id_parroquia = $request->input('parroquia_so');
+            $sol->id_edocivil = $request->input('edocivil_so');
+            $sol->save();
+        }
 
 
         $solicitudes = new \App\Models\Solicitudes;
@@ -184,12 +170,14 @@ class SolicitudesController extends Controller
         $solicitudes->observacion = $request->input('observacion_caso');
         $solicitudes->monto_solicitado = $request->input('monto_solicitado');
         $solicitudes->id_beneficiario = $ben->id;
-        $solicitudes->id_solicitante = $sol->id;
+        $solicitudes->id_solicitante = ($solicitante) ? $solicitante->id : $sol->id;
         $solicitudes->id_tsolicitud = $request->input("tipo_solicitud");
         $solicitudes->id_coordinaciones = $request->input("coordinacion");
         $solicitudes->id_trecepcion = $request->input("recepcion");
         $solicitudes->id_casa_comercial = $request->input("casa_comercial");
         $solicitudes->id_realidad_socieco = $request->input("preguntas");
+        $solicitudes->id_usuarios = Auth::user()->id;
+        $solicitudes->estatus = 1;
         $solicitudes->save();
 
 
@@ -206,12 +194,12 @@ class SolicitudesController extends Controller
         }
 
 
-        //SOLICITUDES
+        //historico de solicitudes
         $user_soli = \App\Models\Solicitudes::find($solicitudes->id);
         $user_soli->usuarios()->attach(Auth::user()->id, ['estatus' => 1, 'fecha_registro' => \Carbon\Carbon::now()]);
 
-        //Ingresos grupo familiar
-        for ($i = 0; $i <= 6; $i++) {
+        //Ingresos por grupo familiar
+        for ($i = 0; $i <= 5; $i++) {
             if ($request->nombre_Apellido[$i] != "") {
                 $ingresos = new  \App\Models\IngresosGrupo;
                 $ingresos->id_solicitud = $solicitudes->id;
@@ -228,12 +216,12 @@ class SolicitudesController extends Controller
         }
 
 
-        //Egreso grupo familiar
+        //Egreso por  grupo familiar
         if (is_array($request->egreso)) {
             foreach ($request->egreso as $ind => $val) {
                 $egreso = new \App\Models\EgresoGrupo;
-                //$egreso->id_solicitud = $solicitudes->id;
-                $egreso->id_solicitud = 10;
+                $egreso->id_solicitud = $solicitudes->id;
+                //$egreso->id_solicitud = 10;
                 $egreso->nombre = $ind;
                 $egreso->cantidad = $val;
                 $egreso->save();
@@ -243,8 +231,8 @@ class SolicitudesController extends Controller
 
         //Socio Demografico
         $socio = new \App\Models\SocioDemografico;
-        //$socio->id_solicitud = $solicitudes->id;
-        $socio->id_solicitud = 10;
+        $socio->id_solicitud = $solicitudes->id;
+        //$socio->id_solicitud = 10;
         $socio->id_viviendas = serialize($request->socio_demofrafico['vivienda']);
         $socio->id_paredes = serialize($request->socio_demofrafico['paredes']);
         $socio->id_pisos = serialize($request->socio_demofrafico['pisos']);
@@ -296,7 +284,14 @@ class SolicitudesController extends Controller
      */
     public function show($id)
     {
-        //
+
+
+        //return $solicitudes = \App\Models\Solicitudes::find($id);//->with('usuarios','estatus','beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
+
+
+        // dd($solicitudes);
+
+
     }
 
     /**
@@ -307,7 +302,48 @@ class SolicitudesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $soli = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
+            ->where('id', '=', $id)
+            ->get();
+
+        // dd(Auth::user()->id_secretaria);
+
+        $beneficiario = \App\Models\Personas::with('beneficiario_discapacidad.')->find($soli[0]->id_beneficiario);
+        //dd($beneficiario);
+        $solicitante = \App\Models\Personas::find($soli[0]->id_solicitante);
+        $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
+        $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
+        $tiposolicitud = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->tipo_solicitud()->lists('nombre', 'id');
+        // dd($tiposolicitud);
+        $estado = \App\Models\Estados::all()->lists('nombre', 'id');
+        $municipios = \App\Models\Municipios::all()->lists('nombre', 'id');
+        $parroquias = \App\Models\Parroquias::all()->lists('nombre', 'id');
+        $ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
+        $recepcion = \App\Models\Recepcion::where('estatus', '=', 1)->lists('nombre', 'id');
+        $parentesco = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
+        $nivelInstruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
+        $ingresos = \App\Models\consulta_ingreso::where('estatus', '=', 1)->lists('nombre', 'id');
+        $edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
+
+        return view('solicitudes.editar_solicitudes', [
+            'solicitudes' => $soli,
+            'solicitante' => $solicitante,
+            'beneficiario' => $beneficiario,
+            'subSecretaria' => $sub_secretaria,
+            'coordinacion' => $coordinacion,
+            'tipoSolicitud' => $tiposolicitud,
+            'estado' => $estado,
+            'municipio' => $municipios,
+            'parroquia' => $parroquias,
+            'ocupacion' => $ocupacion,
+            'recepcion' => $recepcion,
+            'parentesco' => $parentesco,
+            'nivelInstruccion' => $nivelInstruccion,
+            'ingresos' => $ingresos,
+            'edo_civil' => $edo_civil
+
+        ]);
+
     }
 
     /**

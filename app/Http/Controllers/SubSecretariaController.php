@@ -28,19 +28,13 @@ class SubsecretariaController extends Controller {
 		//dd($secretaria);
 
 		if(trim($name) != ""  ){
-
 			$nombre=Input::get('lolo');
-
 			$secretaria=\App\Models\Sub_secretaria::where('descripcion','like','%'.$name.'%')->paginate(10);
-
 			return view('sub_secretaria.index',['secretaria'=>$secretaria]);
-
 		}
 
 		$secretaria=\App\Models\Sub_secretaria::with('secretaria')->paginate(10);
 		$secretaria->setPath('subsecretaria');
-
-
 			return view('sub_secretaria.index',['secretaria'=>$secretaria]);
 
 	}

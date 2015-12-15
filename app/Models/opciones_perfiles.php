@@ -10,7 +10,6 @@ class opciones_perfiles extends Model
 
     //protected  $table="opciones";
 
-
     static function  menu($id, $user)
     {
 
@@ -29,11 +28,17 @@ class opciones_perfiles extends Model
 
 
     static function menu_complete($user)
+
     {
+
+
         $nemo = \App\Models\opciones_perfiles::menu(0, $user);
 
         echo "<ul class='nav navbar-nav'>";
-        foreach ($nemo as $men) { //@foreach()
+
+
+
+              foreach ($nemo as $men) { //@foreach()
             if ($men->Count > 0) {  //@if()
 
                 echo '<li class="dropdown">';
