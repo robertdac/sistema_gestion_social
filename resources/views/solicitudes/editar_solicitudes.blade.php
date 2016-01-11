@@ -4,18 +4,15 @@
     <h2 class="text-center">EDICIÓN DE LA SOLICITUD</h2>
 
 
-    {!! Form::open(['url' => 'solicitudes', 'files' => true]) !!}
+    {!! Form::open(['url' => "editar_solicitudes/$solicitudes->id", 'files' => true]) !!}
 
 
     <div role="tabpanel">
-
-
         @if($errors->has())
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach
                 @endif
-
                         <!-- Nav tabs -->
                 <ul style="margin-bottom:20px" class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
@@ -63,145 +60,288 @@
                             </div>
                         </div>
 
+                        <div class="panel panel-primary">
+                            <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
+                            <div class="panel-body">
 
-                    </div>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="naci_be">Nacionalidad:</label>
+                                        <?php $nac = $solicitudes->beneficiario->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                        {!! Form::text('naci_be',$naci,['class'=>'form-control','disabled'=>'true']) !!}
+                                        {!! Form::hidden('nacionalidad',$nac)  !!}
 
-                    {{--   @include('solicitudes.socio_economico')
-                       @include('solicitudes.descripcion')--}}
+                                    </div>
+                                    <div class="col-xs-3">
 
+                                        {!! Form::label('cedula','Cedula de identidad:');  !!}
+                                        {!! Form::text('cedula_be',$solicitudes->beneficiario->cedula,['class'=>"form-control","disabled"=>"true"]) !!}
 
-                </div>
-
-                <div class="panel panel-primary">
-                    <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
-                    <div class="panel-body">
-
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <label for="email">Nacionalidad:</label>
-                                <?php $nac = $beneficiario->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
-                                {!! Form::text('naci_be',$naci,['class'=>'form-control','readonly'=>'true']) !!}
-                                {!! Form::hidden('nacionalidad',$nac)  !!}
-
-                            </div>
-                            <div class="col-xs-3">
-
-                                {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                {!! Form::text('cedula_be',$beneficiario->cedula,['class'=>"form-control","readonly"=>"true"]) !!}
-
-                            </div>
+                                    </div>
 
 
-                            <div class="col-xs-3">
-                                {!! Form::label('nombre','Nombre:');   !!}
-                                {!! Form::text('nombre_be',$beneficiario->nombres,['class'=>'form-control',"readonly"=>"true" ]) !!}
+                                    <div class="col-xs-3">
+                                        {!! Form::label('nombre','Nombre:');   !!}
+                                        {!! Form::text('nombre_be',$solicitudes->beneficiario->nombres,['class'=>'form-control',"disabled"=>"true" ]) !!}
 
-                            </div>
+                                    </div>
 
-                            <div class="col-xs-3 ">
+                                    <div class="col-xs-3 ">
 
-                                {!! Form::label('apellido','Apellido')   !!}
-                                {!! Form::text('apellido_be',$beneficiario->apellidos,['class'=>'form-control',"readonly"=>"true" ])  !!}
+                                        {!! Form::label('apellido','Apellido')   !!}
+                                        {!! Form::text('apellido_be',$solicitudes->beneficiario->apellidos,['class'=>'form-control',"disabled"=>"true" ])  !!}
 
-                            </div>
+                                    </div>
 
-                        </div>
-                        <br>
-
-                        <div class="row">
-
-                            <div class="col-xs-3 ">
-                                {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                {!! Form::select('Edocivil_be',$edo_civil,$beneficiario->id_edocivil,['class'=>'form-control'])   !!}
-
-                            </div>
-
-                            <div class="col-xs-3 ">
-                                {!! Form::label('masculimo','Masculino')   !!}
-                                {!! Form::radio('sexo_be','M',($beneficiario->sexo == 'M') ? 1 : 0)  !!}
+                                </div>
                                 <br>
-                                {!! Form::label('femenino','Femenino')   !!}
-                                {!! Form::radio('sexo_be','F',($beneficiario->sexo == 'F')? 1 : 0 )   !!}
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Edo.Civil','Edo.Civil')   !!}
+                                        {!! Form::select('Edocivil_be',$edo_civil,$solicitudes->beneficiario->id_edocivil,['class'=>'form-control'])   !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('masculimo','Masculino')   !!}
+                                        {!! Form::radio('sexo_be','M',($solicitudes->beneficiario->sexo == 'M') ? 1 : 0)  !!}
+                                        <br>
+                                        {!! Form::label('femenino','Femenino')   !!}
+                                        {!! Form::radio('sexo_be','F',($solicitudes->beneficiario->sexo == 'F')? 1 : 0 )   !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
+                                        {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$solicitudes->beneficiario->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control','disabled'=>true])    !!}
+                                    </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Ocupacion','Ocupacion:')   !!}
+                                        {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control']);  !!}
+                                    </div>
+
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Estado','Estado:')   !!}
+                                        {!! Form::select('estado_be',$estado,$solicitudes->beneficiario->estado,['class'=>'form-control estado']);  !!}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        {!! Form::label('Municipio','Municipio:')   !!}
+                                        {!! Form::select('municipio_be',$municipio,$solicitudes->beneficiario->id_municipio,['class'=>'form-control municipio']);  !!}
+
+                                    </div>
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Parroquia','Parroquias:')   !!}
+
+                                        {!! Form::select('parroquias_be',$parroquia,$solicitudes->beneficiario->id_parroquia,['class'=>'form-control parroquias']);  !!}
+
+                                    </div>
+
+
+                                </div>
+
+                                {{--si el beneficiario posee alguna discapacidad--}}
+                                @if(isset($solicitudes->beneficiario->beneficiario_discapacidad[0]))
+                                    <br>
+                                    <div class="row discapacidad">
+
+                                        <div class="col-xs-3">
+
+                                            {!! Form::label('Tipo','Presenta alguna discapacidad:'); !!}
+                                            {!! Form::select('discapacidad[algunaDis]',$discapacidad,$solicitudes->beneficiario->beneficiario_discapacidad[0]->discapacidad->id,['class'=>'form-control']) !!}
+
+                                        </div>
+
+
+                                        <div class="col-xs-3 grado">
+
+                                            {!! Form::label('Tipo','Grado:'); !!}
+                                            {!! Form::select('discapacidad[grado]',$gradoDis,$solicitudes->beneficiario->beneficiario_discapacidad[0]->GradoDiscapacidad->id,['class'=>'form-control']) !!}
+
+                                        </div>
+
+                                        <div class="col-xs-3 grado">
+                                            {!! Form::label('Tipo','Necesita ayuda tecnica:'); !!}
+                                            {!! Form::select('discapacidad[ayudaTecnica]',[''=>'SELECCIONE..',1=>'SI',0=>'NO'],$solicitudes->beneficiario->beneficiario_discapacidad[0]->ayuda_tecnica,['class'=>'form-control']) !!}
+
+                                        </div>
+                                        <div class="col-xs-3 grado">
+                                            {!! Form::label('Tipo','N° de certificado:'); !!}
+                                            {!! Form::text('discapacidad[certificado]',$solicitudes->beneficiario->beneficiario_discapacidad[0]->certificado_discp,['class'=>'form-control']) !!}
+
+                                        </div>
+
+                                    </div>
+                                @endif
+
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <label for="comment">Sector:</label>
+                                        <textarea name="sector_be" id='municipio' class="mayusculas form-control"
+                                                  rows="3"
+                                                  id="comment">{!! $solicitudes->beneficiario->direccion  !!}</textarea>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('celular_be','Celular:')  !!}
+                                        {!! Form::text('celular_be',null,['class'=>'form-control']);  !!}
+
+                                    </div>
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('Telefono(Casa):')  !!}
+                                        {!! Form::text('telefono_be',null,['class'=>'form-control']);  !!}
+
+                                    </div>
+
+
+                                </div>
+
 
                             </div>
-
-                            <div class="col-xs-3 ">
-                                {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$beneficiario->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
-                            </div>
-
                         </div>
-                        <br>
 
-                        <div class="row">
 
-                            <div class="col-xs-3 ">
-                                {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control']);  !!}
+                        <div class="panel panel-primary">
+                            <div class=" text-center panel-heading">DATOS DEL SOLICITANTE</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="email">Nacionalidad:</label>
+                                        <?php $nac = $solicitudes->solicitante->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                        {!! Form::text('naci_so',$naci,['class'=>'form-control','disabled'=>'true']) !!}
+                                        {!! Form::hidden('nacionalidad',$nac)  !!}
+
+                                    </div>
+                                    <div class="col-xs-3">
+
+                                        {!! Form::label('cedula','Cedula de identidad:');  !!}
+                                        {!! Form::text('cedula_so',$solicitudes->solicitante->cedula,['class'=>"form-control",'disabled'=>true]) !!}
+
+                                    </div>
+
+
+                                    <div class="col-xs-3">
+                                        {!! Form::label('nombre','Nombre:');   !!}
+                                        {!! Form::text('nombre_so',$solicitudes->solicitante->nombres,['class'=>'form-control limpiar','disabled'=>true ]) !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('apellido','Apellido')   !!}
+                                        {!! Form::text('apellido_so',$solicitudes->solicitante->apellidos,['class'=>'form-control limpiar','disabled'=>true ])  !!}
+
+                                    </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Edo.Civil','Edo.Civil')   !!}
+                                        {!! Form::select('edocivil_so',$edo_civil,$solicitudes->solicitante->id_edocivil,['class'=>'form-control'])   !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('masculimo','Masculino')   !!}
+                                        {!! Form::radio('sexo_so','M',($solicitudes->solicitante->sexo == 'M') ? 1:0,['id'=>'macho','class'=>'limpiar'])  !!}
+                                        <br>
+
+                                        {!! Form::label('femenino','Femenino')   !!}
+                                        {!! Form::radio('sexo_so','F',($solicitudes->solicitante->sexo == 'F') ? 1:0,['id'=>'hembra','class'=>'limpiar'])  !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
+                                        {!! Form::text('fecha_nacimiento_so',Carbon\Carbon::parse(str_replace('"','',$solicitudes->solicitante->fecha_nacimiento))->format('d-m-Y'),['class'=>'limpiar form-control','disabled'=>true])    !!}
+                                    </div>
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Ocupacion','Ocupacion:')   !!}
+                                        {!! Form::select('ocupacion_so',$ocupacion,$solicitudes->solicitante->id_ocupacion,['class'=>'form-control']);  !!}
+                                    </div>
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Estado','Estado:')   !!}
+                                        {!! Form::select('estado_so',$estado,$solicitudes->solicitante->id_estado,['class'=>'form-control estado2']);  !!}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        {!! Form::label('Municipio','Municipio:')   !!}
+                                        {!! Form::select('municipio_so',$municipio,$solicitudes->solicitante->id_municipio,['class'=>'form-control municipio2']);  !!}
+
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+                                        {!! Form::label('Parroquia','Parroquias:')   !!}
+                                        {!! Form::select('parroquia_so',$parroquia,$solicitudes->solicitante->id_parroquia,['class'=>'form-control parroquias2']);  !!}
+
+                                    </div>
+
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <label for="comment">Sector:</label>
+                                        <textarea name="sector_so" id='municipio' class="form-control" rows="3"
+                                                  id="comment">{!! $solicitudes->solicitante->direccion  !!}</textarea>
+                                    </div>
+
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('celular:')  !!}
+                                        {!! Form::text('celular_so',null,['class'=>'form-control']);  !!}
+
+                                    </div>
+                                    <div class="col-xs-3 ">
+
+                                        {!! Form::label('Telefono(Casa):')  !!}
+                                        {!! Form::text('telefono_so',null,['class'=>'form-control']);  !!}
+
+
+                                    </div>
+
+
+                                </div>
+
                             </div>
 
-
-                            <div class="col-xs-3 ">
-                                {!! Form::label('Estado','Estado:')   !!}
-                                {!! Form::select('estado_be',$estado,$beneficiario->estado,['class'=>'form-control estado']);  !!}
-                            </div>
-                            <div class="col-xs-3">
-                                {!! Form::label('Municipio','Municipio:')   !!}
-                                {!! Form::select('municipio_be',$municipio,$beneficiario->id_municipio,['class'=>'form-control municipio']);  !!}
-
-                            </div>
-                            <div class="col-xs-3 ">
-                                {!! Form::label('Parroquia','Parroquias:')   !!}
-
-                                {!! Form::select('parroquias_be',$parroquia,$beneficiario->id_parroquia,['class'=>'form-control parroquias']);  !!}
-
-                            </div>
-
-
-                        </div>
-
-                        {{ dd($beneficiario)  }}
-
-
-                        <div style="display:none; " class="row discapacidad">
-
-                            <div class="col-xs-3">
-
-                                {!! Form::label('Tipo','Presenta alguna discapacidad:'); !!}
-                                {!! Form::select('discapacidad[algunaDis]',$discapacidad,"",['class'=>'form-control quitar','disabled'=>true]) !!}
-
-                            </div>
-
-
-                            <div class="col-xs-3 grado">
-
-                                {!! Form::label('Tipo','Grado:'); !!}
-                                {!! Form::select('discapacidad[grado]',$gradoDis,0,['class'=>'form-control quitar','disabled'=>true]) !!}
-
-                            </div>
-
-                            <div class="col-xs-3 grado">
-                                {!! Form::label('Tipo','Necesita ayuda tecnica:'); !!}
-                                {!! Form::select('discapacidad[ayudaTecnica]',[''=>'SELECCIONE..',1=>'SI',0=>'NO'],"",['class'=>'form-control quitar','disabled'=>true]) !!}
-
-                            </div>
-                            <div class="col-xs-3 grado">
-                                {!! Form::label('Tipo','N° de certificado:'); !!}
-                                {!! Form::text('discapacidad[certificado]',null,['class'=>'form-control quitar','disabled'=>true]) !!}
-
-                            </div>
 
                         </div>
 
 
                     </div>
+
+                    @include('solicitudes.editar_descripcion')
+                    @include('solicitudes.editar_socio_economico')
+
                 </div>
 
 
     </div>
-
-
-
 
     </form>
 

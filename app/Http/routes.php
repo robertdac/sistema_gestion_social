@@ -135,6 +135,7 @@ Route::get('solicitudes', 'SolicitudesController@index');
 Route::get('solicitudes/{ci}', 'SolicitudesController@create');
 Route::post('solicitudes', 'SolicitudesController@store');
 Route::get('editar_solicitudes/{id}','SolicitudesController@edit');
+Route::post('editar_solicitudes/{id}','SolicitudesController@update');
 Route::get('ficha/{id}','SolicitudesController@show');
 
 Route::get('usuarios', 'UserController@index');

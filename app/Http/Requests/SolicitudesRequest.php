@@ -22,7 +22,7 @@ class SolicitudesRequest extends Request
      */
     public function rules()
     {
-        return['subSecretaria' => 'required'];
+        return['sector_be' => 'required'];
 
 
       /*  return [

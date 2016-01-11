@@ -50,8 +50,6 @@ class CoordinacionController extends Controller
     {
         $subsecretaria = \App\Models\Sub_secretaria::all()->lists('descripcion', 'id');
         return view('coordinacion.nueva_coordinacion', ['secretaria' => $subsecretaria]);
-
-
     }
 
     /**

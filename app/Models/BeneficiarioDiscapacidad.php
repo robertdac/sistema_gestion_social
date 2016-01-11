@@ -17,12 +17,12 @@ class BeneficiarioDiscapacidad extends Model
 
     public function discapacidad()
     {
-        return $this->belongsTo('\App\Models\discapacidad');
+        return $this->belongsTo('\App\Models\discapacidad','id_discapacidad');
     }
 
     public function GradoDiscapacidad()
     {
-        return $this->belongsTo('\App\Models\GradoDiscapacidad');
+        return $this->belongsTo('\App\Models\GradoDiscapacidad','id_gdiscapacidad');
     }
 
 

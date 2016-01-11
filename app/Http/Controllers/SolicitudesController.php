@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitudesRequest;
+use App\Models\Solicitudes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -9,28 +10,80 @@ use Illuminate\Support\Facades\Redirect;
 
 class SolicitudesController extends Controller
 {
+    protected $edo_civil;
+    protected $estados;
+    protected $ocupacion;
+    protected $recepcion;
+    protected $discapacidad;
+    protected $gradoDis;
+    protected $comites;
+    protected $misiones;
+    protected $vivienda;
+    protected $pisos;
+    protected $paredes;
+    protected $techos;
+    protected $suministro_agua;
+    protected $gas;
+    protected $desecho;
+    protected $agua_ser;
+    protected $servicios;
+    protected $servicios_comunidad;
+    protected $realidad;
+    protected $casa_comercial;
+    protected $sub_secretaria;
+    protected $consulta_ingreso;
+    protected $nivel_instruccion;
+    protected $parentesco;
+    protected $anexos;
+    protected $municipios;
+    protected $parroquias;
+
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
+        $this->estados = \App\Models\Estados::all()->lists('nombre', 'id');
+        $this->municipios = \App\Models\Municipios::all()->lists('nombre', 'id');
+        $this->parroquias = \App\Models\Parroquias::all()->lists('nombre', 'id');
+        $this->ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
+        $this->recepcion = \App\Models\Recepcion::all()->lists('nombre', 'id');
+        $this->discapacidad = \App\Models\discapacidad::all()->lists('nombre', 'id');
+        $this->gradoDis = \App\Models\GradoDiscapacidad::where('estatus', '=', 1)->lists('nombre', 'id');
+        $this->comites = \App\Models\Comites::all()->lists('nombre', 'id');
+        $this->misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
+        $this->vivienda = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
+        $this->pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
+        $this->paredes = \App\Models\tipoParedes::all()->lists('nombre', 'id');
+        $this->techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
+        $this->suministro_agua = \App\Models\Servicios::where('padre', '=', 1)->lists('nombre', 'id');
+        $this->gas = \App\Models\Servicios::where('padre', '=', 2)->lists('nombre', 'id');
+        $this->desecho = \App\Models\Servicios::where('padre', '=', 3)->lists('nombre', 'id');
+        $this->agua_ser = \App\Models\Servicios::where('padre', '=', 8)->lists('nombre', 'id');
+        $this->servicios = \App\Models\Servicios::where('padre', '=', null)->lists('nombre', 'id');
+        $this->servicios_comunidad = \App\Models\Servicios_comunidad::all()->lists('nombre', 'id');
+        $this->realidad = \App\Models\RealidadSocioeconomica::all()->lists('pregunta', 'id');
+        $this->casa_comercial = \App\Models\CasaComercial::all()->lists('nombre', 'id');
+        $this->sub_secretaria = \App\Models\Sub_secretaria::where('estatus', '=', 1)->lists('descripcion', 'id');
+        $this->consulta_ingreso = \App\Models\consulta_ingreso::where('estatus', '=', 1)->lists('nombre', 'id');
+        $this->nivel_instruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
+        $this->parentesco = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
+        $this->anexos = \App\Models\Anexos::where('estatus', '=', 1)->lists('nombre', 'id');
+
 
     }
 
+
     public function index()
     {
-        //dd(Secretaria::with('Subsecretaria')->get());
+
         $solicitudes = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
             ->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)
             ->where('id_estatus', '=', '1')
             //->select('id','estatus','id_coordinaciones')
             ->get();
 
-        //dd($solicitudes[0]->estatus);
-
-
         return view('solicitudes.index', ['solicitud' => $solicitudes]);
-
-        // dd($solicitudes);
 
     }
 
@@ -45,61 +98,61 @@ class SolicitudesController extends Controller
         $cedula = Crypt::decrypt($ci);
         // dd($cedula);
         $datos = \App\Models\Saime::datos("'V'", $cedula);
-        $edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
-        $estados = \App\Models\Estados::all()->lists('nombre', 'id');
-        array_unshift($estados, 'Seleccione un Estado');
-        $ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
-        $recepcion = \App\Models\Recepcion::all()->lists('nombre', 'id');
-        $discapacidad = \App\Models\discapacidad::all()->lists('nombre', 'id');
-        $gradoDis = \App\Models\GradoDiscapacidad::where('estatus', '=', 1)->lists('nombre', 'id');
-        $comites = \App\Models\Comites::all()->lists('nombre', 'id');
-        $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
-        $vivienda = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
-        $pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
-        $paredes = \App\Models\tipoParedes::all()->lists('nombre', 'id');
-        $techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
-        $suministro_agua = \App\Models\Servicios::where('padre', '=', 1)->lists('nombre', 'id');
-        $gas = \App\Models\Servicios::where('padre', '=', 2)->lists('nombre', 'id');
-        $desecho = \App\Models\Servicios::where('padre', '=', 3)->lists('nombre', 'id');
-        $agua_ser = \App\Models\Servicios::where('padre', '=', 8)->lists('nombre', 'id');
-        $servicios = \App\Models\Servicios::where('padre', '=', null)->lists('nombre', 'id');
-        $servicios_comunidad = \App\Models\Servicios_comunidad::all()->lists('nombre', 'id');
-        $realidad = \App\Models\RealidadSocioeconomica::all()->lists('pregunta', 'id');
-        $casa_comercial = \App\Models\CasaComercial::all()->lists('nombre', 'id');
-        $sub_secretaria = \App\Models\Sub_secretaria::where('estatus', '=', 1)->lists('descripcion', 'id');
-        $consulta_ingreso = \App\Models\consulta_ingreso::where('estatus', '=', 1)->lists('nombre', 'id');
-        $nivel_instruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
-        $parenteso = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
-        $anexos = \App\Models\Anexos::where('estatus', '=', 1)->lists('nombre', 'id');
+        /*    $edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
+            $estados = \App\Models\Estados::all()->lists('nombre', 'id');
+            //array_unshift($estados, 'Seleccione un Estado');
+            $ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
+            $recepcion = \App\Models\Recepcion::all()->lists('nombre', 'id');
+            $discapacidad = \App\Models\discapacidad::all()->lists('nombre', 'id');
+            $gradoDis = \App\Models\GradoDiscapacidad::where('estatus', '=', 1)->lists('nombre', 'id');
+            $comites = \App\Models\Comites::all()->lists('nombre', 'id');
+            $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
+            $vivienda = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
+            $pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
+            $paredes = \App\Models\tipoParedes::all()->lists('nombre', 'id');
+            $techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
+            $suministro_agua = \App\Models\Servicios::where('padre', '=', 1)->lists('nombre', 'id');
+            $gas = \App\Models\Servicios::where('padre', '=', 2)->lists('nombre', 'id');
+            $desecho = \App\Models\Servicios::where('padre', '=', 3)->lists('nombre', 'id');
+            $agua_ser = \App\Models\Servicios::where('padre', '=', 8)->lists('nombre', 'id');
+            $servicios = \App\Models\Servicios::where('padre', '=', null)->lists('nombre', 'id');
+            $servicios_comunidad = \App\Models\Servicios_comunidad::all()->lists('nombre', 'id');
+            $realidad = \App\Models\RealidadSocioeconomica::all()->lists('pregunta', 'id');
+            $casa_comercial = \App\Models\CasaComercial::all()->lists('nombre', 'id');
+            $sub_secretaria = \App\Models\Sub_secretaria::where('estatus', '=', 1)->lists('descripcion', 'id');
+            $consulta_ingreso = \App\Models\consulta_ingreso::where('estatus', '=', 1)->lists('nombre', 'id');
+            $nivel_instruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
+            $parenteso = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
+            $anexos = \App\Models\Anexos::where('estatus', '=', 1)->lists('nombre', 'id');*/
 
 
         return view('solicitudes.solicitud', [
             'datos' => $datos,
-            'EdoCivil' => $edo_civil,
-            'estados' => $estados,
-            'ocupacion' => $ocupacion,
-            'recepcion' => $recepcion,
-            'discapacidad' => ['' => 'SELECCIONE..'] + $discapacidad,
-            'comites' => $comites,
-            'misiones' => $misiones,
-            'vivienda' => $vivienda,
-            'paredes' => $paredes,
-            'pisos' => $pisos,
-            'techos' => $techos,
-            'servicios' => $servicios,
-            'suministro_agua' => $suministro_agua,
-            'gas' => $gas,
-            'desecho' => $desecho,
-            'agua_ser' => $agua_ser,
-            'servicios_comunidad' => $servicios_comunidad,
-            'realidad' => $realidad,
-            'casa_comercial' => $casa_comercial,
-            'sub_secretaria' => ['' => 'SELECIONE...'] + $sub_secretaria,
-            'consulta_ingreso' => ['' => 'SELECCIONE..'] + $consulta_ingreso,
-            'nivel_instruccion' => ['' => 'SELECCIONE..'] + $nivel_instruccion,
-            'parentesco' => ['' => 'SELECCIONE..'] + $parenteso,
-            'anexos' => $anexos,
-            'gradoDis' => ['' => 'SELECCIONE..'] + $gradoDis
+            'EdoCivil' => $this->edo_civil,
+            'estados' => ['' => 'Seleccione un Estado'] + $this->estados,
+            'ocupacion' => $this->ocupacion,
+            'recepcion' => $this->recepcion,
+            'discapacidad' => ['' => 'SELECCIONE..'] + $this->discapacidad,
+            'comites' => $this->comites,
+            'misiones' => $this->misiones,
+            'vivienda' => $this->vivienda,
+            'paredes' => $this->paredes,
+            'pisos' => $this->pisos,
+            'techos' => $this->techos,
+            'servicios' => $this->servicios,
+            'suministro_agua' => $this->suministro_agua,
+            'gas' => $this->gas,
+            'desecho' => $this->desecho,
+            'agua_ser' => $this->agua_ser,
+            'servicios_comunidad' => $this->servicios_comunidad,
+            'realidad' => $this->realidad,
+            'casa_comercial' => $this->casa_comercial,
+            'sub_secretaria' => ['' => 'SELECIONE...'] + $this->sub_secretaria,
+            'consulta_ingreso' => ['' => 'SELECCIONE..'] + $this->consulta_ingreso,
+            'nivel_instruccion' => ['' => 'SELECCIONE..'] + $this->nivel_instruccion,
+            'parentesco' => ['' => 'SELECCIONE..'] + $this->parentesco,
+            'anexos' => $this->anexos,
+            'gradoDis' => ['' => 'SELECCIONE..'] + $this->gradoDis
 
         ]);
 
@@ -257,7 +310,6 @@ class SolicitudesController extends Controller
 
     protected function fileStore($file)
     {
-
         /*        $imageName = 'Robert.'.$request->file('cedula_file')->getClientOriginalExtension();
 
                 $request->file('cedula_file')->move(base_path() . '/public/documentos/', $imageName);*/
@@ -273,6 +325,48 @@ class SolicitudesController extends Controller
 
 
         }
+    }
+
+
+    protected function showInforme($id)
+    {
+
+        $socioD = \App\Models\SocioDemografico::where('id_solicitud', '=', $id)->get();
+        $socio['vivienda'] = \App\Models\tipoVivienda::find(unserialize($socioD[0]['id_viviendas']));
+        $socio['paredes'] = \App\Models\tipoParedes::find(unserialize($socioD[0]['id_paredes']));
+        $socio['pisos'] = \App\Models\tipoPisos::find(unserialize($socioD[0]['id_pisos']));
+        $socio['techos'] = \App\Models\tipoTechos::find(unserialize($socioD[0]['id_techos']));
+        $socio['agua'] = \App\Models\Servicios::find(unserialize($socioD[0]['id_agua']));
+        $socio['gas'] = \App\Models\Servicios::find(unserialize($socioD[0]['id_gas']));
+        $socio['basura'] = \App\Models\Servicios::find(unserialize($socioD[0]['id_basura']));
+        $socio['aguaServida'] = \App\Models\Servicios::find(unserialize($socioD[0]['id_agua_servida']));
+        $socio['comunidad'] = \App\Models\Servicios_comunidad::find(unserialize($socioD[0]['id_comunidad']));
+        $socio['comite'] = \App\Models\Comites::find(unserialize($socioD[0]['id_comite']));
+        $socio['misiones'] = \App\Models\Misiones::find(unserialize($socioD[0]['id_misiones']));
+
+        $informe = \App\Models\Solicitudes::with(
+            'egresos_grupo',
+            'beneficiario.estado',
+            'beneficiario.ocupacion',
+            'beneficiario.municipio',
+            'beneficiario.parroquia',
+            'beneficiario.edoCivil',
+            'solicitante.estado',
+            'solicitante.ocupacion',
+            'solicitante.municipio',
+            'solicitante.parroquia',
+            'solicitante.edoCivil',
+            'ingresos_grupo.parentesco',
+            'ingresos_grupo.ocupacion',
+            'ingresos_grupo.consulta_ingresos',
+            'ingresos_grupo.nivel_instruccion',
+            'socio_demografico')
+            ->find($id);
+
+
+        return $socio;
+
+
     }
 
 
@@ -302,45 +396,66 @@ class SolicitudesController extends Controller
      */
     public function edit($id)
     {
-        $soli = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
-            ->where('id', '=', $id)
-            ->get();
 
-        // dd(Auth::user()->id_secretaria);
+        $soli = \App\Models\Solicitudes::with(
+            'usuarios',
+            'estatus',
+            'beneficiario.beneficiario_discapacidad.discapacidad',
+            'solicitante',
+            'coordinacion',
+            'tipoSolicitud',
+            'recepcion',
+            'ingresos_grupo.parentesco',
+            'ingresos_grupo.ocupacion',
+            'ingresos_grupo.consulta_ingresos',
+            'ingresos_grupo.nivel_instruccion',
+            'socio_demografico'
+        )->find($id);
 
-        $beneficiario = \App\Models\Personas::with('beneficiario_discapacidad.')->find($soli[0]->id_beneficiario);
-        //dd($beneficiario);
-        $solicitante = \App\Models\Personas::find($soli[0]->id_solicitante);
+        //dd(($soli->egresos_grupo[1]));
+
+
+
+
+        // $beneficiario = \App\Models\Personas::with('beneficiario_discapacidad.discapacidad', 'beneficiario_discapacidad.GradoDiscapacidad')->find($soli->id_beneficiario);
+        //$solicitante = \App\Models\Personas::find($soli->id_solicitante);
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
         $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
         $tiposolicitud = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->tipo_solicitud()->lists('nombre', 'id');
-        // dd($tiposolicitud);
-        $estado = \App\Models\Estados::all()->lists('nombre', 'id');
-        $municipios = \App\Models\Municipios::all()->lists('nombre', 'id');
-        $parroquias = \App\Models\Parroquias::all()->lists('nombre', 'id');
-        $ocupacion = \App\Models\Ocupacion::all()->lists('nombre', 'id');
-        $recepcion = \App\Models\Recepcion::where('estatus', '=', 1)->lists('nombre', 'id');
-        $parentesco = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
-        $nivelInstruccion = \App\Models\nivel_instruccion::where('estatus', '=', 1)->lists('nombre', 'id');
-        $ingresos = \App\Models\consulta_ingreso::where('estatus', '=', 1)->lists('nombre', 'id');
-        $edo_civil = \App\Models\EdoCivil::all()->lists('descripcion', 'id');
 
         return view('solicitudes.editar_solicitudes', [
+            'anexos' => $this->anexos,
+            'casa_comercial' => $this->casa_comercial,
             'solicitudes' => $soli,
-            'solicitante' => $solicitante,
-            'beneficiario' => $beneficiario,
+            //'solicitante' => $solicitante,
+            //'beneficiario' => $beneficiario,
             'subSecretaria' => $sub_secretaria,
             'coordinacion' => $coordinacion,
             'tipoSolicitud' => $tiposolicitud,
-            'estado' => $estado,
-            'municipio' => $municipios,
-            'parroquia' => $parroquias,
-            'ocupacion' => $ocupacion,
-            'recepcion' => $recepcion,
-            'parentesco' => $parentesco,
-            'nivelInstruccion' => $nivelInstruccion,
-            'ingresos' => $ingresos,
-            'edo_civil' => $edo_civil
+            'estado' => $this->estados,
+            'municipio' => $this->municipios,
+            'parroquia' => $this->parroquias,
+            'ocupacion' => $this->ocupacion,
+            'recepcion' => $this->recepcion,
+            'parentesco' => $this->parentesco,
+            'nivelInstruccion' => $this->nivel_instruccion,
+            'consulta_ingreso' => $this->consulta_ingreso,
+            'edo_civil' => $this->edo_civil,
+            'discapacidad' => $this->discapacidad,
+            'gradoDis' => $this->gradoDis,
+            'vivienda'=> $this->vivienda,
+            'paredes'=>$this->paredes,
+            'pisos'=>$this->pisos,
+            'techos'=>$this->techos,
+            'suministro_agua'=>$this->suministro_agua,
+            'gas'=>$this->gas,
+            'agua_ser'=>$this->agua_ser,
+            'servicios_comunidad'=>$this->servicios_comunidad,
+            'comite'=>$this->comites,
+            'misiones'=>$this->misiones,
+            'desecho'=>$this->desecho,
+            'realidad'=>$this->realidad
+
 
         ]);
 
@@ -352,8 +467,80 @@ class SolicitudesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function update($id)
+    public function update(SolicitudesRequest $request,$id)
     {
+        $soli = \App\Models\Solicitudes::with(
+            'usuarios',
+            'estatus',
+            'beneficiario.beneficiario_discapacidad.discapacidad',
+            'solicitante',
+            'coordinacion',
+            'tipoSolicitud',
+            'recepcion',
+            'ingresos_grupo.parentesco',
+            'ingresos_grupo.ocupacion',
+            'ingresos_grupo.consulta_ingresos',
+            'ingresos_grupo.nivel_instruccion',
+            'socio_demografico'
+        )->find($id);
+
+        dd($request->input());
+       // dd($soli);
+
+        // BENEFICIARIO
+        $soli->beneficiario->sexo = $request->input('sexo_be');
+        $soli->beneficiario->direccion = $request->input('sector_be');
+        $soli->beneficiario->id_ocupacion = $request->input('ocupacion_be');
+        $soli->beneficiario->id_estado = $request->input('estado_be');
+        $soli->beneficiario->id_municipio = $request->input('municipio_be');
+        $soli->beneficiario->id_parroquia = $request->input('parroquias_be');
+        $soli->beneficiario->id_edocivil = $request->input('Edocivil_be');
+
+        // BENEFICIARIO DISCAPACIDAD
+        if ($request->discapacidad != null) {
+            $soli->beneficiario->certificado_discp = $request->discapacidad['certificado'];
+            $soli->beneficiario->beneficiario_discapacidad->ayuda_tecnica = $request->discapacidad['ayudaTecnica'];
+            $soli->beneficiario->beneficiario_discapacidad->id_discapacidad = $request->discapacidad['algunaDis'];
+            $soli->beneficiario->beneficiario_discapacidad->id_gdiscapacidad = $request->discapacidad['grado'];
+
+        }
+
+        //SOLICITANTE
+        $soli->solicitante->sexo = $request->input('sexo_so');
+        $soli->solicitante->direccion = $request->input('sector_so');
+        $soli->solicitante->id_ocupacion = $request->input('ocupacion_so');
+        $soli->solicitante->id_estado = $request->input('estado_so');
+        $soli->solicitante->id_municipio = $request->input('municipio_so');
+        $soli->solicitante->id_parroquia = $request->input('parroquia_so');
+        $soli->solicitante->id_edocivil = $request->input('edocivil_so');
+
+
+
+
+
+
+
+
+
+
+        //$soli->solicitante->nombres='DANIXI';
+        //$soli->save();
+
+      //  dd($soli->solicitante);
+
+     /*   $solicitudes= Solicitudes::find($id)->beneficiario()->first();
+
+        $solicitudes->nombres='ROBERT';
+        $solicitudes->save();
+
+        dd($solicitudes);
+
+
+
+        dd($request->input());*/
+
+
+
         //
     }
 
