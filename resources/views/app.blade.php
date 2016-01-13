@@ -2,14 +2,11 @@
 <html lang="es">
 <head>
     <title>SURAGS</title>
-    {{-- Incluimos el CSS de boostrap y el CSS de la plantilla
-        que usamos con los helpers de Laravel --}}
 
     {!! Html::style('css/bootstrap.min.css')  !!}
     {{--{!! Html::style('css/jumbotron-narrow.css') !!}--}}
     {!! Html::style('css/datepicker.css') !!}
     {!! Html::style('css/bootstrap-select.css') !!}
-    {{--Incluimos la libreria jQuery--}}
     {!! Html::script('js/jquery.js') !!}
 
 </head>

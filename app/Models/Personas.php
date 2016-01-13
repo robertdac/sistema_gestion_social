@@ -11,7 +11,14 @@ class Personas extends Model
 
     public function  beneficiario_discapacidad()
     {
-       return $this->hasMany('\App\Models\BeneficiarioDiscapacidad', 'id_beneficiario');
+        return $this->hasMany('\App\Models\BeneficiarioDiscapacidad', 'id_beneficiario');
+    }
+
+
+    public function telefonos()
+    {
+ return $this->hasMany('App\Models\Telefonos','id_persona');
+
     }
 
 

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+
 
 class SolicitudesController extends Controller
 {
@@ -76,12 +78,15 @@ class SolicitudesController extends Controller
 
     public function index()
     {
-
-        $solicitudes = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
+        $solicitudes = \App\Models\Solicitudes::with
+        ('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
             ->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)
-            ->where('id_estatus', '=', '1')
+            ->where('id_estatus', '=', 1)
             //->select('id','estatus','id_coordinaciones')
             ->get();
+
+       // dd($solicitudes);
+
 
         return view('solicitudes.index', ['solicitud' => $solicitudes]);
 
@@ -412,13 +417,6 @@ class SolicitudesController extends Controller
             'socio_demografico'
         )->find($id);
 
-        //dd(($soli->egresos_grupo[1]));
-
-
-
-
-        // $beneficiario = \App\Models\Personas::with('beneficiario_discapacidad.discapacidad', 'beneficiario_discapacidad.GradoDiscapacidad')->find($soli->id_beneficiario);
-        //$solicitante = \App\Models\Personas::find($soli->id_solicitante);
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
         $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
         $tiposolicitud = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->tipo_solicitud()->lists('nombre', 'id');
@@ -477,15 +475,10 @@ class SolicitudesController extends Controller
             'coordinacion',
             'tipoSolicitud',
             'recepcion',
-            'ingresos_grupo.parentesco',
-            'ingresos_grupo.ocupacion',
-            'ingresos_grupo.consulta_ingresos',
-            'ingresos_grupo.nivel_instruccion',
+            'egresos_grupo',
+            'ingresos_grupo',
             'socio_demografico'
         )->find($id);
-
-        dd($request->input());
-       // dd($soli);
 
         // BENEFICIARIO
         $soli->beneficiario->sexo = $request->input('sexo_be');
@@ -496,13 +489,15 @@ class SolicitudesController extends Controller
         $soli->beneficiario->id_parroquia = $request->input('parroquias_be');
         $soli->beneficiario->id_edocivil = $request->input('Edocivil_be');
 
+        $soli->beneficiario->save();
+
         // BENEFICIARIO DISCAPACIDAD
         if ($request->discapacidad != null) {
-            $soli->beneficiario->certificado_discp = $request->discapacidad['certificado'];
+            $soli->beneficiario->beneficiario_discapacidad->certificado_discp = $request->discapacidad['certificado'];
             $soli->beneficiario->beneficiario_discapacidad->ayuda_tecnica = $request->discapacidad['ayudaTecnica'];
             $soli->beneficiario->beneficiario_discapacidad->id_discapacidad = $request->discapacidad['algunaDis'];
             $soli->beneficiario->beneficiario_discapacidad->id_gdiscapacidad = $request->discapacidad['grado'];
-
+            //$soli->beneficiario->beneficiario_discapacidad->save();
         }
 
         //SOLICITANTE
@@ -513,35 +508,62 @@ class SolicitudesController extends Controller
         $soli->solicitante->id_municipio = $request->input('municipio_so');
         $soli->solicitante->id_parroquia = $request->input('parroquia_so');
         $soli->solicitante->id_edocivil = $request->input('edocivil_so');
+        $soli->solicitante->save();
 
 
+        //SOLICITUDES
+        $soli->descripcion = $request->input('descripcion_caso');
+        $soli->observacion = $request->input('observacion_caso');
+        $soli->monto_solicitado = $request->input('monto_solicitado');
+        $soli->id_tsolicitud = $request->input("tipoSolicitud");
+        $soli->id_trecepcion = $request->input("recepcion");
+        $soli->id_casa_comercial = $request->input("casa_comercial");
+        $soli->id_realidad_socieco = $request->input("preguntas");
+        $soli->save();
 
+        //INGRESOS GRUPO FAMILIAR
+        for ($i = 0; $i < count($request->nombre_Apellido); $i++) {
+            $soli->ingresos_grupo[$i]->nombre_apellido = $request->nombre_Apellido[$i];
+            $soli->ingresos_grupo[$i]->edad = $request->edad[$i];
+            $soli->ingresos_grupo[$i]->id_parentesco = $request->parentesco[$i];
+            $soli->ingresos_grupo[$i]->id_ocupacion = $request->ocupacion[$i];
+            $soli->ingresos_grupo[$i]->id_nivel_instr = $request->nivel_instruccion[$i];
+            $soli->ingresos_grupo[$i]->id_ingresos = $request->ingresos[$i];
+            $soli->ingresos_grupo[$i]->cantidad = $request->cantidad[$i];
 
+            ( $i == $request->jefe_familia) ?  $soli->ingresos_grupo[$i]->jefe_familia = 1 : $soli->ingresos_grupo[$i]->jefe_familia = 0;
 
+            $soli->ingresos_grupo[$i]->save();
 
+        }
 
+       //EGRESOS GRUPO FAMILIAR
 
+        $u = 0;
+        foreach ($request->egreso as $ind => $val) {
+            $soli->egresos_grupo[$u]->nombre = $ind;
+            $soli->egresos_grupo[$u]->cantidad = $val;
+            $soli->egresos_grupo[$u]->save();
+            $u++;
+        }
 
+       //SOCIO DEMOGRAFICO
+        $soli->socio_demografico[0]->id_viviendas = serialize($request->socio_demofrafico['vivienda']);
+        $soli->socio_demografico[0]->id_paredes = serialize($request->socio_demofrafico['paredes']);
+        $soli->socio_demografico[0]->id_pisos = serialize($request->socio_demofrafico['pisos']);
+        $soli->socio_demografico[0]->id_techos = serialize($request->socio_demofrafico['techos']);
+        $soli->socio_demografico[0]->id_agua = serialize($request->socio_demofrafico['agua']);
+        $soli->socio_demografico[0]->id_gas = serialize($request->socio_demofrafico['gas']);
+        $soli->socio_demografico[0]->id_basura = serialize($request->socio_demofrafico['basura']);
+        $soli->socio_demografico[0]->id_agua_servida = serialize($request->socio_demofrafico['aguas_servidas']);
+        $soli->socio_demografico[0]->id_comunidad = serialize($request->socio_demofrafico['servicio_comunidad']);
+        $soli->socio_demografico[0]->id_comite = serialize($request->socio_demofrafico['programa']);
+        $soli->socio_demografico[0]->id_misiones = serialize($request->socio_demofrafico['misiones']);
+        $soli->socio_demografico[0]->save();
 
-        //$soli->solicitante->nombres='DANIXI';
-        //$soli->save();
+        Session::flash('mensaje','SE HA ACTUALIZADO LA SOLICITUD CORRECTAMENTE');
+        return Redirect::to('editar_solicitudes/'.$soli->id);
 
-      //  dd($soli->solicitante);
-
-     /*   $solicitudes= Solicitudes::find($id)->beneficiario()->first();
-
-        $solicitudes->nombres='ROBERT';
-        $solicitudes->save();
-
-        dd($solicitudes);
-
-
-
-        dd($request->input());*/
-
-
-
-        //
     }
 
     /**

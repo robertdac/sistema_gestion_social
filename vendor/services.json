@@ -1,5 +1,6 @@
 {
     "providers": [
+        "Barryvdh\\DomPDF\\ServiceProvider",
         "Collective\\Html\\HtmlServiceProvider",
         "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -30,6 +31,7 @@
         "App\\Providers\\RouteServiceProvider"
     ],
     "eager": [
+        "Barryvdh\\DomPDF\\ServiceProvider",
         "Illuminate\\Auth\\AuthServiceProvider",
         "Illuminate\\Routing\\ControllerServiceProvider",
         "Illuminate\\Cookie\\CookieServiceProvider",

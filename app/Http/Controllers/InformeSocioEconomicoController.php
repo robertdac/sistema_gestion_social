@@ -46,9 +46,6 @@ class InformeSocioEconomicoController extends Controller
 
         $socioD = \App\Models\SocioDemografico::where('id_solicitud', '=', $id)->get();
 
-
-
-
         $socio['vivienda'] = \App\Models\tipoVivienda::find(unserialize($socioD[0]['id_viviendas']));
         $socio['paredes'] = \App\Models\tipoParedes::find(unserialize($socioD[0]['id_paredes']));
         $socio['pisos'] = \App\Models\tipoPisos::find(unserialize($socioD[0]['id_pisos']));
@@ -80,16 +77,17 @@ class InformeSocioEconomicoController extends Controller
             'socio_demografico')
             ->find($id);
 
-          $dos=[$informe,$socio];
+          //$dos=[$informe,$socio];
+
+           // $data=['informe' => $informe];
+
+     /*   $view =  \View::make('informe_socioeconomico.informe',$data)->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('lalala');*/
 
 
-        dd($dos);
-
-
-
-        //dd($informe[0]->beneficiario->nacionalidad);
-
-        return view('informe_socioeconomico.informe', ['informe' => $informe,'socio'=>$socio]);
+        return view("informe_socioeconomico.informe", ['informe' => $informe]);
 
 
     }

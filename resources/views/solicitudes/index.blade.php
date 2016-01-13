@@ -45,9 +45,6 @@
 
         @foreach($solicitud as $sol)
 
-
-
-
             <tr>
                 <td>{!! $sol->coordinacion->abreviacion.' '.$sol->id !!}</td>
                 <td>{!! $sol->tipoSolicitud->nombre !!}</td>
@@ -58,8 +55,7 @@
 
                 <td class=" text-center">
                     <a class="verFicha" data-toggle="modal" data-target="#myModal" title="Ver ficha"
-                       href="{{ url("ficha/$sol->id")  }} "><span
-                                class="glyphicon glyphicon-eye-open"></span></a>
+                       href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
                     <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span
                                 class="glyphicon glyphicon-pencil"></span></a>
                     <a title="Informe Socio Economico" href="{{ url("informe_socio_economico/$sol->id")  }} "> <span

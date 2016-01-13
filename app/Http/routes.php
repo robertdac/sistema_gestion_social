@@ -18,6 +18,38 @@ Route::get('/', 'HomeController@index');
 
 Route::get('prueba', function () {
 
+
+dd(\App\Models\Personas::with('telefonos.tipoTelefono')->find('43'));
+
+    $informe = \App\Models\Solicitudes::with(
+        'egresos_grupo',
+        'beneficiario.estado',
+        'beneficiario.ocupacion',
+        'beneficiario.municipio',
+        'beneficiario.parroquia',
+        'beneficiario.edoCivil',
+        'solicitante.estado',
+        'solicitante.ocupacion',
+        'solicitante.municipio',
+        'solicitante.parroquia',
+        'solicitante.edoCivil',
+        'ingresos_grupo.parentesco',
+        'ingresos_grupo.ocupacion',
+        'ingresos_grupo.consulta_ingresos',
+        'ingresos_grupo.nivel_instruccion',
+        'socio_demografico')
+        ->find(10);
+
+//dd($informe->descripcion);
+
+    return view('success',['informe'=>$informe]);
+
+    $view =  \View::make('success',['informe'=>$informe]);
+    $pdf = \App::make('dompdf.wrapper');
+    $pdf->loadHTML($view);
+    return $pdf->stream('lalala');
+
+
     $epa= \App\Models\Estatus::find(1)->solicitudes();
 
    dd($epa);

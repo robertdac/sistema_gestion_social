@@ -30,32 +30,35 @@
                     </tr>
 
                     <tr>
-                        <th class="col-xs-1"> Jefe de Familia  </th>
+                        <th class="col-xs-1"> Jefe de Familia</th>
                         <th class="col-xs-2">Nombre y Apellido</th>
                         <th>Edad</th>
                         <th class="col-xs-2">Parentesco</th>
                         <th>Ocupacion Actual</th>
                         <th>Nivel de Instruccion</th>
                         <th>Ingresos</th>
-                        <th class="col-xs-2" >Cantidad en Bs.</th>
+                        <th class="col-xs-2">Cantidad en Bs.</th>
                         {{--    <th></th>--}}
 
                     </tr>
 
                     <tbody class="input_fields_wrap">
 
+                    <?php $i = 0; ?>
                     @foreach($solicitudes->ingresos_grupo as $ingresos)
                         <tr>
-                            <td class="text-center"> {!! Form::radio("jefe_familia",$ingresos->id,($ingresos->jefe_familia == 1) ? 1 :0  ) !!}   </td>
-                            <td> {!! Form::text("nombre_Apellido[$ingresos->id]",$ingresos->nombre_apellido,["class"=>"mayusculas form-control"]); !!}  </td>
-                            <td> {!! Form::text("edad[$ingresos->id]",$ingresos->edad,["class"=>"form-control"]); !!} </td>
-                            <td> {!!Form::select("parentesco[$ingresos->id]",$parentesco,$ingresos->id_parentesco,['class'=>'form-control']); !!} </td>
-                            <td> {!! Form::select("ocupacion[$ingresos->id]",$ocupacion,$ingresos->id_ocupacion,[ 'id'=>'cambia', 'class'=>'form-control']); !!} </td>
-                            <td> {!! Form::select("nivel_instruccion[$ingresos->id]",$nivelInstruccion,$ingresos->id_nivel_instr,[ "id"=>'cambia', "class"=>"form-control"]); !!} </td>
-                            <td> {!! Form::select("ingresos[$ingresos->id]",$consulta_ingreso,$ingresos->id_ingresos,['class'=>'form-control']); !!} </td>
-                            <td> {!! Form::text("cantidad[$ingresos->id]",$ingresos->cantidad,["class"=>"income_count form-control"]); !!}</td>
+                            <td class="text-center"> {!! Form::radio("jefe_familia",$i,($ingresos->jefe_familia == 1) ? 1 : 0  ) !!}   </td>
+                            <td> {!! Form::text("nombre_Apellido[$i]",$ingresos->nombre_apellido,["class"=>"mayusculas form-control"]); !!}  </td>
+                            <td> {!! Form::text("edad[$i]",$ingresos->edad,["class"=>"form-control"]); !!} </td>
+                            <td> {!!Form::select("parentesco[$i]",$parentesco,$ingresos->id_parentesco,['class'=>'form-control']); !!} </td>
+                            <td> {!! Form::select("ocupacion[$i]",$ocupacion,$ingresos->id_ocupacion,[ 'id'=>'cambia', 'class'=>'form-control']); !!} </td>
+                            <td> {!! Form::select("nivel_instruccion[$i]",$nivelInstruccion,$ingresos->id_nivel_instr,[ "id"=>'cambia', "class"=>"form-control"]); !!} </td>
+                            <td> {!! Form::select("ingresos[$i]",$consulta_ingreso,$ingresos->id_ingresos,['class'=>'form-control']); !!} </td>
+                            <td> {!! Form::text("cantidad[$i]",$ingresos->cantidad,["class"=>"income_count form-control"]); !!}</td>
 
                         </tr>
+
+                        <?php  $i++ ?>
                     @endforeach
 
                     </tbody>
@@ -75,38 +78,37 @@
 
                 @foreach($solicitudes->egresos_grupo as $egresos)
 
-                <tr>
-                 {{--   <td> {!! Form::checkbox("egresoDescrip[$egresos->id]",$egresos->nombre); !!}</td>--}}
-                    <td><strong>{!!  $egresos->nombre  !!}</strong></td>
-                    <td>{!!
+                    <tr>
+                        {{--   <td> {!! Form::checkbox("egresoDescrip[$egresos->id]",$egresos->nombre); !!}</td>--}}
+                        <td><strong>{!!  $egresos->nombre  !!}</strong></td>
+                        <td>{!!
                         Form::text("egreso[$egresos->nombre]",$egresos->cantidad,['class'=>'income_count2 form-control','id'=>'alimentacion', 'placeholder'=>'Cantidad en Bs.']); !!}
-                    </td>
-                </tr>
-              @endforeach
-
+                        </td>
+                    </tr>
+                @endforeach
 
 
             </table>
 
-          {{--  <div>
-                <br>
+            {{--  <div>
+                  <br>
 
 
-                <div class="row">
-                    <div class="col-xs-4"> {!! Form::label('Tipo','Otros Ingresos:'); !!}</div>
-                    <div class="col-xs-4"> {!! Form::label('Tipo','Ingreso Total:'); !!}</div>
-                    <div class="col-xs-4"> {!! Form::label('Tipo','Egreso Total:'); !!}</div>
+                  <div class="row">
+                      <div class="col-xs-4"> {!! Form::label('Tipo','Otros Ingresos:'); !!}</div>
+                      <div class="col-xs-4"> {!! Form::label('Tipo','Ingreso Total:'); !!}</div>
+                      <div class="col-xs-4"> {!! Form::label('Tipo','Egreso Total:'); !!}</div>
 
-                </div>
+                  </div>
 
-                <div class="row">
-                    <div class="col-xs-4"> {!! Form::text("otrosIngresos",null,["class"=>"form-control" ]); !!}</div>
-                    <div class="col-xs-4"> {!! Form::text("ingresoTotal",null,['id'=>"income_sum",'readonly'=>true,"class"=>"form-control total"]); !!}</div>
-                    <div class="col-xs-4"> {!! Form::text("egresoTotal",null,[ 'id'=>"income_sum2","class"=>"form-control",'readonly'=>true]); !!}</div>
+                  <div class="row">
+                      <div class="col-xs-4"> {!! Form::text("otrosIngresos",null,["class"=>"form-control" ]); !!}</div>
+                      <div class="col-xs-4"> {!! Form::text("ingresoTotal",null,['id'=>"income_sum",'readonly'=>true,"class"=>"form-control total"]); !!}</div>
+                      <div class="col-xs-4"> {!! Form::text("egresoTotal",null,[ 'id'=>"income_sum2","class"=>"form-control",'readonly'=>true]); !!}</div>
 
 
-                </div>
-            </div>--}}
+                  </div>
+              </div>--}}
 
 
         </div>
@@ -140,7 +142,7 @@
 
                     {!! Form::label('Tipo de pisos') !!}
 
-                    {!! Form::select('socio_demofrafico[pisos][]',$pisos,unserialize($solicitudes->socio_demografico[0]->pisos),['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
+                    {!! Form::select('socio_demofrafico[pisos][]',$pisos,unserialize($solicitudes->socio_demografico[0]->id_pisos),['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
                 </div>
                 <div class="col-xs-3">

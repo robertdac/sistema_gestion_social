@@ -8,7 +8,13 @@
 
 
     <div role="tabpanel">
-        @if($errors->has())
+
+
+        @if (Session::has('mensaje'))
+            <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
+        @endif
+
+    @if($errors->has())
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach
@@ -121,17 +127,18 @@
                                 </div>
                                 <br>
 
+
                                 <div class="row">
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                        {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control']);  !!}
+                                        {!! Form::select('ocupacion_be',$ocupacion,$solicitudes->beneficiario->id_ocupacion,['class'=>'form-control']);  !!}
                                     </div>
 
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Estado','Estado:')   !!}
-                                        {!! Form::select('estado_be',$estado,$solicitudes->beneficiario->estado,['class'=>'form-control estado']);  !!}
+                                        {!! Form::select('estado_be',$estado,$solicitudes->beneficiario->estado->id,['class'=>'form-control estado']);  !!}
                                     </div>
                                     <div class="col-xs-3">
                                         {!! Form::label('Municipio','Municipio:')   !!}

@@ -2,9 +2,7 @@
 @section('content')
 
 
-{{--
-            {{  dd($socio['vivienda'])  }}
---}}
+            {{--{{  dd($informe)  }}--}}
 
     <h2 class="text-center">DATOS SOCIECONOMMICOS</h2>
 
@@ -39,7 +37,7 @@
                             <div class="col-xs-12">
                                 {!! Form::label('descripcion de la Solicitud ') !!}
 
-                                {!! Form::textarea('descripcion',$informe[0]->descripcion,['class'=>'form-control','rows' => 5]) !!}
+                                {!! Form::textarea('descripcion',$informe->descripcion,['class'=>'form-control','rows' => 5]) !!}
                             </div>
 
                         </div>
@@ -55,7 +53,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <label for="email">Nacionalidad:</label>
-                                <?php $nac = $informe[0]->beneficiario->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                <?php $nac = $informe->beneficiario->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
                                 {!! Form::text('naci_be',$naci,['class'=>'form-control','readonly'=>'true']) !!}
                                 {!! Form::hidden('nacionalidad',$nac)  !!}
 
@@ -63,21 +61,21 @@
                             <div class="col-xs-3">
 
                                 {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                {!! Form::text('cedula_be',$informe[0]->beneficiario->cedula,['class'=>"form-control","readonly"=>"true"]) !!}
+                                {!! Form::text('cedula_be',$informe->beneficiario->cedula,['class'=>"form-control","readonly"=>"true"]) !!}
 
                             </div>
 
 
                             <div class="col-xs-3">
                                 {!! Form::label('nombre','Nombre:');   !!}
-                                {!! Form::text('nombre_be',$informe[0]->beneficiario->nombres,['class'=>'form-control' ]) !!}
+                                {!! Form::text('nombre_be',$informe->beneficiario->nombres,['class'=>'form-control' ]) !!}
 
                             </div>
 
                             <div class="col-xs-3 ">
 
                                 {!! Form::label('apellido','Apellido')   !!}
-                                {!! Form::text('apellido_be',$informe[0]->beneficiario->apellidos,['class'=>'form-control' ])  !!}
+                                {!! Form::text('apellido_be',$informe->beneficiario->apellidos,['class'=>'form-control' ])  !!}
 
                             </div>
 
@@ -88,7 +86,7 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                {!! Form::text('Edocivil_be',$informe[0]->beneficiario->edoCivil->descripcion,['class'=>'form-control'])   !!}
+                                {!! Form::text('Edocivil_be',$informe->beneficiario->edoCivil->descripcion,['class'=>'form-control'])   !!}
 
                             </div>
 
@@ -104,7 +102,7 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$informe[0]->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
+                                {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$informe->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
                             </div>
 
                         </div>
@@ -114,23 +112,23 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                {!! Form::text('ocupacion_be',$informe[0]->beneficiario->ocupacion->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('ocupacion_be',$informe->beneficiario->ocupacion->nombre,['class'=>'form-control']);  !!}
                             </div>
 
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Estado','Estado:')   !!}
-                                {!! Form::text('estado_be',$informe[0]->beneficiario->estado->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_be',$informe->beneficiario->estado->nombre,['class'=>'form-control']);  !!}
                             </div>
                             <div class="col-xs-3">
                                 {!! Form::label('Municipio','Municipio:')   !!}
-                                {!! Form::text('estado_be',$informe[0]->beneficiario->municipio->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_be',$informe->beneficiario->municipio->nombre,['class'=>'form-control']);  !!}
 
                             </div>
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Parroquia','Parroquias:')   !!}
-                                {!! Form::text('estado_be',$informe[0]->beneficiario->parroquia->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_be',$informe->beneficiario->parroquia->nombre,['class'=>'form-control']);  !!}
 
                             </div>
 
@@ -203,7 +201,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <label for="email">Nacionalidad:</label>
-                                <?php $nac = str_replace('(', '', $informe[0]->solicitante->nacionalidad);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                                <?php $nac = str_replace('(', '', $informe->solicitante->nacionalidad);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
                                 {!! Form::text('naci_so',$naci,['class'=>'form-control','readonly'=>'true']) !!}
                                 {!! Form::hidden('nacionalidad',$nac)  !!}
 
@@ -211,21 +209,21 @@
                             <div class="col-xs-3">
 
                                 {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                {!! Form::text('cedula_so',$informe[0]->solicitante->cedula,['class'=>"form-control limpiar"]) !!}
+                                {!! Form::text('cedula_so',$informe->solicitante->cedula,['class'=>"form-control limpiar"]) !!}
 
                             </div>
 
 
                             <div class="col-xs-3">
                                 {!! Form::label('nombre','Nombre:');   !!}
-                                {!! Form::text('nombre_so',$informe[0]->solicitante->nombres,['class'=>'form-control limpiar','readonly'=>true ]) !!}
+                                {!! Form::text('nombre_so',$informe->solicitante->nombres,['class'=>'form-control limpiar','readonly'=>true ]) !!}
 
                             </div>
 
                             <div class="col-xs-3 ">
 
                                 {!! Form::label('apellido','Apellido')   !!}
-                                {!! Form::text('apellido_so',$informe[0]->solicitante->apellidos,['class'=>'form-control limpiar','readonly'=>true ])  !!}
+                                {!! Form::text('apellido_so',$informe->solicitante->apellidos,['class'=>'form-control limpiar','readonly'=>true ])  !!}
 
                             </div>
 
@@ -236,7 +234,7 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                {!! Form::text('edocivil_so',$informe[0]->solicitante->edoCivil->descripcion,['class'=>'form-control'])   !!}
+                                {!! Form::text('edocivil_so',$informe->solicitante->edoCivil->descripcion,['class'=>'form-control'])   !!}
 
                             </div>
 
@@ -253,7 +251,7 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                {!! Form::text('fecha_nacimiento_so',Carbon\Carbon::parse(str_replace('"','',$informe[0]->solicitante->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
+                                {!! Form::text('fecha_nacimiento_so',Carbon\Carbon::parse(str_replace('"','',$informe->solicitante->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
                             </div>
 
                         </div>
@@ -263,23 +261,23 @@
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                {!! Form::text('ocupacion_so',$informe[0]->solicitante->ocupacion->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('ocupacion_so',$informe->solicitante->ocupacion->nombre,['class'=>'form-control']);  !!}
                             </div>
 
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Estado','Estado:')   !!}
-                                {!! Form::text('estado_so',$informe[0]->solicitante->estado->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_so',$informe->solicitante->estado->nombre,['class'=>'form-control']);  !!}
                             </div>
                             <div class="col-xs-3">
                                 {!! Form::label('Municipio','Municipio:')   !!}
-                                {!! Form::text('estado_so',$informe[0]->solicitante->municipio->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_so',$informe->solicitante->municipio->nombre,['class'=>'form-control']);  !!}
                             </div>
 
                             <div class="col-xs-3 ">
                                 {!! Form::label('Parroquia','Parroquias:')   !!}
 
-                                {!! Form::text('estado_so',$informe[0]->solicitante->parroquia->nombre,['class'=>'form-control']);  !!}
+                                {!! Form::text('estado_so',$informe->solicitante->parroquia->nombre,['class'=>'form-control']);  !!}
 
                             </div>
 
@@ -320,7 +318,9 @@
 
 
 
+{{--
             @include('informe_socioeconomico.mortadela')
+--}}
 
 
         </div>

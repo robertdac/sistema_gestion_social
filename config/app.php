@@ -113,7 +113,7 @@ return [
 		/*
 		 * Laravel Framework Service Providers...
 		 */
-
+		'Barryvdh\DomPDF\ServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
@@ -196,6 +196,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
+		 'PDF' => 'Barryvdh\DomPDF\Facade'
 
 	],
 
