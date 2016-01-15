@@ -22,7 +22,7 @@ class IngresosGrupo extends Model
     }
 
     public function ocupacion(){
-        return $this->belongsTo('App\Models\parentesco','id_ocupacion');
+        return $this->belongsTo('App\Models\ocupacion','id_ocupacion');
 
 
     }
