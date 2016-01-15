@@ -20,6 +20,15 @@ body{
 </head>
 <body>
 
+
+<script type="text/php">
+ $text = 'pagina: {PAGE_NUM} / {PAGE_COUNT}';
+ $font = Font_Metrics::get_font("helvetica", "bold");
+ $pdf->page_text(100, 300, $text, $font, 9);
+</script>
+
+
+
 <table width="100%" border="0">
     <tr>
         <td><img src="{{ asset('cortes_agenda/logoGDC.png')  }}" width="80" height="80">
