@@ -22,15 +22,6 @@ Route::get('prueba', function () {
 //dd(\App\Models\Personas::with('telefonos.tipoTelefono')->find('43'));
 
 
-
-
-
-
-
-
-
-
-
     $informe = \App\Models\Solicitudes::with(
         'egresos_grupo',
         'beneficiario.estado',
@@ -38,7 +29,8 @@ Route::get('prueba', function () {
         'beneficiario.municipio',
         'beneficiario.parroquia',
         'beneficiario.edoCivil',
-        'beneficiario.beneficiario_discapacidad',
+        'beneficiario.beneficiario_discapacidad.discapacidad',
+        'beneficiario.beneficiario_discapacidad.GradoDiscapacidad',
         'beneficiario.telefonos',
         'solicitante.telefonos',
         'solicitante.estado',
@@ -53,72 +45,93 @@ Route::get('prueba', function () {
         'socio_demografico')
         ->find(10);
 
+    //dd($informe->beneficiario->beneficiario_discapacidad[0]);
 
-   // dd($informe->socio_demografico[0]);
+
+    // dd($informe->socio_demografico[0]);
 
     //dd(\App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre'));
 
-/*    $viviendas=unserialize($informe->socio_demografico[0]->id_viviendas);
-    $paredes=unserialize($informe->socio_demografico[0]->id_paredes);
-    $pisos=unserialize($informe->socio_demografico[0]->id_pisos);
-    $techos=unserialize($informe->socio_demografico[0]->id_techos);
-    $agua=unserialize($informe->socio_demografico[0]->id_agua);
-    $gas=unserialize($informe->socio_demografico[0]->id_gas);
-    $basura=unserialize($informe->socio_demografico[0]->id_basura);
-    $agua_servida=unserialize($informe->socio_demografico[0]->id_agua_servida);
-    $comunidad=unserialize($informe->socio_demografico[0]->id_comunidad);
-    $comite=unserialize($informe->socio_demografico[0]->id_comite);
-    $id_misiones=unserialize($informe->socio_demografico[0]->id_misiones);*/
+    $idViviendas = unserialize($informe->socio_demografico[0]->id_viviendas);
+    $idParedes = unserialize($informe->socio_demografico[0]->id_paredes);
+    $idPisos = unserialize($informe->socio_demografico[0]->id_pisos);
+    $idTechos = unserialize($informe->socio_demografico[0]->id_techos);
+    $idAgua = unserialize($informe->socio_demografico[0]->id_agua);
+    $idGas = unserialize($informe->socio_demografico[0]->id_gas);
+    $idBasura = unserialize($informe->socio_demografico[0]->id_basura);
+    $idAgua_servida = unserialize($informe->socio_demografico[0]->id_agua_servida);
+    $idComunidad = unserialize($informe->socio_demografico[0]->id_comunidad);
+    $idComite = unserialize($informe->socio_demografico[0]->id_comite);
+    $idMisiones = unserialize($informe->socio_demografico[0]->id_misiones);
 
-    $gas = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre', 'id');
-    $vivienda = \App\Models\tipoVivienda::find(unserialize($informe->socio_demografico[0]->id_viviendas))->lists('nombre');
-    $paredes = \App\Models\tipoParedes::find(unserialize($informe->socio_demografico[0]->id_paredes))->lists('nombre');
-    $pisos = \App\Models\tipoPisos::find(unserialize($informe->socio_demografico[0]->id_pisos))->lists('nombre');
-    $techos = \App\Models\tipoTechos::find(unserialize($informe->socio_demografico[0]->id_techos))->lists('nombre');
-    $suministro_agua = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua))->lists('nombre', 'id');
-    $desecho = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_basura))->lists('nombre');
-    $agua_ser = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua_servida))->lists('nombre');
-    //$servicios = \App\Models\Servicios::find('padre', '=', null)->lists('nombre');
+    // $gas = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre', 'id');
+    $gas = \App\Models\Servicios::where('padre', 2)->lists('nombre', 'id');
+    //$vivienda = \App\Models\tipoVivienda::find(unserialize($informe->socio_demografico[0]->id_viviendas))->lists('nombre');
+    $vivienda = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
+    //$paredes = \App\Models\tipoParedes::find(unserialize($informe->socio_demografico[0]->id_paredes))->lists('nombre');
+    $paredes = \App\Models\tipoParedes::all()->lists('nombre', 'id');
+    //$pisos = \App\Models\tipoPisos::find(unserialize($informe->socio_demografico[0]->id_pisos))->lists('nombre');
+    $pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
+    //$techos = \App\Models\tipoTechos::find(unserialize($informe->socio_demografico[0]->id_techos))->lists('nombre');
+    $techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
+    //$suministro_agua = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua))->lists('nombre', 'id');
+    $suministro_agua = \App\Models\Servicios::where('padre', 1)->lists('nombre', 'id');
+    // $desecho = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_basura))->lists('nombre');
+    $desecho = \App\Models\Servicios::where('padre', 3)->lists('nombre', 'id');
+    //$agua_ser = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua_servida))->lists('nombre');
+    $agua_ser = \App\Models\Servicios::where('padre', 8)->lists('nombre', 'id');
     $servicios_comunidad = \App\Models\Servicios_comunidad::find(unserialize($informe->socio_demografico[0]->id_comunidad))->lists('nombre');
-    $comites = \App\Models\Comites::find(unserialize($informe->socio_demografico[0]->id_comite))->lists('nombre');
-    $misiones = \App\Models\Misiones::find(unserialize($informe->socio_demografico[0]->id_misiones))->lists('nombre');
+    $comites = \App\Models\Comites::all()->lists('nombre', 'id');
+    $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
 
 
+    dd(array_merge($vivienda,$idViviendas));
 
 
-     //dd();
+    // dd($vivienda[1]);
 
     //return view('success',['informe'=>$informe]);
 
-    $view =  \View::make('success',[
-        'informe'=>$informe,
-        'vivienda'=>$vivienda,
-        'gas'=>$gas,
-        'paredes'=>$paredes,
-        'pisos'=>$pisos,
-        'techos'=>$techos,
-        'comites'=>$comites,
-        'misiones'=>$misiones,
-        'suministro_agua'=>$suministro_agua,
-        'basura'=>$desecho,
-        'agua_servida'=>$agua_ser,
-        'servicios_comunidad'=>$servicios_comunidad
+    $view = \View::make('success', [
+        'informe' => $informe,
+        'vivienda' => array_merge($vivienda,$idViviendas),
+        'gas' => $gas,
+        'paredes' => $paredes,
+        'pisos' => $pisos,
+        'techos' => $techos,
+        'comites' => $comites,
+        'misiones' => $misiones,
+        'suministro_agua' => $suministro_agua,
+        'basura' => $desecho,
+        'agua_servida' => $agua_ser,
+        'servicios_comunidad' => $servicios_comunidad,
+        'idViviendas' => $idViviendas,
+        'idParedes' => $idParedes,
+        'idPisos' => $idPisos,
+        'idTechos' => $idTechos,
+        'idAgua' => $idAgua,
+        'idGas' => $idGas,
+        'idBasura' => $idBasura,
+        'idAgua_servida' => $idAgua_servida,
+        'idComunidad' => $idComunidad,
+        'idComite' => $idComite,
+        'idMisiones' => $idMisiones,
     ]);
     $pdf = \App::make('dompdf.wrapper');
     $pdf->loadHTML($view);
     return $pdf->stream('lalala');
 
 
-    $epa= \App\Models\Estatus::find(1)->solicitudes();
+    $epa = \App\Models\Estatus::find(1)->solicitudes();
 
-   dd($epa);
+    dd($epa);
 
     $solicitudes = \App\Models\Solicitudes::with('beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
-        ->join('usuarios','solicitudes.id','=','usuarios.id')
+        ->join('usuarios', 'solicitudes.id', '=', 'usuarios.id')
         //->where('id_coordinaciones', '=', 3)
         // ->where('estatus','=','1')
         ->get();
-dd($solicitudes);
+    dd($solicitudes);
 
 });
 
@@ -225,9 +238,9 @@ Route::get('informe_socio_economico/{id}', 'InformeSocioEconomicoController@show
 Route::get('solicitudes', 'SolicitudesController@index');
 Route::get('solicitudes/{ci}', 'SolicitudesController@create');
 Route::post('solicitudes', 'SolicitudesController@store');
-Route::get('editar_solicitudes/{id}','SolicitudesController@edit');
-Route::post('editar_solicitudes/{id}','SolicitudesController@update');
-Route::get('ficha/{id}','SolicitudesController@show');
+Route::get('editar_solicitudes/{id}', 'SolicitudesController@edit');
+Route::post('editar_solicitudes/{id}', 'SolicitudesController@update');
+Route::get('ficha/{id}', 'SolicitudesController@show');
 
 Route::get('usuarios', 'UserController@index');
 Route::get('ver_usuario/{id}', 'UserController@show');

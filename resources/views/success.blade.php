@@ -1,49 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-body{
-     font-family: Arial;
-    font-size: 80% ;
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana, arial, sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
 
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
 
-}
+        table.gridtable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
 
-        table{
+        .checklist {
 
-         border-spacing: 10px;
-
-
+            background: url("{{ asset('cortes_agenda/checked.png')  }}") no-repeat;
+            width: 40px;
+            height: 40px;
+            padding: 150px;
 
         }
+
+
     </style>
+
 </head>
 <body>
 
 
 <script type="text/php">
- $text = 'pagina: {PAGE_NUM} / {PAGE_COUNT}';
+{{-- $text = 'pagina: {PAGE_NUM} / {PAGE_COUNT}';
  $font = Font_Metrics::get_font("helvetica", "bold");
- $pdf->page_text(100, 300, $text, $font, 9);
+ $pdf->page_text(100, 300, $text, $font, 9);--}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
-
-
-<table width="100%" border="0">
-    <tr>
-        <td><img src="{{ asset('cortes_agenda/logoGDC.png')  }}" width="80" height="80">
-        </td>
-    </tr>
+<table class="gridtable" width="100%">
+    {{--    <tr>
+            <td><img src="{{ asset('cortes_agenda/logoGDC.png')  }}" width="80" height="80">
+            </td>
+        </tr>--}}
 
     <tr>
-        <td colspan="2" style=" text-align: center">Secretaría de Gestión Social <br> Subsecretaría de Atención Social
-        </td>
+        <th colspan="2" style=" text-align: center">SECRETARIA DE GESTIÓN SOCIAL <br> SUBSECRETARIA DE ATENCION SOCIAL
+        </th>
     </tr>
 
     <tr>
 
         <td>
-            Fecha de la entrevista: 21/08/1989
+            Fecha de la entrevista: {{ date("d-m-Y", strtotime($informe->created_at) ) }}
 
         </td>
         <td>
@@ -54,7 +125,7 @@ body{
     </tr>
 
     <tr>
-        <td style="text-align: center" colspan="2">DESCRIPCION DE LA SOLICITUD</td>
+        <th style="text-align: center" colspan="2">DESCRIPCION DE LA SOLICITUD</th>
 
     </tr>
 
@@ -63,16 +134,16 @@ body{
         </td>
 
 
-
     </tr>
 
     <tr>
-        <td colspan="2" style="text-align: center"> DATOS DE IDENTIFICACIÓN DEL SOLICITANTE</td>
+        <th colspan="2" style="text-align: center"> DATOS DE IDENTIFICACIÓN DEL SOLICITANTE</th>
     </tr>
 
 
     <tr>
-        <td colspan="2"> Nombres Apellidos: {{ $informe->solicitante->nombres." ".$informe->solicitante->apellidos  }}</td>
+        <td colspan="2"> Nombres
+            Apellidos: {{ $informe->solicitante->nombres." ".$informe->solicitante->apellidos  }}</td>
     </tr>
     <tr>
 
@@ -82,7 +153,7 @@ body{
     </tr>
     <tr>
         <td>Afinidad:</td>
-        <td>Fecha de nacimiento: {{ $informe->solicitante->fecha_nacimiento }}</td>
+        <td>Fecha de nacimiento: {{ date("d-m-Y", strtotime($informe->solicitante->fecha_nacimiento) ) }} </td>
 
     </tr>
     <tr>
@@ -92,9 +163,8 @@ body{
     </tr>
 
     <tr>
-        <td colspan="2" style="text-align: center"> DATOS DE IDENTIFICACIóN DEL BENEFICIARIO</td>
+        <th colspan="2" style="text-align: center"> DATOS DE IDENTIFICACIÓN DEL BENEFICIARIO</th>
     </tr>
-
 
     <tr>
         <td>Cedula:19387292</td>
@@ -107,38 +177,39 @@ body{
 
     </tr>
     <tr>
-        <td>Fecha de nacimiento: {{ $informe->beneficiario->fecha_nacimiento }} </td>
+        <td>Fecha de nacimiento: {{ date("d-m-Y", strtotime($informe->beneficiario->fecha_nacimiento) ) }} </td>
         <td>Telefono:</td>
 
     </tr>
     <tr>
-        <td colspan="2">Direccion: {{ $informe->direccion }}</td>
+        <td colspan="2">Direccion: {{ $informe->beneficiario->direccion }}</td>
 
     </tr>
 
     <tr>
-        <td colspan="2" style="text-align: center"> PRESENTA ALGUNA DISCAPACIDAD</td>
+        <th colspan="2" style="text-align: center"> PRESENTA ALGUNA DISCAPACIDAD</th>
     </tr>
 
     <tr>
-        <td>Discapacidad:</td>
-        <td>Grado:</td>
+        <td>Discapacidad: {{  $informe->beneficiario->beneficiario_discapacidad[0]->discapacidad->nombre  }}  </td>
+        <td>Grado:{{  $informe->beneficiario->beneficiario_discapacidad[0]->GradoDiscapacidad->nombre  }}</td>
 
     </tr>
     <tr>
-        <td>Necesita ayuda tecnica:</td>
-        <td>Numero de certificado:</td>
+        <td>Necesita ayuda
+            tecnica: {{ ($informe->beneficiario->beneficiario_discapacidad[0]->certificado_discp == 1) ? 'SI' : 'NO'  }}   </td>
+        <td>Numero de certificado: {{ $informe->beneficiario->beneficiario_discapacidad[0]->certificado_discp  }}</td>
 
     </tr>
 
-
-    <tr>
-        <td colspan="2" style="text-align: center"> DATOS SOCIECONOMICOS</td>
-    </tr>
 
 </table>
 
-<table width="100%">
+<table class="gridtable" width="100%">
+
+    <tr>
+        <th colspan="8" style="text-align: center"> DATOS SOCIECONOMICOS</th>
+    </tr>
 
     <tr>
         <td colspan="8" style="text-align: center">CONFORMACIÓN DEL GRUPO FAMILIAR</td>
@@ -155,9 +226,10 @@ body{
         <th>Cantidad en Bs.</th>
     </tr>
 
-        @for($i=0; $i < count($informe->ingresos_grupo); $i++)
-    <tr>
-            <td> {{ ($informe->ingresos_grupo[$i]->jefe_familia == 1)?  'X' : "-"     }} </td>
+
+    @for($i=0; $i < count($informe->ingresos_grupo); $i++)
+        <tr>
+            <td> {{ ($informe->ingresos_grupo[$i]->jefe_familia == 1)? 'X'  : "-"     }} </td>
             <td>{{ $informe->ingresos_grupo[$i]->nombre_apellido }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->edad   }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->parentesco->nombre   }}</td>
@@ -165,38 +237,47 @@ body{
             <td>{{ $informe->ingresos_grupo[$i]->nivel_instruccion->nombre   }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->consulta_ingresos->nombre   }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->cantidad   }}</td>
-    </tr>
-        @endfor
+        </tr>
+    @endfor
+
+</table>
 
 
-
-
-    <tr>
-        <td colspan="8" style="text-align: center">Tipo de vivienda</td>
-    </tr>
+<table style="margin-top: 150px" class="gridtable">
 
     <tr>
-
-      @foreach($vivienda as $vi)
-
-          <td> {{ $vi  }}</td>
-      @endforeach
-
-
+        <th colspan="7" style="text-align: center">Tipo de vivienda</th>
     </tr>
 
     <tr>
-        <td colspan="8" style="text-align: center">Tipo de Paredes</td>
+
+        @foreach($vivienda as $in=>$val)
+
+           <td>   {{ ($in == $val) ?   :    }} </td>
+
+
+
+
+
+        @endforeach
+
     </tr>
 
     <tr>
+        <th colspan="7" style="text-align: center">TIPO DE PAREDES</th>
+    </tr>
+
+    <tr>
+
         @foreach($paredes as $pa)
 
             <td> {{ $pa  }}</td>
+
         @endforeach
     </tr>
+
     <tr>
-        <td colspan="8" style="text-align: center">Tipo de Pisos</td>
+        <th colspan="7" style="text-align: center">TIPO DE PISOS</th>
     </tr>
 
     <tr>
@@ -208,7 +289,7 @@ body{
     </tr>
 
     <tr>
-        <td colspan="8" style="text-align: center">Tipo de techos</td>
+        <th colspan="7" style="text-align: center">TIPO DE TECHOS</th>
     </tr>
 
     <tr>
@@ -216,34 +297,39 @@ body{
 
             <td> {{ $te  }}</td>
         @endforeach
+        <td></td>
     </tr>
 
 
     <tr>
-        <td colspan="8" style="text-align: center">Suministro de Agua</td>
+        <th colspan="7" style="text-align: center">SUMINISTRO DE AGUA</th>
     </tr>
     <tr>
         @foreach($suministro_agua as $sumi)
 
             <td> {{ $sumi  }}</td>
         @endforeach
+        <td></td>
     </tr>
 
-
     <tr>
-        <td colspan="8" style="text-align: center">Suministro de Gas</td>
+        <th colspan="7" style="text-align: center">SUMINISTRO DE GAS</th>
     </tr>
 
     <tr>
         @foreach($gas as $ga)
 
-            <td> {{ $ga  }}</td>
+            <td>  {{ $ga  }}</td>
         @endforeach
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
 
-
     <tr>
-        <td colspan="8" style="text-align: center">Desecho de Basura</td>
+        <th colspan="7" style="text-align: center">DESECHO BASURA</th>
     </tr>
 
     <tr>
@@ -251,7 +337,82 @@ body{
 
             <td> {{ $ba  }}</td>
         @endforeach
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
+
+
+</table>
+
+
+<table class="gridtable">
+
+    <tr>
+        <th colspan="8" style="text-align: center">COMITES</th>
+    </tr>
+
+
+    <tr>
+        @for($x=1; $x <= 7; $x++ )
+            <td> {{ $comites[$x]  }}</td>
+        @endfor
+
+        <td></td>
+    </tr>
+
+    <tr>
+        @for($x=8; $x <= 15; $x++ )
+            <td> {{ $comites[$x]  }}</td>
+
+        @endfor
+
+    </tr>
+
+
+</table>
+
+
+<table class="gridtable">
+
+
+    <tr>
+        <th colspan="7" style="text-align: center">MISIONES</th>
+    </tr>
+
+
+    <tr>
+        @for($x=1; $x <= 7; $x++ )
+            <td> {{ $misiones[$x]  }}</td>
+        @endfor
+
+    </tr>
+
+    <tr>
+        @for($x=8; $x <= 14; $x++ )
+            <td> {{ $misiones[$x]  }}</td>
+
+        @endfor
+
+    </tr>
+
+    <tr>
+        @for($x=15; $x <= 21; $x++ )
+            <td> {{ $misiones[$x]  }}</td>
+
+        @endfor
+
+    </tr>
+    <tr>
+        @for($x=22; $x <= 25; $x++ )
+            <td> {{ $misiones[$x]  }}</td>
+
+        @endfor
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
 
 </table>
 

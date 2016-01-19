@@ -321,12 +321,12 @@ class SolicitudesController extends Controller
 
 
         if (is_array($file)) {
-            foreach ($file as $key => $value) {
-                if (!empty($value) || $value != NULL || $value != "") {
-                    return true;
-                    break;//stop the process we have seen that at least 1 of the array has value so its not empty
+                foreach ($file as $key => $value) {
+                    if (!empty($value) || $value != NULL || $value != "") {
+                        return true;
+                        break;
+                    }
                 }
-            }
 
 
         }
