@@ -31,7 +31,6 @@ class opciones_perfiles extends Model
 
     {
 
-
         $nemo = \App\Models\opciones_perfiles::menu(0, $user);
 
         echo "<ul class='nav navbar-nav'>";

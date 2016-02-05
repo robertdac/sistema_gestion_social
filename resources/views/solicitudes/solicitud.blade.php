@@ -4,7 +4,7 @@
     <h2 class="text-center">REGISTRO DE LA SOLICITUD</h2>
 
 
-    {!! Form::open(['url' => 'solicitudes', 'files' => true]) !!}
+    {!! Form::open(['url' => 'solicitudes', 'id'=> 'solicitud','files' => true]) !!}
 
 
     <div role="tabpanel">
@@ -15,7 +15,6 @@
                 <li>{{ $error }}</li>
                 @endforeach
                 @endif
-
 
                         <!-- Nav tabs -->
                 <ul style="margin-bottom:20px" class="nav nav-tabs" role="tablist">
@@ -38,10 +37,14 @@
                             <div class="panel-body">
 
                                 <div class="row">
+
+
+                                    <input type="text" pattern="^[0-9]" title='Only Number' min="1" max="8">
+
                                     <div class="col-xs-3">
                                         {!! Form::label('sub secretaria') !!}
 
-                                        {!! Form::select('subSecretaria',$sub_secretaria,0,['class'=>' sub_secretaria form-control']) !!}
+                                        {!! Form::select('subSecretaria',$sub_secretaria,0,['class'=>' sub_secretaria form-control','required'=>"required"]) !!}
 
 
                                     </div>
@@ -50,7 +53,7 @@
                                         {!! Form::label('Coordinacion') !!}
 
                                         <select class="form-control coordinacion" name="coordinacion">
-                                            <option name="coordinacion">Debe Seleccionar una coordinacion</option>
+                                            <option required="required"  name="coordinacion">Debe Seleccionar una coordinacion</option>
                                         </select>
 
                                     </div>
@@ -421,6 +424,9 @@
 
 
         $(document).ready(function () {
+
+
+            $('#solicitud').guardian();
 
 
             $('.coordinacion').click(function () {

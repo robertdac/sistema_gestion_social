@@ -19,11 +19,17 @@ class Solicitudes extends Model
 
     }
 
-    public function ingresos_grupo()
+    public function recomendaciones()
     {
 
-        return $this->hasMany('App\Models\IngresosGrupo', 'id_solicitud');
+        return $this->hasMany('App\Models\Recomendaciones','id_solicitud');
 
+    }
+
+
+    public function ingresos_grupo()
+    {
+        return $this->hasMany('App\Models\IngresosGrupo', 'id_solicitud');
 
     }
 
@@ -31,7 +37,6 @@ class Solicitudes extends Model
     {
 
         return $this->hasMany('App\Models\EgresoGrupo', 'id_solicitud');
-
 
     }
 

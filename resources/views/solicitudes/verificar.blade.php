@@ -1,6 +1,7 @@
 @extends('app')
 @section('content')
 
+
     <h2 class="text-center">Solicitudes </h2>
 
     @if (Session::has('mensaje'))
@@ -26,8 +27,6 @@
 
 
 
-
-
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -46,7 +45,6 @@
 
         @foreach($solicitud as $sol)
 
-
             <tr>
                 <td>{!! $sol->coordinacion->abreviacion.' '.$sol->id !!}</td>
                 <td>{!! $sol->tipoSolicitud->nombre !!}</td>
@@ -56,28 +54,20 @@
                 <td>{!!$sol->estatus->descripcion  !!}</td>
 
                 <td class=" text-center">
-                    <a class="verFicha" data-toggle="modal" data-target="#myModal" title="Ver ficha"
-                       href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span
-                                class="glyphicon glyphicon-pencil"></span></a>
-                    <a title="Informe Socio Economico" href="{{ url("informe_socio_economico/$sol->id")  }} "> <span
-                                style="margin-right: 10px; " class="glyphicon glyphicon-list-alt"></span></a>
-                    {{--SOLO COORDINADORES PUEDEN VERIFICAR LA SOLICITUD --}}
-                        @if(Auth::user()->id_perfil == 5  )
-                    <a title="Verificar" href="{{ url("verificar/$sol->id")  }} "> <span style="margin-right: 10px;"class="glyphicon glyphicon-ok"></span></a>
-                        @elseif(Auth::user()->id_perfil == 4)
-                        <a title="Aprobar" href="{{ url("aprobar/$sol->id")  }} "> <span style="margin-right: 10px;"class="glyphicon glyphicon-ok"></span></a>
 
-                @endif
+                    <a title="VERIFICAR" href="{{ url("verificar/$sol->id")  }} "><span
+                                class="glyphicon glyphicon-pencil"></span></a>
+
             </tr>
+
             </td>
+
 
         @endforeach
 
 
         </tbody>
     </table>
-
 
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -136,7 +126,7 @@
          });*/
 
 
-        $('.verFicha').on('click', function () {
+        $('.verFicha').on('click',function(){
             // var id=$(this).data('id');
             //alert(id);
             $('.modal-body').html('loading');
@@ -145,11 +135,11 @@
                 url: '{{ url("ficha/$sol->id")  }}',
                 // data:{id: id},
                 dataType: 'json',
-                success: function (data) {
+                success: function(data) {
                     $('.modal-body').html(data[0].id);
                 },
-                error: function (err) {
-                    alert("error" + JSON.stringify(err));
+                error:function(err){
+                    alert("error"+JSON.stringify(err));
                 }
             })
         });

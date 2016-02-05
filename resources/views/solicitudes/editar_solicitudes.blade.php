@@ -14,7 +14,7 @@
             <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
         @endif
 
-    @if($errors->has())
+        @if($errors->has())
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach

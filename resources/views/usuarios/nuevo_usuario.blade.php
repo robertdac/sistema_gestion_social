@@ -71,7 +71,7 @@
                 <div class="col-xs-3" >
 
                     {!! Form::label('secretaria','secretaria')   !!}
-                    {!! Form::select(  'secretaria',$secre, 0,['class'=>'form-control'])  !!}
+                    {!! Form::select('secretaria',$secre, 1,['class'=>'form-control'])  !!}
 
 
                 </div>
@@ -150,7 +150,7 @@
 
 
                 $('#subsecre').change(function(){
-                    $.get("{{ url('coordinacion')}}",
+                    $.get("{{ url('coordinaciones')}}",
                             { option: $(this).val() },
                             function(data) {
                                 $('#coordinacion').empty();

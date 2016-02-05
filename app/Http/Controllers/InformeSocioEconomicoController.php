@@ -2,8 +2,12 @@
 
 use App\Http\Requests;
 
+
+
+
 class InformeSocioEconomicoController extends Controller
 {
+
 
     /**
      * Display a listing of the resource.
@@ -12,8 +16,179 @@ class InformeSocioEconomicoController extends Controller
      */
     public function index()
     {
-        //
+
+
+        $informe = \App\Models\Solicitudes::with(
+            'egresos_grupo',
+            'beneficiario.estado',
+            'beneficiario.ocupacion',
+            'beneficiario.municipio',
+            'beneficiario.parroquia',
+            'beneficiario.edoCivil',
+            'beneficiario.beneficiario_discapacidad.discapacidad',
+            'beneficiario.beneficiario_discapacidad.GradoDiscapacidad',
+            'beneficiario.telefonos',
+            'solicitante.telefonos',
+            'solicitante.estado',
+            'solicitante.ocupacion',
+            'solicitante.municipio',
+            'solicitante.parroquia',
+            'solicitante.edoCivil',
+            'ingresos_grupo.parentesco',
+            'ingresos_grupo.ocupacion',
+            'ingresos_grupo.consulta_ingresos',
+            'ingresos_grupo.nivel_instruccion',
+            'socio_demografico')
+            ->find(10);
+
+        //dd($informe->beneficiario->beneficiario_discapacidad[0]);
+        // dd($informe->socio_demografico[0]);
+        //dd(\App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre'));
+
+        $idViviendas = unserialize($informe->socio_demografico[0]->id_viviendas);
+        $idParedes = unserialize($informe->socio_demografico[0]->id_paredes);
+        $idPisos = unserialize($informe->socio_demografico[0]->id_pisos);
+        $idTechos = unserialize($informe->socio_demografico[0]->id_techos);
+        $idAgua = unserialize($informe->socio_demografico[0]->id_agua);
+        $idGas = unserialize($informe->socio_demografico[0]->id_gas);
+        $idBasura = unserialize($informe->socio_demografico[0]->id_basura);
+        $idAgua_servida = unserialize($informe->socio_demografico[0]->id_agua_servida);
+        $idComunidad = unserialize($informe->socio_demografico[0]->id_comunidad);
+        $idComite = unserialize($informe->socio_demografico[0]->id_comite);
+        $idMisiones = unserialize($informe->socio_demografico[0]->id_misiones);
+
+
+        // $gas = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre', 'id');
+        $gas = \App\Models\Servicios::where('padre', 2)->lists('nombre', 'id');
+        //$vivienda = \App\Models\tipoVivienda::find(unserialize($informe->socio_demografico[0]->id_viviendas))->lists('nombre');
+        $viviendas = \App\Models\tipoVivienda::all()->lists('nombre', 'id');
+        //$paredes = \App\Models\tipoParedes::find(unserialize($informe->socio_demografico[0]->id_paredes))->lists('nombre');
+        $parede = \App\Models\tipoParedes::all()->lists('nombre', 'id');
+        //$pisos = \App\Models\tipoPisos::find(unserialize($informe->socio_demografico[0]->id_pisos))->lists('nombre');
+        $pisos = \App\Models\tipoPisos::all()->lists('nombre', 'id');
+        //$techos = \App\Models\tipoTechos::find(unserialize($informe->socio_demografico[0]->id_techos))->lists('nombre');
+        $techos = \App\Models\tipoTechos::all()->lists('nombre', 'id');
+        //$suministro_agua = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua))->lists('nombre', 'id');
+        $suministro_agua = \App\Models\Servicios::where('padre', 1)->lists('nombre', 'id');
+        // $desecho = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_basura))->lists('nombre');
+        $desecho = \App\Models\Servicios::where('padre', 3)->lists('nombre', 'id');
+        //$agua_ser = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua_servida))->lists('nombre');
+        $agua_ser = \App\Models\Servicios::where('padre', 8)->lists('nombre', 'id');
+        $servicios_comunidad = \App\Models\Servicios_comunidad::find(unserialize($informe->socio_demografico[0]->id_comunidad))->lists('nombre');
+        $comites = \App\Models\Comites::all()->lists('nombre', 'id');
+        $comites1 = \App\Models\Comites::find($idComite)->lists('nombre','id');
+        $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
+        $misiones1 = \App\Models\Misiones::find($idMisiones)->lists('nombre', 'id');
+
+
+        $viviendas= $this->check($viviendas,$idViviendas);
+        $paredes= $this->check($parede,$idParedes);
+        $pisos= $this->check($pisos,$idPisos);
+        $techos= $this->check($techos,$idTechos);
+        $suministro_agua= $this->check($suministro_agua,$idAgua);
+        $gas= $this->check($gas,$idGas);
+        $desecho= $this->check($desecho,$idBasura);
+        $agua_ser= $this->check($agua_ser,$idAgua_servida);
+        //$comites= $this->check($comites,$idComite);
+        //$misiones1= array_keys($this->check($misiones,$idMisiones));
+        //$misiones1= $this->check($misiones,$idMisiones);
+
+
+        //$skip=array_keys($misiones1);
+
+
+
+
+
+        // dd($misiones,$misiones1);
+
+
+
+
+      //  dd($agua_ser);
+
+    /*    echo "<pre>";
+        var_dump($pisos);
+        echo "<br>";
+        var_dump($idPisos);
+
+
+        //dd($ver);
+
+
+        exit;
+        // dd(array_merge_recursive($vivienda,$idViviendas));
+
+
+        //return view('success',['informe'=>$informe]);*/
+
+        $view = \View::make('success', [
+            'informe' => $informe,
+            'vivienda' => $viviendas,
+            'gas' => $gas,
+            'paredes' => $paredes,
+            'pisos' => $pisos,
+            'techos' => $techos,
+            'comites' => $comites,
+            'comites1' => $comites1,
+            'misiones' => $misiones,
+            'misiones1' => $misiones1,
+            'suministro_agua' => $suministro_agua,
+            'basura' => $desecho,
+            'agua_servida' => $agua_ser,
+            'servicios_comunidad' => $servicios_comunidad,
+            'idViviendas' => $idViviendas,
+            'idParedes' => $idParedes,
+            'idPisos' => $idPisos,
+            'idTechos' => $idTechos,
+            'idAgua' => $idAgua,
+            'idGas' => $idGas,
+            'idBasura' => $idBasura,
+            'idAgua_servida' => $idAgua_servida,
+            'idComunidad' => $idComunidad,
+            'idComite' => $idComite,
+            'idMisiones' => $idMisiones,
+        ]);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('lalala');
+
+
     }
+
+
+    public function check($one, $two)
+    {
+
+        $ver = array();
+
+        foreach ($one as $in => $val) {
+
+            foreach ($two as $id) {
+
+                if ($in == $id) {
+                    //dd($val);
+                    $ver[$val] = $val;
+                    // break;
+
+                }
+
+            }
+
+            if (isset($ver[$val]) <> true) {
+
+                $ver[] = $val;
+            }
+
+
+        }
+
+
+        return $ver;
+
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -77,14 +252,14 @@ class InformeSocioEconomicoController extends Controller
             'socio_demografico')
             ->find($id);
 
-          //$dos=[$informe,$socio];
+        //$dos=[$informe,$socio];
 
-           // $data=['informe' => $informe];
+        // $data=['informe' => $informe];
 
-     /*   $view =  \View::make('informe_socioeconomico.informe',$data)->render();
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        return $pdf->stream('lalala');*/
+        /*   $view =  \View::make('informe_socioeconomico.informe',$data)->render();
+           $pdf = \App::make('dompdf.wrapper');
+           $pdf->loadHTML($view);
+           return $pdf->stream('lalala');*/
 
 
         return view("informe_socioeconomico.informe", ['informe' => $informe]);

@@ -4,12 +4,15 @@
     <style type="text/css">
         table.gridtable {
             font-family: verdana, arial, sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             color: #333333;
             border-width: 1px;
             border-color: #666666;
             border-collapse: collapse;
         }
+
+
+
 
         table.gridtable th {
             border-width: 1px;
@@ -27,12 +30,13 @@
             background-color: #ffffff;
         }
 
-        .checklist {
+        td.checklist {
 
             background: url("{{ asset('cortes_agenda/checked.png')  }}") no-repeat;
-            width: 40px;
-            height: 40px;
-            padding: 150px;
+            width: 100px;
+            height: 100px;
+
+            background-position: left top;
 
         }
 
@@ -47,48 +51,6 @@
 {{-- $text = 'pagina: {PAGE_NUM} / {PAGE_COUNT}';
  $font = Font_Metrics::get_font("helvetica", "bold");
  $pdf->page_text(100, 300, $text, $font, 9);--}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -229,7 +191,7 @@
 
     @for($i=0; $i < count($informe->ingresos_grupo); $i++)
         <tr>
-            <td> {{ ($informe->ingresos_grupo[$i]->jefe_familia == 1)? 'X'  : "-"     }} </td>
+            <td> {!!  ($informe->ingresos_grupo[$i]->jefe_familia == 1)? '<b>X</b>'  : "-"     !!} </td>
             <td>{{ $informe->ingresos_grupo[$i]->nombre_apellido }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->edad   }}</td>
             <td>{{ $informe->ingresos_grupo[$i]->parentesco->nombre   }}</td>
@@ -243,7 +205,7 @@
 </table>
 
 
-<table style="margin-top: 150px" class="gridtable">
+<table style="margin-top: 200px" class="gridtable">
 
     <tr>
         <th colspan="7" style="text-align: center">Tipo de vivienda</th>
@@ -253,8 +215,7 @@
 
         @foreach($vivienda as $in=>$val)
 
-           <td>   {{ ($in == $val) ?   :    }} </td>
-
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
 
 
 
@@ -269,9 +230,9 @@
 
     <tr>
 
-        @foreach($paredes as $pa)
+        @foreach($paredes as $in=>$val)
 
-            <td> {{ $pa  }}</td>
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
 
         @endforeach
     </tr>
@@ -281,21 +242,25 @@
     </tr>
 
     <tr>
-        @foreach($pisos as $pi)
 
-            <td> {{ $pi  }}</td>
+        @foreach($pisos as $in=>$val)
+
+            <td>   {!!  ($in == $val) ? '<b>X</b> '.$val  : $val   !!} </td>
+
         @endforeach
 
+
     </tr>
+
 
     <tr>
         <th colspan="7" style="text-align: center">TIPO DE TECHOS</th>
     </tr>
 
     <tr>
-        @foreach($techos as $te)
+        @foreach($techos as $in=>$val)
 
-            <td> {{ $te  }}</td>
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
     </tr>
@@ -305,9 +270,9 @@
         <th colspan="7" style="text-align: center">SUMINISTRO DE AGUA</th>
     </tr>
     <tr>
-        @foreach($suministro_agua as $sumi)
+        @foreach($suministro_agua  as $in=>$val)
 
-            <td> {{ $sumi  }}</td>
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
     </tr>
@@ -317,9 +282,10 @@
     </tr>
 
     <tr>
-        @foreach($gas as $ga)
 
-            <td>  {{ $ga  }}</td>
+        @foreach($gas as $in=>$val)
+
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
         <td></td>
@@ -333,9 +299,9 @@
     </tr>
 
     <tr>
-        @foreach($basura as $ba)
+        @foreach($basura as $in=>$val)
 
-            <td> {{ $ba  }}</td>
+            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
         <td></td>
@@ -355,17 +321,36 @@
 
     <tr>
         @for($x=1; $x <= 7; $x++ )
-            <td> {{ $comites[$x]  }}</td>
+            @if(isset($comites1[$x]) == true )
+                <td>{!! '<b>X</b> '. $comites1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $comites[$x] !!}</td>
+
+            @endif
+
         @endfor
+
 
         <td></td>
     </tr>
 
     <tr>
         @for($x=8; $x <= 15; $x++ )
-            <td> {{ $comites[$x]  }}</td>
+            @if(isset($comites1[$x]) == true )
+
+                <td>{!! '<b>X</b> '. $comites1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $comites[$x] !!}</td>
+
+            @endif
 
         @endfor
+
+
 
     </tr>
 
@@ -382,15 +367,35 @@
 
 
     <tr>
+
+
         @for($x=1; $x <= 7; $x++ )
-            <td> {{ $misiones[$x]  }}</td>
+            @if(isset($misiones1[$x]) == true )
+
+                <td>{!! '<b>X</b> '. $misiones1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $misiones[$x] !!}</td>
+
+            @endif
+
         @endfor
 
     </tr>
 
     <tr>
         @for($x=8; $x <= 14; $x++ )
-            <td> {{ $misiones[$x]  }}</td>
+            @if(isset($misiones1[$x]) == true )
+
+                <td>{!! '<b>X</b> '. $misiones1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $misiones[$x] !!}</td>
+
+            @endif
+
 
         @endfor
 
@@ -398,14 +403,31 @@
 
     <tr>
         @for($x=15; $x <= 21; $x++ )
-            <td> {{ $misiones[$x]  }}</td>
+            @if(isset($misiones1[$x]) == true )
+
+                <td>{!! '<b>X</b> '. $misiones1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $misiones[$x] !!}</td>
+
+            @endif
+
 
         @endfor
 
     </tr>
     <tr>
         @for($x=22; $x <= 25; $x++ )
-            <td> {{ $misiones[$x]  }}</td>
+            @if(isset($misiones1[$x]) == true )
+
+                <td>{!! '<b>X</b> '. $misiones1[$x]  !!}    </td>
+
+            @else
+
+                <td> {!!  $misiones[$x] !!}</td>
+
+            @endif
 
         @endfor
         <td></td>

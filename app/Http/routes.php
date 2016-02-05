@@ -19,9 +19,6 @@ Route::get('/', 'HomeController@index');
 Route::get('prueba', function () {
 
 
-//dd(\App\Models\Personas::with('telefonos.tipoTelefono')->find('43'));
-
-
     $informe = \App\Models\Solicitudes::with(
         'egresos_grupo',
         'beneficiario.estado',
@@ -64,6 +61,7 @@ Route::get('prueba', function () {
     $idComite = unserialize($informe->socio_demografico[0]->id_comite);
     $idMisiones = unserialize($informe->socio_demografico[0]->id_misiones);
 
+
     // $gas = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre', 'id');
     $gas = \App\Models\Servicios::where('padre', 2)->lists('nombre', 'id');
     //$vivienda = \App\Models\tipoVivienda::find(unserialize($informe->socio_demografico[0]->id_viviendas))->lists('nombre');
@@ -85,16 +83,50 @@ Route::get('prueba', function () {
     $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
 
 
-    dd(array_merge($vivienda,$idViviendas));
+    echo "<pre>";
+    var_dump($pisos);
+    echo "<br>";
+    var_dump($idPisos);
 
 
-    // dd($vivienda[1]);
+    $ver = array();
+    //$x = 0;
+    foreach ($pisos as $in => $val) {
+
+        foreach ($idPisos as $id) {
+
+            if ($in == $id) {
+                //dd($val);
+                $ver[$val] = $val;
+                // break;
+
+            }
+
+        }
+
+        if (isset($ver[$val]) <> true) {
+
+            $ver[] = $val;
+        }
+
+
+       // $x++;
+
+    }
+
+
+    dd($ver);
+
+
+    exit;
+    // dd(array_merge_recursive($vivienda,$idViviendas));
+
 
     //return view('success',['informe'=>$informe]);
 
     $view = \View::make('success', [
         'informe' => $informe,
-        'vivienda' => array_merge($vivienda,$idViviendas),
+        'vivienda' => $vivienda,
         'gas' => $gas,
         'paredes' => $paredes,
         'pisos' => $pisos,
@@ -120,18 +152,6 @@ Route::get('prueba', function () {
     $pdf = \App::make('dompdf.wrapper');
     $pdf->loadHTML($view);
     return $pdf->stream('lalala');
-
-
-    $epa = \App\Models\Estatus::find(1)->solicitudes();
-
-    dd($epa);
-
-    $solicitudes = \App\Models\Solicitudes::with('beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
-        ->join('usuarios', 'solicitudes.id', '=', 'usuarios.id')
-        //->where('id_coordinaciones', '=', 3)
-        // ->where('estatus','=','1')
-        ->get();
-    dd($solicitudes);
 
 });
 
@@ -183,56 +203,11 @@ Route::get('tipo_solicitud', function () {
 	var_dump($posts);
 });*/
 
-
-Route::any('filtro', function () {
-    $cedula = Input::get('cedula');
-
-    if ($cedula != null) {
-        $personas = \App\Models\Personas::where('cedula', '=', $cedula)->first();
-
-        if ($personas == null) {
-            $cedula = Crypt::encrypt(Input::get('cedula'));
-            return redirect('solicitudes/' . $cedula);
-
-        }
+Route::get('filtro', 'FiltroController@index');
+Route::post('filtro', 'FiltroController@create');
 
 
-    }
-    return view('solicitudes.nueva_solicitud');
-
-    /*   if (!empty($personas)) {
-           $personas = \App\Models\Personas::find($cedula);
-           $id = \App\Models\Solicitudes::where('id_beneficiario', '=', $personas->id)->lists('id');
-
-           if ($personas != null && empty($id) != true) {
-               $solicitudes = \App\Models\Solicitudes::find($id[0])->usuarios;
-               if (count($solicitudes) == 3) {
-
-                   return redirect('filtro')->with('mensaje', 'la solicitud ya ha sido aprobada tiene que esperar 6 meses para otra solicitud');
-
-               } else {
-
-                   return redirect('filtro')->with('mensaje', 'la solicitud esta en proceso');
-
-               }
-
-           }
-           $cedula = Crypt::encrypt(Input::get('cedula'));
-           return redirect('solicitudes/' . $cedula);
-       }
-
-       //return redirect('solicitudes/');
-
-       return view('solicitudes.nueva_solicitud');*/
-
-});
-
-
-//Route::any('nueva_solicitud','SolicitudesController@index');
-//Route::post('nueva_solicitud','SolicitudesController@index');
-
-
-Route::get('informe_socio_economico/{id}', 'InformeSocioEconomicoController@show');
+Route::get('informe_socio_economico', 'InformeSocioEconomicoController@index');
 
 
 Route::get('solicitudes', 'SolicitudesController@index');
@@ -240,7 +215,16 @@ Route::get('solicitudes/{ci}', 'SolicitudesController@create');
 Route::post('solicitudes', 'SolicitudesController@store');
 Route::get('editar_solicitudes/{id}', 'SolicitudesController@edit');
 Route::post('editar_solicitudes/{id}', 'SolicitudesController@update');
+
+
 Route::get('ficha/{id}', 'SolicitudesController@show');
+
+//Route:get('ficha/{id}',['as'=>'fichas','SolicitudesController@show']);
+
+Route::get('verificar/{id}', 'SolicitudesController@verificarEdit');
+Route::post('verificar/{id}', 'SolicitudesController@verificarUpdate');
+Route::get('aprobar/{id}', 'SolicitudesController@aprobarEdit');
+Route::post('aprobar/{id}', 'SolicitudesController@aprobarUpdate');
 
 Route::get('usuarios', 'UserController@index');
 Route::get('ver_usuario/{id}', 'UserController@show');
