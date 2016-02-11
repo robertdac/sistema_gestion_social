@@ -3,8 +3,6 @@
 use App\Http\Requests;
 
 
-
-
 class InformeSocioEconomicoController extends Controller
 {
 
@@ -16,8 +14,6 @@ class InformeSocioEconomicoController extends Controller
      */
     public function index()
     {
-
-
         $informe = \App\Models\Solicitudes::with(
             'egresos_grupo',
             'beneficiario.estado',
@@ -76,19 +72,19 @@ class InformeSocioEconomicoController extends Controller
         $agua_ser = \App\Models\Servicios::where('padre', 8)->lists('nombre', 'id');
         $servicios_comunidad = \App\Models\Servicios_comunidad::find(unserialize($informe->socio_demografico[0]->id_comunidad))->lists('nombre');
         $comites = \App\Models\Comites::all()->lists('nombre', 'id');
-        $comites1 = \App\Models\Comites::find($idComite)->lists('nombre','id');
+        $comites1 = \App\Models\Comites::find($idComite)->lists('nombre', 'id');
         $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
         $misiones1 = \App\Models\Misiones::find($idMisiones)->lists('nombre', 'id');
 
 
-        $viviendas= $this->check($viviendas,$idViviendas);
-        $paredes= $this->check($parede,$idParedes);
-        $pisos= $this->check($pisos,$idPisos);
-        $techos= $this->check($techos,$idTechos);
-        $suministro_agua= $this->check($suministro_agua,$idAgua);
-        $gas= $this->check($gas,$idGas);
-        $desecho= $this->check($desecho,$idBasura);
-        $agua_ser= $this->check($agua_ser,$idAgua_servida);
+        $viviendas = $this->check($viviendas, $idViviendas);
+        $paredes = $this->check($parede, $idParedes);
+        $pisos = $this->check($pisos, $idPisos);
+        $techos = $this->check($techos, $idTechos);
+        $suministro_agua = $this->check($suministro_agua, $idAgua);
+        $gas = $this->check($gas, $idGas);
+        $desecho = $this->check($desecho, $idBasura);
+        $agua_ser = $this->check($agua_ser, $idAgua_servida);
         //$comites= $this->check($comites,$idComite);
         //$misiones1= array_keys($this->check($misiones,$idMisiones));
         //$misiones1= $this->check($misiones,$idMisiones);
@@ -97,30 +93,25 @@ class InformeSocioEconomicoController extends Controller
         //$skip=array_keys($misiones1);
 
 
-
-
-
         // dd($misiones,$misiones1);
 
 
+        //  dd($agua_ser);
+
+        /*    echo "<pre>";
+            var_dump($pisos);
+            echo "<br>";
+            var_dump($idPisos);
 
 
-      //  dd($agua_ser);
-
-    /*    echo "<pre>";
-        var_dump($pisos);
-        echo "<br>";
-        var_dump($idPisos);
+            //dd($ver);
 
 
-        //dd($ver);
+            exit;
+            // dd(array_merge_recursive($vivienda,$idViviendas));
 
 
-        exit;
-        // dd(array_merge_recursive($vivienda,$idViviendas));
-
-
-        //return view('success',['informe'=>$informe]);*/
+            //return view('success',['informe'=>$informe]);*/
 
         $view = \View::make('success', [
             'informe' => $informe,

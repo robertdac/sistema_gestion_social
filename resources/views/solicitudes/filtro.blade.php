@@ -2,12 +2,9 @@
 
 @section('content')
 
-
-    {{  html_entity_decode('&#10004;')  }}
     <div style="  margin-top: 20px;"></div>
 
     <div class="container-fluid">
-
 
         <div class="row">
             <div class="col-md-5 col-md-offset-3">
@@ -32,13 +29,9 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                         <div class="form-group">
-
-                             <div class="col-md-6">
-                                <input   required="required" name="cedula" type="text" class="form-control" id="cedula" placeholder="INTRODUZCA LA CÉDULA">
+                            <div class="col-md-6">
+                                <input required="required" name="cedula" type="text" class="form-control" id="cedula" placeholder="INTRODUZCA LA CÉDULA">
                             </div>
-
-
-
                         </div>
 
 
@@ -57,34 +50,34 @@
         </div>
     </div>
 
-{{--<form id="example1" action="javascript:alert('Validation Successful')">
-    <div>
-        <label>Name<span class="red">*</span></label>
-        <input name="name" required="required" type="text">
-    </div>
+    {{--<form id="example1" action="javascript:alert('Validation Successful')">
+        <div>
+            <label>Name<span class="red">*</span></label>
+            <input name="name" required="required" type="text">
+        </div>
 
-    <div>
-        <label>Email<span class="red">*</span></label>
-        <input name="email" required="required" type="email">
-    </div>
+        <div>
+            <label>Email<span class="red">*</span></label>
+            <input name="email" required="required" type="email">
+        </div>
 
-    <div>
-        <label>Phone</label>
-        <input name="phone" type="tel">
-    </div>
+        <div>
+            <label>Phone</label>
+            <input name="phone" type="tel">
+        </div>
 
-    <input name="submit" value="Submit" type="submit">
-</form>--}}
-
-
+        <input name="submit" value="Submit" type="submit">
+    </form>--}}
 
 
-<script>
 
-        $(document).ready(function() {
+
+    <script>
+
+        $(document).ready(function () {
             $('#example1').guardian();
 
-       });
+        });
 
     </script>
 

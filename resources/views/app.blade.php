@@ -5,7 +5,8 @@
 
     {!! Html::style('css/bootstrap.min.css')  !!}
     {{--{!! Html::style('css/jumbotron-narrow.css') !!}--}}
-    {!! Html::style('css/datepicker.css') !!}
+   {{-- {!! Html::style('css/datepicker.css') !!}--}}
+    {!! Html::style('css/bootstrap-datepicker.css') !!}
     {!! Html::style('css/bootstrap-select.css') !!}
     {!! Html::script('js/jquery.js') !!}
     {!! Html::style('js/guardian-master/css/guardian.css') !!}
@@ -51,11 +52,13 @@
 </div>
 
 
-{{--<script src="https://code.jquery.com/jquery.js"></script>--}}
+
 <!-- Incluimos el JS de boostrap con el Helper de Laravel -->
 {!! Html::script('js/bootstrap.min.js') !!}
 {!! Html::script('js/bootstrap-filestyle.min.js') !!}
+{{--{!! Html::script('js/bootstrap-datepicker.js') !!}--}}
 {!! Html::script('js/bootstrap-datepicker.js') !!}
+{!! Html::script('js/bootstrap-datepicker.es.min.js') !!}
 {!! Html::script('js/bootstrap-select.js') !!}
 {!! Html::script('js/guardian-master/js/jquery.guardian-1.0.min.js') !!}
 
