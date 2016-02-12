@@ -10,7 +10,8 @@
     {!! Html::style('css/bootstrap-select.css') !!}
     {!! Html::script('js/jquery.js') !!}
     {!! Html::style('js/guardian-master/css/guardian.css') !!}
-
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body>
 
@@ -54,6 +55,7 @@
 
 
 <!-- Incluimos el JS de boostrap con el Helper de Laravel -->
+
 {!! Html::script('js/bootstrap.min.js') !!}
 {!! Html::script('js/bootstrap-filestyle.min.js') !!}
 {{--{!! Html::script('js/bootstrap-datepicker.js') !!}--}}

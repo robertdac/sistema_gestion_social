@@ -1,5 +1,6 @@
 {
     "providers": [
+        "Aivo\\Highchart\\HighchartServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Collective\\Html\\HtmlServiceProvider",
         "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
@@ -31,6 +32,7 @@
         "App\\Providers\\RouteServiceProvider"
     ],
     "eager": [
+        "Aivo\\Highchart\\HighchartServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Illuminate\\Auth\\AuthServiceProvider",
         "Illuminate\\Routing\\ControllerServiceProvider",

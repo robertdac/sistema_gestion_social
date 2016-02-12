@@ -116,9 +116,16 @@ exit();
 
             $desde1 = \Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['desde']);
             $hasta2 = \Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['hasta']);
+            $date = \Carbon\Carbon::createFromFormat('d/m/Y','26/01/2016');
             //$hasta2 = \Carbon\Carbon::parse($arre['aprobado']['hasta'])->toDateTimeString();
 
-            //dd($desde1,$hasta2);
+           // dd($desde1,$hasta2);
+           // dd($date);
+
+            $nem=\App\Models\Solicitudes::whereBetween('created_at',['2016-01-26 00:00:00','2016-01-26 00:00:00'])->get();
+
+            dd($nem);
+
 
 
             $query->join('usuarios_solicitudes', 'usuarios_solicitudes.id_solicitud', '=', 'solicitudes.id')

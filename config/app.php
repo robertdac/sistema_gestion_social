@@ -113,6 +113,7 @@ return [
 		/*
 		 * Laravel Framework Service Providers...
 		 */
+		'Aivo\Highchart\HighchartServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',

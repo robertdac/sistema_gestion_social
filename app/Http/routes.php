@@ -18,8 +18,8 @@ Route::get('/', 'HomeController@index');
 
 Route::get('prueba', function () {
 
-    $lolo= \App\Models\Solicitudes::municipio()->get();
-dd($lolo);
+
+return view('prueba');
 
 });
 

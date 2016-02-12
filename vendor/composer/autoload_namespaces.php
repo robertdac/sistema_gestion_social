@@ -27,4 +27,5 @@ return array(
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
+    'Aivo\\Highchart' => array($vendorDir . '/mauro-moreno/laravel-highcharts/src', $vendorDir . '/mauro-moreno/laravel-highcharts/api'),
 );
