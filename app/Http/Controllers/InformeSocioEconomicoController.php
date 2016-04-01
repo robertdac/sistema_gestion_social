@@ -12,9 +12,10 @@ class InformeSocioEconomicoController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index($id)
     {
         $informe = \App\Models\Solicitudes::with(
+            'realidadSocio',
             'egresos_grupo',
             'beneficiario.estado',
             'beneficiario.ocupacion',
@@ -32,10 +33,15 @@ class InformeSocioEconomicoController extends Controller
             'solicitante.edoCivil',
             'ingresos_grupo.parentesco',
             'ingresos_grupo.ocupacion',
-            'ingresos_grupo.consulta_ingresos',
+            'ingresos_grupo.consulta_ingresos.ingresos',
             'ingresos_grupo.nivel_instruccion',
             'socio_demografico')
-            ->find(10);
+            ->find($id);
+
+        // dd($informe->realidadSocio->ponderacion);
+
+        //$this->puntaje($informe->ingresos_grupo, $informe->realidadSocio->ponderacion);
+
 
         //dd($informe->beneficiario->beneficiario_discapacidad[0]);
         // dd($informe->socio_demografico[0]);
@@ -53,6 +59,7 @@ class InformeSocioEconomicoController extends Controller
         $idComite = unserialize($informe->socio_demografico[0]->id_comite);
         $idMisiones = unserialize($informe->socio_demografico[0]->id_misiones);
 
+        //dd($idViviendas,$idParedes,$idPisos,$idTechos,$idAgua,$idGas,$idBasura,$idAgua_servida,$idComunidad,$idComite,$idMisiones);
 
         // $gas = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_gas))->lists('nombre', 'id');
         $gas = \App\Models\Servicios::where('padre', 2)->lists('nombre', 'id');
@@ -71,6 +78,7 @@ class InformeSocioEconomicoController extends Controller
         //$agua_ser = \App\Models\Servicios::find(unserialize($informe->socio_demografico[0]->id_agua_servida))->lists('nombre');
         $agua_ser = \App\Models\Servicios::where('padre', 8)->lists('nombre', 'id');
         $servicios_comunidad = \App\Models\Servicios_comunidad::find(unserialize($informe->socio_demografico[0]->id_comunidad))->lists('nombre');
+
         $comites = \App\Models\Comites::all()->lists('nombre', 'id');
         $comites1 = \App\Models\Comites::find($idComite)->lists('nombre', 'id');
         $misiones = \App\Models\Misiones::all()->lists('nombre', 'id');
@@ -89,6 +97,11 @@ class InformeSocioEconomicoController extends Controller
         //$misiones1= array_keys($this->check($misiones,$idMisiones));
         //$misiones1= $this->check($misiones,$idMisiones);
 
+
+        //dd($informe->id);
+
+
+        //dd($viviendas,$paredes,$pisos,$techos,$suministro_agua,$gas,$desecho,$agua_ser,$comites,$comites1,$misiones,$misiones1,$servicios_comunidad);
 
         //$skip=array_keys($misiones1);
 
@@ -112,6 +125,39 @@ class InformeSocioEconomicoController extends Controller
 
 
             //return view('success',['informe'=>$informe]);*/
+
+        // dd($informe->beneficiario->beneficiario_discapacidad);
+        /*  return view('success',[
+
+              'informe' => $informe,
+              'vivienda' => $viviendas,
+              'gas' => $gas,
+              'paredes' => $paredes,
+              'pisos' => $pisos,
+              'techos' => $techos,
+              'comites' => $comites,
+              'comites1' => $comites1,
+              'misiones' => $misiones,
+              'misiones1' => $misiones1,
+              'suministro_agua' => $suministro_agua,
+              'basura' => $desecho,
+              'agua_servida' => $agua_ser,
+              'servicios_comunidad' => $servicios_comunidad,
+              'idViviendas' => $idViviendas,
+              'idParedes' => $idParedes,
+              'idPisos' => $idPisos,
+              'idTechos' => $idTechos,
+              'idAgua' => $idAgua,
+              'idGas' => $idGas,
+              'idBasura' => $idBasura,
+              'idAgua_servida' => $idAgua_servida,
+              'idComunidad' => $idComunidad,
+              'idComite' => $idComite,
+              'idMisiones' => $idMisiones,
+
+
+          ]);*/
+
 
         $view = \View::make('success', [
             'informe' => $informe,
@@ -139,10 +185,10 @@ class InformeSocioEconomicoController extends Controller
             'idComunidad' => $idComunidad,
             'idComite' => $idComite,
             'idMisiones' => $idMisiones,
-        ]);
+        ])->render();
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
-        return $pdf->stream('lalala');
+        return $pdf->stream($informe->id . '_' . $informe->beneficiario->cedula . '_' . $informe->beneficiario->nombres . '_' . $informe->beneficiario->apellidos);
 
 
     }
@@ -176,6 +222,30 @@ class InformeSocioEconomicoController extends Controller
 
 
         return $ver;
+
+
+    }
+
+    /**
+     *
+     * DATOS QUE LLEVAN PUNTAJE PARA CALCULAR
+     * EL ESTRATO SOCIAL AL QUE PERTENENCE
+     * EL GRUPO FAMILIAR
+     *
+     */
+
+    public function puntaje($ingresos, $realidad)
+    {
+
+
+        $sum = 0;
+        dd($ingresos);
+        foreach ($ingresos as $ing) {
+
+            $sum += $ing->nivel_instruccion->puntos + $ing->consulta_ingresos->puntos;
+
+
+        }
 
 
     }

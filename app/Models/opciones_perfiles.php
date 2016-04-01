@@ -21,7 +21,7 @@ class opciones_perfiles extends Model
     FROM opciones
     GROUP BY padre
     )Deriv1 ON o.id = Deriv1.padre
-    WHERE o.padre =" . $id . " AND o.estatus = 1 AND op.id_usuario=" . $user);
+    WHERE o.padre =" . $id . " AND o.estatus = 1 AND op.id_usuario=" . $user . " ORDER BY op.id_opcion ASC ");
 
 
     }
@@ -34,37 +34,32 @@ class opciones_perfiles extends Model
         $nemo = \App\Models\opciones_perfiles::menu(0, $user);
 
         echo "<ul class='nav navbar-nav'>";
-
-
-
-              foreach ($nemo as $men) { //@foreach()
+        foreach ($nemo as $men) { //@foreach()
             if ($men->Count > 0) {  //@if()
-
                 echo '<li class="dropdown">';
-                echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>" . $men->nombre . "<span class='caret'></span></a>";
+                echo "<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>" . $men->nombre . "<span class='caret'></span></a>";
 
                 if ($men->Count > 0) { //@if()
                     $hijo = \App\Models\opciones_perfiles::menu($men->id, $user);
-
 
                     echo '<ul class="dropdown-menu" role="menu">';
                     foreach ($hijo as $hi) {
 
                         if ($hi->Count > 0) {
                             echo '<li class="dropdown-submenu">';
-                            echo '<a href="#">' . $hi->nombre . '</a>';
+                            echo '<a href="javascript:void(0)">' . $hi->nombre . '</a>';
                             $nieto = \App\Models\opciones_perfiles::menu($hi->id, $user);
 
                             echo '<ul class="dropdown-menu">';
                             foreach ($nieto as $ni) {
-                                echo '<li><a href="' . $ni->url . '">' . $ni->nombre . '</a></li>';
+                                echo '<li><a href="' . url($ni->url) . '">' . $ni->nombre . '</a></li>';
 
                             }
                             echo '</ul>';
 
                         } else {
                             echo '<li>';
-                            echo '<a href="' . $hi->url . '">' . $hi->nombre . '</a>';
+                            echo '<a href="' . url($hi->url) . '">' . $hi->nombre . '</a>';
 
                         }
 
@@ -82,8 +77,7 @@ class opciones_perfiles extends Model
             else {
 
                 echo "<li>";
-
-                echo "<a href='$men->url'>" . $men->nombre . "</a>";
+                echo  ($men->nombre == 'INICIO')? '<a href="'."javascript:void(0)". '">' . $men->nombre . "</a>": '<a href="' . url($men->url). '">' . $men->nombre . "</a>"  ;
                 echo "</li>";
 
             }//@endif

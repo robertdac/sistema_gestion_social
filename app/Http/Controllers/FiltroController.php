@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use \App\Http\Requests\FiltroRequest;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
@@ -20,8 +21,7 @@ class FiltroController extends Controller
      *
      * @return Response
      */
-    public function index()
-    {
+    public function index()    {
 
         return View('solicitudes.filtro');
 
@@ -35,47 +35,56 @@ class FiltroController extends Controller
      */
     public function create(FiltroRequest $request)
     {
+        // dd($request->input('menorEdad'));
         $cedula = trim($request->input('cedula'));
 
-        $epa = DB::table('personas')
-            ->join('solicitudes', 'personas.id', '=', 'solicitudes.id_beneficiario')
-            ->join('usuarios_solicitudes', 'solicitudes.id', '=', 'usuarios_solicitudes.id_solicitud')
-            ->where('personas.cedula', $cedula)
-            ->orderBy('usuarios_solicitudes.estatus', 'desc')
-            ->get();
+        if ($cedula) {
+
+            $epa = DB::table('personas')
+                ->join('solicitudes', 'personas.id', '=', 'solicitudes.id_beneficiario')
+                ->join('usuarios_solicitudes', 'solicitudes.id', '=', 'usuarios_solicitudes.id_solicitud')
+                ->where('personas.cedula', $cedula)
+                ->orderBy('usuarios_solicitudes.estatus', 'desc')
+                ->get();
 
 
+            if (count($epa) > 0) {
 
-
-        if (count($epa) > 0) {
-            if ($epa[0]->estatus == 1 || $epa[0]->estatus == 2) {
-
-            } else {
-
-                $hoy = Carbon::now();
-                //agregamos 6 meses mas
-                $fecha_aprobada = Carbon::parse($epa[0]->fecha_registro)->addMonth(6);
-                //comprueba si la primera fecha es mayor a la segunda fecha.
-                $fecha = $hoy->gt($fecha_aprobada);
-
-                if ($fecha == true) {
-                    $ci = Crypt::encrypt($cedula);
-                    return redirect('solicitudes/' . $ci);
-
+                if ($epa[0]->estatus == 1 || $epa[0]->estatus == 2) {
+                    return redirect('filtro')->with('mensaje', 'la solicitud esta en en cola');
                 } else {
-                    //dd(Redirect::action('SolicitudesController@show',$epa[0]->id));
-                    //return redirect()->route('fichas',[$epa[0]->id]);
-                    return Redirect::action('SolicitudesController@show',$epa[0]->id);
+                    $hoy = Carbon::now();
+                    //agregamos 6 meses mas
+                    $fecha_aprobada = Carbon::parse($epa[0]->fecha_registro)->addMonth(6);
+                    //comprueba si la primera fecha es mayor a la segunda fecha.
+                    $fecha = $hoy->gt($fecha_aprobada);
+
+
+                    // Session::flash('mensaje','El beneficiario obtuvo un finaciamiento, debe esperar 6 meses');
+                    //return redirect('filtro');
+
+
+                    if ($fecha == true) {
+                        $ci = Crypt::encrypt($cedula);
+                        return redirect('solicitudes/' . $ci);
+
+                    } else {
+                        //dd(Redirect::action('SolicitudesController@show',$epa[0]->id));
+                        //return redirect()->route('fichas',[$epa[0]->id]);
+                        return Redirect::action('SolicitudesController@show', $epa[0]->id);
+
+                    }
 
                 }
 
+
             }
-
-
+            $ci = Crypt::encrypt($cedula);
+            return redirect('solicitudes/' . $ci);
         }
 
-        $ci = Crypt::encrypt($cedula);
-
+        //menor de edad sin cedula
+        $ci = Crypt::encrypt(0);
         return redirect('solicitudes/' . $ci);
 
 

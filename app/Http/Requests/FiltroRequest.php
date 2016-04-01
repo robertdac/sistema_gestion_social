@@ -22,7 +22,7 @@ class FiltroRequest extends Request {
 	public function rules()
 	{
 		return [
-			'cedula'=>'required|integer'
+			'cedula'=>'integer'
 		];
 	}
 

@@ -84,11 +84,24 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function recomendaciones()
     {
 
-        return $this->hasMany('App\Models\Recomendaciones','id_usuarios');
+        return $this->hasMany('App\Models\Recomendaciones', 'id_usuarios');
 
     }
 
 
+    public function perfiles()
+    {
+
+        return $this->belongsTo('\App\Models\Perfiles', 'id_perfil');
+
+    }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Opciones', 'opciones_perfiles', 'id_usuario', 'id_opcion');
+
+    }
 
 
     public function scopeName($query, $name)

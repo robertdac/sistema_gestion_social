@@ -1,17 +1,11 @@
 @extends('app')
 @section('content')
-
     <h2 class="text-center">FICHA TECNICA </h2>
-
-
-
-
     <div class="pull-left">
 
-        {!! link_to('filtro', 'NUEVA SOLICITUD', ['class' => 'btn btn-primary']) !!}
+        {!! link_to('nuevaSolicitud', 'REGRESAR', ['class' => 'btn btn-primary']) !!}
 
     </div>
-
 
     <div STYLE="margin-top: 70px" class="panel panel-primary">
         <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
@@ -166,6 +160,7 @@
     </div>
 
 @endsection
+
 
 
 

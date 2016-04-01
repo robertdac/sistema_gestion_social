@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use \App\Http\Requests\FiltroRequest;
 use App\Http\Requests\SolicitudesRequest;
+use Illuminate\Http\Request;
 use App\Models\Recomendaciones;
 use App\Models\Solicitudes;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 class SolicitudesController extends Controller
@@ -79,28 +83,29 @@ class SolicitudesController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         //JEFE DE  SUB-SECRETARIA
         if (Auth::user()->id_perfil == 4) {
             $solicitudes = \App\Models\Solicitudes::whereHas('coordinacion', function ($query) {
                 $query->where('idsubsecretaria', Auth::user()->id_subsecre);
-            })->where('id_estatus', '=', 2)
+            })
+                ->where('id_estatus', '=', 2)
                 ->get();
+
         } else {
-            $solicitudes = \App\Models\Solicitudes::with
-            ('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion')
-                ->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)
-                ->where('id_estatus', '=', 1)
-                //->select('id','estatus','id_coordinaciones')
-                ->get();
+
+            $sol = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion');
+            $solicitudes = $sol->filtro($request->input('lolo'))->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)->where('id_estatus', '=', 1)->get();
+
         }
+
 
         if ($solicitudes->count() > 0) {
             return view('solicitudes.index', ['solicitud' => $solicitudes]);
         }
-        Session::flash('mensaje', 'No se encontraron registros');
-        return redirect('filtro');
+        return redirect('filtro')->with('mensaje', 'No se encontraron registros');
+
 
     }
 
@@ -113,16 +118,18 @@ class SolicitudesController extends Controller
     public function create($ci)
     {
         $cedula = Crypt::decrypt($ci);
-        // dd($cedula);
+        //dd($cedula);
         $datos = \App\Models\Saime::datos("'V'", $cedula);
 
 
+
+        //dd($datos[0]->intcedula);
 
         return view('solicitudes.solicitud', [
             'datos' => $datos,
             'EdoCivil' => $this->edo_civil,
             'estados' => ['' => 'Seleccione un Estado'] + $this->estados,
-            'ocupacion' => $this->ocupacion,
+            'ocupacion' => ['' => 'SELECCIONE..'] + $this->ocupacion,
             'recepcion' => $this->recepcion,
             'discapacidad' => ['' => 'SELECCIONE..'] + $this->discapacidad,
             'comites' => $this->comites,
@@ -157,6 +164,77 @@ class SolicitudesController extends Controller
 
     }
 
+
+    public function nuevaSolicitud()
+    {
+        return View('solicitudes.filtro');
+    }
+
+
+    public function filtro(FiltroRequest $request)
+    {
+        //   dd($request->input('menorEdad'));
+        $cedula = trim($request->input('cedula'));
+
+        if ($cedula) {
+
+            $epa = DB::table('personas')
+                ->join('solicitudes', 'personas.id', '=', 'solicitudes.id_beneficiario')
+                ->join('usuarios_solicitudes', 'solicitudes.id', '=', 'usuarios_solicitudes.id_solicitud')
+                ->where('personas.cedula', $cedula)
+                ->orderBy('usuarios_solicitudes.estatus', 'desc')
+                ->get();
+
+            if (count($epa) > 0) {
+
+                if ($epa[0]->estatus == 1 || $epa[0]->estatus == 2) {
+
+                    return Redirect::action('SolicitudesController@show', $epa[0]->id);
+
+                    //return redirect('filtro')->with('mensaje', 'la solicitud esta en en cola');
+                } else {
+                    $hoy = Carbon::now();
+                    //agregamos 6 meses mas
+                    $fecha_aprobada = Carbon::parse($epa[0]->fecha_registro)->addMonth(6);
+                    //comprueba si la primera fecha es mayor a la segunda fecha.
+                    $fecha = $hoy->gt($fecha_aprobada);
+
+
+                    // Session::flash('mensaje','El beneficiario obtuvo un finaciamiento, debe esperar 6 meses');
+                    //return redirect('filtro');
+
+
+                    if ($fecha == true) {
+                        $ci = Crypt::encrypt($cedula);
+                        return $this->create($ci);
+                        // return redirect('solicitudes/' . $ci);
+
+                    } else {
+                        //dd(Redirect::action('SolicitudesController@show',$epa[0]->id));
+                        //return redirect()->route('fichas',[$epa[0]->id]);
+                        return Redirect::action('SolicitudesController@show', $epa[0]->id);
+
+                    }
+
+                }
+
+
+            }
+            $ci = Crypt::encrypt($cedula);
+            return $this->create($ci);
+           // return redirect('solicitudes/' . $ci);
+        }
+
+        //menor de edad sin cedula
+        $ci = Crypt::encrypt(0);
+        return $this->create($ci);
+
+        //return redirect('solicitudes/' . $ci);
+
+
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -164,35 +242,49 @@ class SolicitudesController extends Controller
      */
     public function store(SolicitudesRequest $request)
     {
-
+        // dd($request->input());
         $cumple_be = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento_be'));
         $cumple_so = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento_so'));
 
+//pendiente de validar las cedulas si son las misma como el beneficiario con el solicitante
+        $beneficiario = \App\Models\Personas::where('cedula', '=', $request->input('cedula_be'))->first();
 
-//pendiente de validar las cedulas si son las misma como el beneficiario com el solicitante
+        if ($beneficiario == null) {
 
-        $ben = new \App\Models\Personas;
-        $ben->nacionalidad = $request->input('nacionalidad');
-        $ben->nombres = $request->input('nombre_be');
-        $ben->apellidos = $request->input('apellido_be');
-        $ben->cedula = $request->input('cedula_be');
-        $ben->fecha_nacimiento = $cumple_be;
-        $ben->sexo = $request->input('sexo_be');
-        $ben->direccion = $request->input('sector_be');
-        $ben->id_ocupacion = $request->input('ocupacion_be');
-        $ben->id_estado = $request->input('estado_be');
-        $ben->id_municipio = $request->input('municipio_be');
-        $ben->id_parroquia = $request->input('parroquias_be');
-        $ben->id_edocivil = $request->input('Edocivil_be');
-        $ben->save();
+            $ben = new \App\Models\Personas;
+            $ben->nacionalidad = $request->input('nacionalidad');
+            $ben->nombres = $request->input('nombre_be');
+            $ben->apellidos = $request->input('apellido_be');
+            $ben->cedula = $request->input('cedula_be');
+            $ben->fecha_nacimiento = $cumple_be;
+            $ben->sexo = $request->input('sexo_be');
+            $ben->direccion = $request->input('sector_be');
+            $ben->id_ocupacion = $request->input('ocupacion_be');
+            $ben->id_estado = $request->input('estado_be');
+            $ben->id_municipio = $request->input('municipio_be');
+            $ben->id_parroquia = $request->input('parroquias_be');
+            $ben->id_edocivil = $request->input('Edocivil_be');
+            $ben->save();
 
+            $telefonos = new \App\Models\Telefonos();
+            $telefonos->numero = $request->input("celular_be");
+            $telefonos->id_persona = $ben->id;
+            $telefonos->id_tipo_telefono = 1;
+            $telefonos->save();
+
+            $telefonos = new \App\Models\Telefonos();
+            $telefonos->numero = $request->input("telefono_be");
+            $telefonos->id_persona = $ben->id;
+            $telefonos->id_tipo_telefono = 2;
+            $telefonos->save();
+
+        }
 
         // si la cedula existe en la tabla personas , si existe solo obtenemos el id
 
         $solicitante = \App\Models\Personas::where('cedula', '=', $request->input('cedula_so'))->first();
 
         if ($solicitante == null) {
-
             $sol = new \App\Models\Personas;
             $sol->nacionalidad = $request->input('nacionalidad');
             $sol->nombres = $request->input('nombre_so');
@@ -207,6 +299,19 @@ class SolicitudesController extends Controller
             $sol->id_parroquia = $request->input('parroquia_so');
             $sol->id_edocivil = $request->input('edocivil_so');
             $sol->save();
+
+            $telefonos = new \App\Models\Telefonos();
+            $telefonos->numero = $request->input("celular_so");
+            $telefonos->id_persona = $sol->id;
+            $telefonos->id_tipo_telefono = 1;
+            $telefonos->save();
+
+            $telefonos = new \App\Models\Telefonos();
+            $telefonos->numero = $request->input("telefono_so");
+            $telefonos->id_persona = $sol->id;
+            $telefonos->id_tipo_telefono = 2;
+            $telefonos->save();
+
         }
 
 
@@ -214,7 +319,7 @@ class SolicitudesController extends Controller
         $solicitudes->descripcion = $request->input('descripcion_caso');
         $solicitudes->observacion = $request->input('observacion_caso');
         $solicitudes->monto_solicitado = $request->input('monto_solicitado');
-        $solicitudes->id_beneficiario = $ben->id;
+        $solicitudes->id_beneficiario = ($beneficiario) ? $beneficiario->id : $ben->id;
         $solicitudes->id_solicitante = ($solicitante) ? $solicitante->id : $sol->id;
         $solicitudes->id_tsolicitud = $request->input("tipo_solicitud");
         $solicitudes->id_coordinaciones = $request->input("coordinacion");
@@ -222,7 +327,7 @@ class SolicitudesController extends Controller
         $solicitudes->id_casa_comercial = $request->input("casa_comercial");
         $solicitudes->id_realidad_socieco = $request->input("preguntas");
         $solicitudes->id_usuarios = Auth::user()->id;
-        $solicitudes->estatus = 1;
+        $solicitudes->id_estatus = 1;
         $solicitudes->save();
 
 
@@ -234,10 +339,9 @@ class SolicitudesController extends Controller
             $disca->ayuda_tecnica = $request->discapacidad['ayudaTecnica'];
             $disca->id_discapacidad = $request->discapacidad['algunaDis'];
             $disca->id_gdiscapacidad = $request->discapacidad['grado'];
-            $disca->id_beneficiario = $ben->id;
+            $disca->id_beneficiario = ($beneficiario) ? $beneficiario->id : $ben->id;
             $disca->save();
         }
-
 
         //historico de solicitudes
         $user_soli = \App\Models\Solicitudes::find($solicitudes->id);
@@ -293,26 +397,36 @@ class SolicitudesController extends Controller
         $socio->save();
 
 
+        //Archivos adjuntos
+        $this->fileStore($request->file('file'), $solicitudes->id);
+
+
         //Session::flash('mensaje','Se Ha Registrado Una Nueva discapacidad');
         //return Redirect::to('solicitudes/' . Crypt::encrypt($request->input('cedula_be')));
-        return Redirect::to('filtro');
+        Session::flash('mensaje', 'Se ha registrado con exito');
+        return redirect('filtro');
 
 
     }
 
 
-    protected function fileStore($file)
+    protected function fileStore($file, $idSol)
     {
-        /*        $imageName = 'Robert.'.$request->file('cedula_file')->getClientOriginalExtension();
-
-                $request->file('cedula_file')->move(base_path() . '/public/documentos/', $imageName);*/
-
 
         if (is_array($file)) {
             foreach ($file as $key => $value) {
                 if (!empty($value) || $value != NULL || $value != "") {
-                    /*            return true;
-                                break;*/
+
+                    $imageName = $idSol . '.' . $value->getClientOriginalExtension();
+                    $value->move(base_path() . '/public/documentos/', $imageName);
+
+                    $anexos = new \App\Models\Anexos_solicitud;
+                    $anexos->id_anexo = $key;
+                    $anexos->id_solicitud = $idSol;
+                    $anexos->URL = $imageName;
+                    $anexos->save();
+
+
                 }
             }
 
@@ -368,7 +482,8 @@ class SolicitudesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function show($id)    {
+    public function show($id)
+    {
 
         $soli = \App\Models\Solicitudes::with(
             'estatus',
@@ -381,12 +496,10 @@ class SolicitudesController extends Controller
             'beneficiario.edoCivil',
             'beneficiario.ocupacion'
 
-              )->find($id);
-
-        //dd($soli);
+        )->find($id);
 
 
-        return view('solicitudes.ficha',['soli'=>$soli]);
+        return view('solicitudes.ficha', ['soli' => $soli]);
 
     }
 
@@ -403,6 +516,8 @@ class SolicitudesController extends Controller
             'usuarios',
             'estatus',
             'beneficiario.beneficiario_discapacidad.discapacidad',
+            'beneficiario.telefonos.tipoTelefono',
+            'solicitante.telefonos.tipoTelefono',
             'solicitante',
             'coordinacion',
             'tipoSolicitud',
@@ -414,9 +529,14 @@ class SolicitudesController extends Controller
             'socio_demografico'
         )->find($id);
 
+
+        //dd($soli->solicitante->telefonos[0]->numero);
+
+
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
         $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
         $tiposolicitud = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->tipo_solicitud()->lists('nombre', 'id');
+        // dd($this->anexos);
 
         return view('solicitudes.editar_solicitudes', [
             'anexos' => $this->anexos,
@@ -464,10 +584,15 @@ class SolicitudesController extends Controller
      */
     public function update(SolicitudesRequest $request, $id)
     {
+
+        // dd($request->input());
+
         $soli = \App\Models\Solicitudes::with(
             'usuarios',
             'estatus',
             'beneficiario.beneficiario_discapacidad.discapacidad',
+            'beneficiario.telefonos',
+            'solicitante.telefonos',
             'solicitante',
             'coordinacion',
             'tipoSolicitud',
@@ -476,6 +601,7 @@ class SolicitudesController extends Controller
             'ingresos_grupo',
             'socio_demografico'
         )->find($id);
+        // dd($soli->beneficiario->telefonos[0]->numero);
 
         // BENEFICIARIO
         $soli->beneficiario->sexo = $request->input('sexo_be');
@@ -485,8 +611,13 @@ class SolicitudesController extends Controller
         $soli->beneficiario->id_municipio = $request->input('municipio_be');
         $soli->beneficiario->id_parroquia = $request->input('parroquias_be');
         $soli->beneficiario->id_edocivil = $request->input('Edocivil_be');
+        $soli->beneficiario->telefonos[0]->numero = $request->input('telefono_be');
+        $soli->beneficiario->telefonos[1]->numero = $request->input('celular_be');
 
         $soli->beneficiario->save();
+        $soli->beneficiario->telefonos[0]->save();
+        $soli->beneficiario->telefonos[1]->save();
+
 
         // BENEFICIARIO DISCAPACIDAD
         if ($request->discapacidad != null) {
@@ -505,14 +636,18 @@ class SolicitudesController extends Controller
         $soli->solicitante->id_municipio = $request->input('municipio_so');
         $soli->solicitante->id_parroquia = $request->input('parroquia_so');
         $soli->solicitante->id_edocivil = $request->input('edocivil_so');
+        $soli->solicitante->telefonos[0]->numero = $request->input('telefono_so');
+        $soli->solicitante->telefonos[1]->numero = $request->input('celular_so');
         $soli->solicitante->save();
+        $soli->solicitante->telefonos[0]->save();
+        $soli->solicitante->telefonos[1]->save();
 
 
         //SOLICITUDES
         $soli->descripcion = $request->input('descripcion_caso');
         $soli->observacion = $request->input('observacion_caso');
         $soli->monto_solicitado = $request->input('monto_solicitado');
-        $soli->id_tsolicitud = $request->input("tipoSolicitud");
+        $soli->id_tsolicitud = $request->input("tipo_solicitud");
         $soli->id_trecepcion = $request->input("recepcion");
         $soli->id_casa_comercial = $request->input("casa_comercial");
         $soli->id_realidad_socieco = $request->input("preguntas");
@@ -571,6 +706,8 @@ class SolicitudesController extends Controller
             'usuarios',
             'estatus',
             'beneficiario.beneficiario_discapacidad.discapacidad',
+            'beneficiario.telefonos.tipoTelefono',
+            'solicitante.telefonos.tipoTelefono',
             'solicitante',
             'coordinacion',
             'tipoSolicitud',
@@ -581,6 +718,7 @@ class SolicitudesController extends Controller
             'ingresos_grupo.nivel_instruccion',
             'socio_demografico'
         )->find($id);
+
 
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
         $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
@@ -624,10 +762,12 @@ class SolicitudesController extends Controller
 
     }
 
-    public function verificarUpdate(SolicitudesRequest $request, $id)
+    public function verificarUpdate(Request $request)
     {
 
+        $id = $request->input('id');
         $solicitudes = \App\Models\Solicitudes::find($id);
+
 
         //historico de solicitudes
         $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => 2, 'fecha_registro' => \Carbon\Carbon::now()]);
@@ -645,11 +785,13 @@ class SolicitudesController extends Controller
         $recomendaciones->comentarios = $request->input('recomendacion_coordinador');;
         $recomendaciones->save();
 
+        return redirect('solicitudes')->with('mensaje', 'La solicitud se ha verificado con exito');
+
+
     }
 
     public function aprobarEdit($id)
     {
-
         $soli = \App\Models\Solicitudes::with(
             'usuarios',
             'estatus',
@@ -668,7 +810,7 @@ class SolicitudesController extends Controller
         )->find($id);
 
 
-        //dd($soli->recomendaciones[0]);
+        //dd($soli->usuarios[1]->pivot->estatus);
         //dd($soli->recomendaciones[0]->comentarios);
 
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
@@ -713,10 +855,11 @@ class SolicitudesController extends Controller
 
     }
 
-    public function aprobarUpdate(SolicitudesRequest $request, $id)
+    public function aprobarUpdate(Request $request)
     {
-
+        $id = $request->input('id');
         $solicitudes = \App\Models\Solicitudes::find($id);
+
 
         //historico de solicitudes
         $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => 3, 'fecha_registro' => \Carbon\Carbon::now()]);
@@ -733,6 +876,9 @@ class SolicitudesController extends Controller
         $recomendaciones->id_tipo_atencion = $request->input('atencion');
         $recomendaciones->comentarios = $request->input('motivo');
         $recomendaciones->save();
+
+        redirect('solicitudes')->with('mensaje', 'La solicitud se ha aprobado con exito');
+
     }
 
 

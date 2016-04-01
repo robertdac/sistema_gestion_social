@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Telefonos extends Model {
 
 	protected  $table="telefonos";
+    public $timestamps = false;
 
     public function tipoTelefono(){
 

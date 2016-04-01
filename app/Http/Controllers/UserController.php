@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use App\Models\opciones_perfiles;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -151,11 +152,13 @@ class UserController extends Controller
     public function edit($id)
     {
         $usuario = User::find($id);
-        $secretarias = Secretaria::secretaria();
-        $subsecre = Sub_secretaria::subsecretaria();
-        $perf = Perfiles::perfiles();
-        $cargos = Cargos::cargos();
-        $coor = Coordinacion::coordinacion();
+        $secretarias = Secretaria::all()->lists('descripcion','id');
+
+
+        $subsecre = Sub_secretaria::all()->lists('descripcion','id');
+        $perf = Perfiles::all()->lists('nombre','id');
+        $cargos = Cargos::all()->lists('nombre','id');
+        $coor = Coordinacion::all()->lists('nombre','id');
 
         return view('usuarios.editar_usuario',
             ['secre' => $secretarias,
@@ -222,6 +225,32 @@ class UserController extends Controller
 
 
     }
+
+
+    public function roles($id)
+    {
+        $roles = \App\Models\Opciones::all();
+        $usuario = \App\User::find($id)->roles()->lists('nombre', 'id');
+        $nombre = \App\User::with('perfiles')->get()->find($id);
+
+        return view('usuarios.roles')->with(['roles' => $roles, 'usuario' => $usuario,'nombre'=>$nombre]);
+
+    }
+
+    public function rolesUpdate(Request $request)
+    {
+        $roles = $request->input('idopcion');
+
+        $user = \App\User::find($request->input('id'));
+        $user->roles()->sync($roles);
+
+        Session::flash('mensaje', 'Se Ha editado las opciones correctamente');
+        return Redirect::to('usuarios');
+
+
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

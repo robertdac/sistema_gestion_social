@@ -1,7 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css">
+
+  /*      .header,
+        .footer {
+            width: 100%;
+            text-align: left;
+            position: fixed;
+        }
+        .header {
+            top: 0px;
+        }
+        .footer {
+            bottom: 0px;
+        }
+        .pagenum:before {
+            content: counter(page);
+        }
+*/
+
+
+  @page { margin: 90px 50px; }
+  #header { border-bottom: solid; position: fixed; left: 0px; top: -90px; right: 0px; height: 75px; /*background-color: whitesmoke;*/ text-align: left; }
+  #footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 180px; background-color: lightblue; }
+  #footer .page:after { content: counter(page, upper-roman); }
+
+
         table.gridtable {
             font-family: verdana, arial, sans-serif;
             font-size: 10px;
@@ -10,9 +36,6 @@
             border-color: #666666;
             border-collapse: collapse;
         }
-
-
-
 
         table.gridtable th {
             border-width: 1px;
@@ -39,8 +62,6 @@
             background-position: left top;
 
         }
-
-
     </style>
 
 </head>
@@ -48,26 +69,21 @@
 
 
 <script type="text/php">
-{{-- $text = 'pagina: {PAGE_NUM} / {PAGE_COUNT}';
- $font = Font_Metrics::get_font("helvetica", "bold");
- $pdf->page_text(100, 300, $text, $font, 9);--}}
-
-
-
-
-
-
-
-
+ $text = "{PAGE_NUM} / {PAGE_COUNT}";
+ $font = Font_Metrics::get_font("verdana", "bold");
+ $pdf->page_text(250, 800, $text, $font, 10);
 
 </script>
 
-<table class="gridtable" width="100%">
-    {{--    <tr>
-            <td><img src="{{ asset('cortes_agenda/logoGDC.png')  }}" width="80" height="80">
-            </td>
-        </tr>--}}
 
+<div id="header">
+    <img  width="120px" height="70px" src="{{ asset('cortes_agenda/logoGDC.png')  }}">
+</div>
+
+
+<div id="content">
+
+<table class="gridtable" width="100%">
     <tr>
         <th colspan="2" style=" text-align: center">SECRETARIA DE GESTIÓN SOCIAL <br> SUBSECRETARIA DE ATENCION SOCIAL
         </th>
@@ -96,6 +112,7 @@
         </td>
 
 
+
     </tr>
 
     <tr>
@@ -109,8 +126,8 @@
     </tr>
     <tr>
 
-        <td>Cedula:{{ $informe->solicitante->cedula  }}</td>
-        <td>Sexo: {{ $informe->solicitante->sexo }}</td>
+        <td>Cedula: {{ $informe->solicitante->cedula  }}</td>
+        <td>Sexo: {{ ($informe->solicitante->sexo == 'M' ) ?'MASCULINO': 'FEMENINO'  }}</td>
 
     </tr>
     <tr>
@@ -120,7 +137,7 @@
     </tr>
     <tr>
         <td>Escolaridad:</td>
-        <td>Telefono:</td>
+        <td>Telefono: {{ $informe->solicitante->telefonos[0]->numero    }}</td>
 
     </tr>
 
@@ -129,18 +146,18 @@
     </tr>
 
     <tr>
-        <td>Cedula:19387292</td>
+        <td>Cedula: {{ $informe->beneficiario->cedula   }}</td>
         <td> Nombres Apellidos: {{ $informe->beneficiario->nombres." ".$informe->beneficiario->apellidos }}</td>
     </tr>
 
     <tr>
-        <td>Sexo:M</td>
+        <td>Sexo: {{  ($informe->beneficiario->sexo == 'M') ? 'MASCULINO' : 'FEMENINO'    }}</td>
         <td>Edo.Civil:{{ $informe->beneficiario->edoCivil->descripcion }}</td>
 
     </tr>
     <tr>
         <td>Fecha de nacimiento: {{ date("d-m-Y", strtotime($informe->beneficiario->fecha_nacimiento) ) }} </td>
-        <td>Telefono:</td>
+        <td>Telefono:  {{  $informe->beneficiario->telefonos[0]->numero  }} </td>
 
     </tr>
     <tr>
@@ -148,6 +165,9 @@
 
     </tr>
 
+
+
+@if(isset($informe->beneficiario->beneficiario_discapacidad[0]))
     <tr>
         <th colspan="2" style="text-align: center"> PRESENTA ALGUNA DISCAPACIDAD</th>
     </tr>
@@ -163,7 +183,7 @@
         <td>Numero de certificado: {{ $informe->beneficiario->beneficiario_discapacidad[0]->certificado_discp  }}</td>
 
     </tr>
-
+@endif
 
 </table>
 
@@ -205,20 +225,15 @@
 </table>
 
 
-<table style="margin-top: 200px" class="gridtable">
+<table  class="gridtable">
 
     <tr>
-        <th colspan="7" style="text-align: center">Tipo de vivienda</th>
+        <th colspan="7" style="text-align: center">TIPO DE VIVIENDA</th>
     </tr>
 
     <tr>
-
         @foreach($vivienda as $in=>$val)
-
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
-
-
-
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
 
         @endforeach
 
@@ -232,7 +247,7 @@
 
         @foreach($paredes as $in=>$val)
 
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
 
         @endforeach
     </tr>
@@ -245,7 +260,7 @@
 
         @foreach($pisos as $in=>$val)
 
-            <td>   {!!  ($in == $val) ? '<b>X</b> '.$val  : $val   !!} </td>
+            <td>   {!!  ($in === $val) ? '<b>X</b> '.$val  : $val   !!} </td>
 
         @endforeach
 
@@ -260,7 +275,7 @@
     <tr>
         @foreach($techos as $in=>$val)
 
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
     </tr>
@@ -272,7 +287,7 @@
     <tr>
         @foreach($suministro_agua  as $in=>$val)
 
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
     </tr>
@@ -285,7 +300,7 @@
 
         @foreach($gas as $in=>$val)
 
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
         <td></td>
@@ -301,7 +316,7 @@
     <tr>
         @foreach($basura as $in=>$val)
 
-            <td>   {!!   ($in == $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
+            <td>   {!!   ($in === $val) ?  '<b>X</b> '.$val   : $val   !!} </td>
         @endforeach
         <td></td>
         <td></td>
@@ -349,7 +364,6 @@
             @endif
 
         @endfor
-
 
 
     </tr>
@@ -437,7 +451,7 @@
 
 
 </table>
-
+<div>
 
 </body>
 </html>

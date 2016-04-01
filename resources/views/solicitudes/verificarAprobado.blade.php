@@ -3,7 +3,7 @@
 
     <h2 class="text-center">VERIFICACIÓN DE LA SOLICITUD</h2>
 
-    {!! Form::open(['url' => 'verificar/'.$solicitudes->id]) !!}
+    {!! Form::open(['url' => 'verificar','id'=>'verificar']) !!}
 
     <div class="panel panel-primary">
         <div class=" text-center panel-heading">SECRETARIA DE GESTION SOCIAL</div>
@@ -11,6 +11,7 @@
 
             <div class="row">
                 <div class="col-xs-4">
+                    {!! Form::hidden('id',$solicitudes->id) !!}
                     {!! Form::label('sub secretaria') !!}
                     {!! Form::select('subSecretaria',$subSecretaria,null,['class'=>' sub_secretaria form-control','disabled'=>true]) !!}
                 </div>
@@ -173,13 +174,14 @@
                 <div class="col-xs-3 ">
 
                     {!! Form::label('celular_be','Celular:')  !!}
-                    {!! Form::text('celular_be',null,['class'=>'form-control']);  !!}
+                    {!! Form::text('celular_be',$solicitudes->beneficiario->telefonos[1]->numero,['class'=>'form-control']);  !!}
 
                 </div>
                 <div class="col-xs-3 ">
 
                     {!! Form::label('Telefono(Casa):')  !!}
-                    {!! Form::text('telefono_be',null,['class'=>'form-control']);  !!}
+                    {!! Form::text('telefono_be',$solicitudes->beneficiario->telefonos[0]->numero,['class'=>'form-control']);  !!}
+
 
                 </div>
 
@@ -289,13 +291,13 @@
                 <div class="col-xs-3 ">
 
                     {!! Form::label('celular:')  !!}
-                    {!! Form::text('celular_so',null,['class'=>'form-control']);  !!}
+                    {!! Form::text('celular_so',$solicitudes->solicitante->telefonos[1]->numero,['class'=>'form-control']);  !!}
 
                 </div>
                 <div class="col-xs-3 ">
 
                     {!! Form::label('Telefono(Casa):')  !!}
-                    {!! Form::text('telefono_so',null,['class'=>'form-control']);  !!}
+                    {!! Form::text('telefono_so',$solicitudes->solicitante->telefonos[0]->numero,['class'=>'form-control']);  !!}
 
 
                 </div>
@@ -338,12 +340,12 @@
 
                 <div class=" col-xs-3">
                     {!!  Form::label('Sugerencia de atención:');    !!}
-                    {!!  Form::select('atencion',$atencion,"",['class'=>'form-control']);    !!}
+                    {!!  Form::select('atencion',$atencion,"",['class'=>'form-control','required'=>""]);    !!}
                 </div>
 
                 <div class=" col-xs-3">
                     {!!  Form::label('Monto sugerido:');  !!}
-                    {!!  Form::text('monto_sugerido',null,['class'=>'form-control numeros']);    !!}
+                    {!!  Form::text('monto_sugerido',null,['class'=>'form-control numeros','required'=>""]);    !!}
                 </div>
 
             </div>
@@ -354,7 +356,8 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Recomendaciones Coordinador(a) :</label>
-                    <textarea name="recomendacion_coordinador" class="form-control" rows="3" id="comment"></textarea>
+                    <textarea required="" name="recomendacion_coordinador" class="form-control" rows="3"
+                              id="comment"></textarea>
                 </div>
 
 
@@ -372,4 +375,15 @@
     </div>
 
     {!! Form::close() !!}
+
+    <script>
+
+        $(document).ready(function () {
+            $('#verificar').parsley();
+        });
+
+
+    </script>
+
+
 @endsection

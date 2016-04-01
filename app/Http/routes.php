@@ -18,18 +18,21 @@ Route::get('/', 'HomeController@index');
 
 Route::get('prueba', function () {
 
+   // $roles = \App\Models\Opciones::all();
+   // $usuario = \App\User::find(Auth::user()->id)->roles()->lists('nombre', 'id');
 
-return view('prueba');
+
+
+
+
+    return view('prueba');
 
 });
 
 
 Route::get('consulta', function () {
-
     $cedula = Input::get('id');
     return \App\Models\Saime::datos("'V'", $cedula);
-
-
 });
 
 
@@ -71,17 +74,16 @@ Route::get('tipo_solicitud', function () {
 	var_dump($posts);
 });*/
 
-Route::get('filtro', 'FiltroController@index');
-Route::post('filtro', 'FiltroController@create');
+//Route::get('filtro', 'FiltroController@index');
+Route::post('filtro', 'SolicitudesController@filtro');
 
-Route::get('ReporteBeneficiario','ReporteBeneficiarioController@index');
-Route::post('ReporteBeneficiario','ReporteBeneficiarioController@create');
+Route::get('ReporteBeneficiario', 'ReporteBeneficiarioController@index');
+Route::post('ReporteBeneficiario', 'ReporteBeneficiarioController@create');
 
-Route::get('informe_socio_economico', 'InformeSocioEconomicoController@index');
-
-
+Route::get('informe_socio_economico/{id}', 'InformeSocioEconomicoController@index');
+Route::get('nuevaSolicitud','SolicitudesController@nuevaSolicitud');
 Route::get('solicitudes', 'SolicitudesController@index');
-Route::get('solicitudes/{ci}', 'SolicitudesController@create');
+//Route::get('solicitudes/{ci}', 'SolicitudesController@create');
 Route::post('solicitudes', 'SolicitudesController@store');
 Route::get('editar_solicitudes/{id}', 'SolicitudesController@edit');
 Route::post('editar_solicitudes/{id}', 'SolicitudesController@update');
@@ -92,9 +94,9 @@ Route::get('ficha/{id}', 'SolicitudesController@show');
 //Route:get('ficha/{id}',['as'=>'fichas','SolicitudesController@show']);
 
 Route::get('verificar/{id}', 'SolicitudesController@verificarEdit');
-Route::post('verificar/{id}', 'SolicitudesController@verificarUpdate');
+Route::post('verificar', 'SolicitudesController@verificarUpdate');
 Route::get('aprobar/{id}', 'SolicitudesController@aprobarEdit');
-Route::post('aprobar/{id}', 'SolicitudesController@aprobarUpdate');
+Route::post('aprobar', 'SolicitudesController@aprobarUpdate');
 
 Route::get('usuarios', 'UserController@index');
 Route::get('ver_usuario/{id}', 'UserController@show');
@@ -102,6 +104,8 @@ Route::get('nuevo_usuario', 'UserController@create');
 Route::post('usuarios', 'UserController@store');
 Route::get('editar_usuario/{id}', 'UserController@edit');
 Route::post('modificar_usuario/{id}', 'UserController@update');
+Route::get('roles/{id}','UserController@roles');
+Route::post('roles','UserController@rolesUpdate');
 
 
 Route::get('discapacidades', 'DiscapacidadController@index');

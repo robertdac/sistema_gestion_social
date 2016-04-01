@@ -72,6 +72,13 @@ class Solicitudes extends Model
 
     }
 
+    public function  realidadSocio()
+    {
+
+        return $this->belongsTo('App\Models\RealidadSocioeconomica', 'id_realidad_socieco');
+
+    }
+
     public function  solicitante()
     {
 
@@ -89,21 +96,56 @@ class Solicitudes extends Model
     /*
      Solo para el reporte del beneficiario
      */
+
+
+    public function scopeFiltro($query, $val = null)
+    {
+
+        if ($val <> "") {
+            $query->orWhereHas('beneficiario', function ($q) use ($val) {
+
+                $q->where('cedula', 'LIKE', '%' . $val . '%');
+
+            })->orWhereHas('beneficiario', function ($q) use ($val) {
+                $q->where('nombres', 'LIKE', '%' . $val . '%');
+
+            })->orWhereHas('beneficiario', function ($q) use ($val) {
+                $q->where('apellidos', 'LIKE', '%' . $val . '%');
+
+            })
+                ->orWhereHas('tipoSolicitud', function ($q) use ($val) {
+
+                    $q->where('nombre', 'LIKE', '%' . $val . '%');
+
+                })->orWhereHas('coordinacion', function ($q) use ($val) {
+
+                    $q->where('abreviacion', 'like', '%' . $val . '%');
+
+
+                });
+
+
+        }
+
+
+    }
+
+
     public function scopeReporte($query, $arre)
     {
 
         //05/02/2016
         //26/09/2016
 
-     //   dd(\Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['desde']));
+        //   dd(\Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['desde']));
 
         if ($arre['Rdesde'] <> "" && $arre['Rhasta'] <> "") {
             $desde = \Carbon\Carbon::createFromTimestamp($arre['Rdesde'])->toDateTimeString();
-            $hasta = \Carbon\Carbon::createFromFormat('d/m/Y',$arre['Rhasta']);
+            $hasta = \Carbon\Carbon::createFromFormat('d/m/Y', $arre['Rhasta']);
 
-            echo"<pre>";
+            echo "<pre>";
             var_dump($hasta->date);
-exit();
+            exit();
 
             $query->whereBetween('created_at', [$desde, $hasta]);
 
@@ -114,23 +156,22 @@ exit();
 
         if ($arre['aprobado']['desde'] <> "" && $arre['aprobado']['hasta'] <> "") {
 
-            $desde1 = \Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['desde']);
-            $hasta2 = \Carbon\Carbon::createFromFormat('d/m/Y',$arre['aprobado']['hasta']);
-            $date = \Carbon\Carbon::createFromFormat('d/m/Y','26/01/2016');
+            $desde1 = \Carbon\Carbon::createFromFormat('d/m/Y', $arre['aprobado']['desde']);
+            $hasta2 = \Carbon\Carbon::createFromFormat('d/m/Y', $arre['aprobado']['hasta']);
+            $date = \Carbon\Carbon::createFromFormat('d/m/Y', '26/01/2016');
             //$hasta2 = \Carbon\Carbon::parse($arre['aprobado']['hasta'])->toDateTimeString();
 
-           // dd($desde1,$hasta2);
-           // dd($date);
+            // dd($desde1,$hasta2);
+            // dd($date);
 
-            $nem=\App\Models\Solicitudes::whereBetween('created_at',['2016-01-26 00:00:00','2016-01-26 00:00:00'])->get();
+            $nem = \App\Models\Solicitudes::whereBetween('created_at', ['2016-01-26 00:00:00', '2016-01-26 00:00:00'])->get();
 
             dd($nem);
 
 
-
             $query->join('usuarios_solicitudes', 'usuarios_solicitudes.id_solicitud', '=', 'solicitudes.id')
-            ->where('solicitudes.estatus', 3);
-           // ->whereBetween('usuarios_solicitudes.fecha_registro', [$desde1, $hasta2]);
+                ->where('solicitudes.estatus', 3);
+            // ->whereBetween('usuarios_solicitudes.fecha_registro', [$desde1, $hasta2]);
 
 
         }

@@ -48,13 +48,13 @@
                     @foreach($solicitudes->ingresos_grupo as $ingresos)
                         <tr>
                             <td class="text-center"> {!! Form::radio("jefe_familia",$i,($ingresos->jefe_familia == 1) ? 1 : 0  ) !!}   </td>
-                            <td> {!! Form::text("nombre_Apellido[$i]",$ingresos->nombre_apellido,["class"=>"mayusculas form-control"]); !!}  </td>
-                            <td> {!! Form::text("edad[$i]",$ingresos->edad,["class"=>"form-control"]); !!} </td>
-                            <td> {!!Form::select("parentesco[$i]",$parentesco,$ingresos->id_parentesco,['class'=>'form-control']); !!} </td>
-                            <td> {!! Form::select("ocupacion[$i]",$ocupacion,$ingresos->id_ocupacion,[ 'id'=>'cambia', 'class'=>'form-control']); !!} </td>
-                            <td> {!! Form::select("nivel_instruccion[$i]",$nivelInstruccion,$ingresos->id_nivel_instr,[ "id"=>'cambia', "class"=>"form-control"]); !!} </td>
-                            <td> {!! Form::select("ingresos[$i]",$consulta_ingreso,$ingresos->id_ingresos,['class'=>'form-control']); !!} </td>
-                            <td> {!! Form::text("cantidad[$i]",$ingresos->cantidad,["class"=>"income_count form-control"]); !!}</td>
+                            <td> {!! Form::text("nombre_Apellido[$i]",$ingresos->nombre_apellido,['required'=>'',"class"=>"mayusculas form-control"]); !!}  </td>
+                            <td> {!! Form::text("edad[$i]",$ingresos->edad,['required'=>'',"class"=>"numeros form-control"]); !!} </td>
+                            <td> {!!Form::select("parentesco[$i]",$parentesco,$ingresos->id_parentesco,['required'=>'','class'=>'form-control parentesco'.$i]); !!} </td>
+                            <td> {!! Form::select("ocupacion[$i]",$ocupacion,$ingresos->id_ocupacion,[ 'required'=>'','id'=>'cambia', 'class'=>'form-control']); !!} </td>
+                            <td> {!! Form::select("nivel_instruccion[$i]",$nivelInstruccion,$ingresos->id_nivel_instr,['required'=>'', "id"=>'cambia', "class"=>"form-control"]); !!} </td>
+                            <td> {!! Form::select("ingresos[$i]",$consulta_ingreso,$ingresos->id_ingresos,['required'=>'','class'=>'form-control']); !!} </td>
+                            <td> {!! Form::text("cantidad[$i]",$ingresos->cantidad,['required'=>'',"class"=>"numeros income_count form-control"]); !!}</td>
 
                         </tr>
 
@@ -82,7 +82,7 @@
                         {{--   <td> {!! Form::checkbox("egresoDescrip[$egresos->id]",$egresos->nombre); !!}</td>--}}
                         <td><strong>{!!  $egresos->nombre  !!}</strong></td>
                         <td>{!!
-                        Form::text("egreso[$egresos->nombre]",$egresos->cantidad,['class'=>'income_count2 form-control','id'=>'alimentacion', 'placeholder'=>'Cantidad en Bs.']); !!}
+                        Form::text("egreso[$egresos->nombre]",$egresos->cantidad,['required'=>'','class'=>'numeros income_count2 form-control','id'=>'alimentacion', 'placeholder'=>'Cantidad en Bs.']); !!}
                         </td>
                     </tr>
                 @endforeach
@@ -124,11 +124,12 @@
 
                 <div class="col-xs-3">
 
+
+
                     {!! Form::label('Tipo de Vivienda') !!}
                     {!! Form::select("socio_demofrafico[vivienda][]",$vivienda,unserialize($solicitudes->socio_demografico[0]->id_viviendas),['class'=>'selectpicker form-control','multiple data-selected-text-format'=>'count']); !!}
 
                 </div>
-
 
                 <div class="col-xs-3">
 
@@ -252,7 +253,9 @@
 
     <div class="col-xs-12 text-center">
 
-        {!! Form::submit('Editar',['class'=>'btn btn-primary btn-lg']); !!}
+
+
+        {!! Form::submit('Editar',['name'=>'submit','class'=>'btn btn-primary btn-lg']); !!}
 
     </div>
 

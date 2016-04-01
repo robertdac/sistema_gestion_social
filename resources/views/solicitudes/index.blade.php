@@ -8,7 +8,7 @@
     @endif
 
 
-    {!! Form::open(['action'=>'CoordinacionController@index','method'=>'get']) !!}
+    {!! Form::open(['action'=>'SolicitudesController@index','method'=>'get']) !!}
     <div class=" col-xs-3 pull-right input-group">
         {!! Form::text('lolo',null,['class'=>'form-control mayusculas','placeholder'=>'NOMBRE'] );  !!}
         <span class="input-group-btn">
@@ -56,12 +56,9 @@
                 <td>{!!$sol->estatus->descripcion  !!}</td>
 
                 <td class=" text-center">
-                    <a class="verFicha" data-toggle="modal" data-target="#myModal" title="Ver ficha"
-                       href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span
-                                class="glyphicon glyphicon-pencil"></span></a>
-                    <a title="Informe Socio Economico" href="{{ url("informe_socio_economico/$sol->id")  }} "> <span
-                                style="margin-right: 10px; " class="glyphicon glyphicon-list-alt"></span></a>
+                    <a  data-toggle="modal" data-target="#myModal" title="Ver ficha" href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a target="_blank" title="Informe Socio Economico" href="{{ url("informe_socio_economico/$sol->id")  }} "> <span style="margin-right: 10px; " class="glyphicon glyphicon-list-alt"></span></a>
                     {{--SOLO COORDINADORES PUEDEN VERIFICAR LA SOLICITUD --}}
                         @if(Auth::user()->id_perfil == 5  )
                     <a title="Verificar" href="{{ url("verificar/$sol->id")  }} "> <span style="margin-right: 10px;"class="glyphicon glyphicon-ok"></span></a>
@@ -112,47 +109,23 @@
     <script>
 
 
-        /*        $('.verFicha').click(function () {
-         $.ajax({
-         url: "",
-         data: {
-         format: 'json'
-         },
-         error: function () {
-         $('#info').html('<p>An error has occurred</p>');
-         },
-         dataType: 'jsonp',
-         success: function (data) {
-
-         // alert(data[0].descripcion);
-
-         var $title = $('<h1>').text(data[0].descripcion);
-         //var $description = $('<p>').text(data.talks[0].talk_description);
-         $('#modal-body').append($title);
-         //.append($description);
-         },
-         type: 'GET'
-         });
-         });*/
-
-
-        $('.verFicha').on('click', function () {
+  /*      $('.verFicha').on('click', function () {
             // var id=$(this).data('id');
-            //alert(id);
+          //  alert(id);
             $('.modal-body').html('loading');
             $.ajax({
                 type: 'GET',
-                url: '{{ url("ficha/$sol->id")  }}',
+                url: '',
                 // data:{id: id},
-                dataType: 'json',
+               /!* dataType: 'json',
                 success: function (data) {
                     $('.modal-body').html(data[0].id);
                 },
                 error: function (err) {
                     alert("error" + JSON.stringify(err));
-                }
+                }*!/
             })
-        });
+        });*/
 
 
         $('.mayusculas').keyup(function () {

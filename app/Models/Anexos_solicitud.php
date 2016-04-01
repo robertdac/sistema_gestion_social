@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Anexos_solicitud extends Model {
+class Anexos_solicitud extends Model
+{
 
-    protected $table="anexos_solicitud";
-    protected $timestamp=false;
+    protected $table = "anexos_solicitud";
+    public $timestamps = false;
 
 }

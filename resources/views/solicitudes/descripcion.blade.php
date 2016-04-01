@@ -8,7 +8,7 @@
 
                 <div class="col-xs-12 text-center">
                     <label for="comment">Breve descripcion del caso:</label>
-                    <textarea name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
+                    <textarea  required="" name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -19,7 +19,7 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Observaciones de la solicitud:</label>
-                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
+                    <textarea required=""  name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -31,14 +31,13 @@
 
                 <div class=" col-xs-3">
                     {!!  Form::label('Recepcion');    !!}
-                    {!!  Form::select('recepcion',$recepcion,"",['class'=>'form-control']);    !!}
+                    {!!  Form::select('recepcion',$recepcion,"",['class'=>'form-control','required'=>'']);    !!}
                 </div>
 
             </div>
 
         </div>
     </div>
-
 
     <div role="tabpanel" class="panel panel-primary">
         <div class=" text-center panel-heading">INFORME MEDICO ORIGINAL:</div>
@@ -54,14 +53,13 @@
 
             <div class=" col-xs-3">
                 {!!  Form::label('Medico tratante');    !!}
-                {!!  Form::text('medico_tratante',null,['class'=>'form-control']);    !!}
+                {!!  Form::text('medico_tratante',null,['class'=>'form-control','required'=>'']);    !!}
             </div>
 
 
             <div class=" col-xs-3">
                 {!!  Form::label('Resumen de informe medico');    !!}
-                <textarea name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
-
+                <textarea required="" name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
 
             </div>
 
@@ -76,14 +74,13 @@
 
             <div class=" col-xs-3">
                 {!!  Form::label('Casa comercial');    !!}
-                {!! Form::select('casa_comercial',$casa_comercial,0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
+                {!! Form::select('casa_comercial',$casa_comercial,0,['class'=>'casaComercial selectpicker form-control','data-live-search'=>"false"]); !!}
             </div>
 
             <div class=" col-xs-3">
                 {!! Form::label('Monto Solicitado') !!}
-                {!! Form::text('monto_solicitado',null,['class'=>'form-control','placeholder'=>'BS.'])   !!}
+                {!! Form::text('monto_solicitado',null,['id'=>'montoSolicitado', 'class'=>'numeros form-control','placeholder'=>'BS.','required'=>''])   !!}
             </div>
-
 
         </div>
     </div>
@@ -108,6 +105,7 @@
             </div>
             <br>
             <div class="row">
+
 
                 @foreach($anexos as $inde => $nom)
 

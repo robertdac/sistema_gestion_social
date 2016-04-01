@@ -384,7 +384,7 @@
       '</div>'
           : '';
       var drop =
-          '<div class="btn-group bootstrap-select' + multiple + inputGroup + '">' +
+          '<div class=" btn-group bootstrap-select' + multiple + inputGroup + '">' +
           '<button type="button" class="' + this.options.styleBase + ' dropdown-toggle" data-toggle="dropdown"' + autofocus + '>' +
           '<span class="filter-option pull-left"></span>&nbsp;' +
           '<span class="caret"></span>' +
@@ -401,7 +401,6 @@
 
       return $(drop);
     },
-
     createView: function () {
       var $drop = this.createDropdown(),
           li = this.createLi();

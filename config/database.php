@@ -62,6 +62,16 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => false,
+        ], 'suragsOld' => [
+            'driver' => 'mysql',
+            'host' => env('SURAGSOLD_HOST', 'localhost'),
+            'database' => env('SURAGSOLD_DATABASE', 'forge'),
+            'username' => env('SURAGSOLD_USERNAME', 'forge'),
+            'password' => env('SURAGSOLD_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
         ],
         'pgsql' => [
             'driver' => 'pgsql',

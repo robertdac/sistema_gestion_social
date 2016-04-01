@@ -3,7 +3,7 @@
 
     <h2 class="text-center">APROBACION DE LA SOLICITUD</h2>
 
-    {!! Form::open(['url' => 'aprobar/'.$solicitudes->id]) !!}
+    {!! Form::open(['url' => 'aprobar']) !!}
 
     {{--
         {{ dd($solicitudes)  }}
@@ -17,6 +17,8 @@
 
             <div class="row">
                 <div class="col-xs-4">
+                    {!!   Form::hidden('id',$solicitudes->id);  !!}
+
                     {!! Form::label('sub secretaria') !!}
                     {!! Form::text('subSecretaria',$solicitudes->coordinacion->subsecretaria->descripcion,['class'=>' sub_secretaria form-control','disabled'=>true]) !!}
                 </div>
@@ -355,11 +357,16 @@
 
             <div class="row ">
 
+
+
+
+
+
                 <div class="col-xs-2">
                     <label for="comment">{{ ($solicitudes->usuarios[0]->pivot->estatus == 1)? 'Procesado:': 'Verificado:'  }}</label>
                     {!!  Form::text('monto_sugerido',$solicitudes->usuarios[0]->nombres.' '.$solicitudes->usuarios[0]->apellidos,['class'=>'form-control numeros']);    !!}
                     <br>
-                    <label for="comment">{{ ($solicitudes->usuarios[1]->pivot->estatus == 1)? 'Procesado': 'Verificado:'  }}</label>
+                    <label for="comment">{{ ($solicitudes->usuarios[1]->pivot->estatus == 2)? 'Procesado': 'Verificado:'  }}</label>
                     {!!  Form::text('nombres',$solicitudes->usuarios[1]->nombres.' '.$solicitudes->usuarios[1]->apellidos,['class'=>'form-control numeros']);    !!}
 
                 </div>
@@ -375,9 +382,10 @@
                 </div>
 
                 <div class="col-xs-4">
-                    <br>
-                    <br>
-                    <br>
+
+
+                    {!!  Form::label('Monto Solicitado:');    !!}
+                    {!!  Form::text('atencion',$solicitudes->monto_solicitado,['class'=>'form-control']);    !!}
                     <br>
                     {!!  Form::label('Sugerencia de atención:');    !!}
                     {!!  Form::select('atencion',$atencion,$solicitudes->recomendaciones[0]->id_tipo_atencion,['class'=>'form-control']);    !!}
@@ -411,7 +419,7 @@
                 </div>
 
             </div>
-<br>
+            <br>
 
             <div class="row text-center">
 

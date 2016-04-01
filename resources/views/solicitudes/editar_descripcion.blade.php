@@ -6,7 +6,7 @@
 
                 <div class="col-xs-12 text-center">
                     <label for="comment">Breve descripcion del caso:</label>
-                    <textarea name="descripcion_caso" class="form-control" rows="3" id="comment">{!! $solicitudes->descripcion  !!}
+                    <textarea required="" name="descripcion_caso" class="form-control" rows="3" id="comment">{!! $solicitudes->descripcion  !!}
                     </textarea>
                 </div>
 
@@ -18,7 +18,7 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Observaciones de la solicitud:</label>
-                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment">{!!  $solicitudes->observacion  !!}
+                    <textarea required="" name="observacion_caso" class="form-control" rows="3" id="comment">{!!  $solicitudes->observacion  !!}
                     </textarea>
                 </div>
 
@@ -31,7 +31,7 @@
 
                 <div class=" col-xs-3">
                     {!!  Form::label('Recepcion');    !!}
-                    {!!  Form::select('recepcion',$recepcion,$solicitudes->id_trecepcion ,['class'=>'form-control']);    !!}
+                    {!!  Form::select('recepcion',$recepcion,$solicitudes->id_trecepcion ,['required'=>'','class'=>'form-control']);    !!}
                 </div>
 
             </div>
@@ -54,13 +54,13 @@
 
             <div class=" col-xs-3">
                 {!!  Form::label('Medico tratante');    !!}
-                {!!  Form::text('medico_tratante',null,['class'=>'form-control']);    !!}
+                {!!  Form::text('medico_tratante',null,['required'=>'','class'=>'form-control']);    !!}
             </div>
 
 
             <div class=" col-xs-3">
                 {!!  Form::label('Resumen de informe medico');    !!}
-                <textarea name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
+                <textarea  required="" name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
 
 
             </div>
@@ -81,7 +81,7 @@
 
             <div class=" col-xs-3">
                 {!! Form::label('Monto Solicitado') !!}
-                {!! Form::text('monto_solicitado',$solicitudes->monto_solicitado,['class'=>'form-control','placeholder'=>'BS.'])   !!}
+                {!! Form::text('monto_solicitado',$solicitudes->monto_solicitado,['required'=>'','class'=>'numeros form-control','placeholder'=>'BS.'])   !!}
             </div>
 
 

@@ -4,16 +4,23 @@
     <h2 class="text-center">REGISTRO DE LA SOLICITUD</h2>
 
 
-    {!! Form::open(['url' => 'solicitudes', 'id'=> 'solicitud','files' => true]) !!}
+
+
+    {!! Form::open(['url' => 'solicitudes','id'=>'solicitud','files' => true]) !!}
+    {!! Form::hidden('menor',($datos[0]->intcedula) ? $datos[0]->intcedula : false ,['id'=>'menor'])  !!}
+
 
 
     <div role="tabpanel">
-
-
         @if($errors->has())
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+
+            @foreach ($errors->all('<li>:message</li>') as $message)
+                <div class="alert alert-danger">
+                    {!! $message; !!}
+                </div>
                 @endforeach
+
+
                 @endif
 
                         <!-- Nav tabs -->
@@ -27,10 +34,9 @@
                 </ul>
 
 
+
                 <div class="tab-content">
-
                     <div id="home" role="tabpanel" class="tab-pane active">
-
 
                         <div class="panel panel-primary">
                             <div class=" text-center panel-heading">SECRETARIA DE GESTION SOCIAL</div>
@@ -39,12 +45,10 @@
                                 <div class="row">
 
 
-                                    <input type="text" pattern="^[0-9]" title='Only Number' min="1" max="8">
-
                                     <div class="col-xs-3">
                                         {!! Form::label('sub secretaria') !!}
 
-                                        {!! Form::select('subSecretaria',$sub_secretaria,0,['class'=>' sub_secretaria form-control','required'=>"required"]) !!}
+                                        {!! Form::select('sub_secretaria',$sub_secretaria,0,['class'=>' sub_secretaria form-control','required'=>'']) !!}
 
 
                                     </div>
@@ -52,8 +56,9 @@
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Coordinacion') !!}
 
-                                        <select class="form-control coordinacion" name="coordinacion">
-                                            <option required="required"  name="coordinacion">Debe Seleccionar una coordinacion</option>
+                                        <select required="" class="form-control coordinacion" name="coordinacion">
+                                            <option value="" name="coordinacion">Debe Seleccionar una coordinacion
+                                            </option>
                                         </select>
 
                                     </div>
@@ -62,8 +67,9 @@
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Tipo de solicitud') !!}
 
-                                        <select class="form-control tipo_solicitud" name="tipo_solicitud">
-                                            <option name="tipo_solicitud">Debe Seleccionar una Solicitud</option>
+                                        <select required="" class="form-control tipo_solicitud" name="tipo_solicitud">
+                                            <option value="" name="tipo_solicitud">Debe Seleccionar una Solicitud
+                                            </option>
                                         </select>
 
                                     </div>
@@ -91,21 +97,21 @@
                                     <div class="col-xs-3">
 
                                         {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                        {!! Form::text('cedula_be',$datos[0]->intcedula,['class'=>"form-control","readonly"=>"true"]) !!}
+                                        {!! Form::text('cedula_be',($datos[0]->intcedula)? $datos[0]->intcedula : 0,['class'=>"form-control","readonly"=>"true"]) !!}
 
                                     </div>
 
 
                                     <div class="col-xs-3">
                                         {!! Form::label('nombre','Nombre:');   !!}
-                                        {!! Form::text('nombre_be',$datos[0]->strnombre_primer,['class'=>'form-control' ]) !!}
+                                        {!! Form::text('nombre_be',$datos[0]->strnombre_primer,['class'=>'form-control','readonly'=>'true' ]) !!}
 
                                     </div>
 
                                     <div class="col-xs-3 ">
 
                                         {!! Form::label('apellido','Apellido')   !!}
-                                        {!! Form::text('apellido_be',$datos[0]->strapellido_primer,['class'=>'form-control' ])  !!}
+                                        {!! Form::text('apellido_be',$datos[0]->strapellido_primer,['class'=>'form-control','readonly'=>'true' ])  !!}
 
                                     </div>
 
@@ -120,19 +126,20 @@
 
                                     </div>
 
-                                    <div class="col-xs-3 ">
-                                        {!! Form::label('masculimo','Masculino')   !!}
-                                        {!! Form::radio('sexo_be','M')  !!}
-                                        <br>
+                                    <div class="radio col-xs-3 ">
+                                        <p>
+                                            {!! Form::label('masculimo','Masculino')   !!}
+                                            {!! Form::radio('sexo_be','M',null,['required'=>''])  !!}
+                                            <br>
 
-                                        {!! Form::label('femenino','Femenino')   !!}
-                                        {!! Form::radio('sexo_be','F')  !!}
-
+                                            {!! Form::label('femenino','Femenino')   !!}
+                                            {!! Form::radio('sexo_be','F',null,['required'=>''])  !!}
+                                        </p>
                                     </div>
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('fecha','Fecha de Nacimiento:')    !!}
-                                        {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$datos[0]->dtmnacimiento))->format('d-m-Y'),['class'=>'form-control'])    !!}
+                                        {!! Form::text('fecha_nacimiento_be',Carbon\Carbon::parse($datos[0]->dtmnacimiento)->format('d-m-Y'),['class'=>'form-control','readonly'=>true])    !!}
                                     </div>
 
                                 </div>
@@ -142,26 +149,26 @@
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                        {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control']);  !!}
+                                        {!! Form::select('ocupacion_be',$ocupacion,'',['class'=>'form-control','required'=>'']);  !!}
                                     </div>
 
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Estado','Estado:')   !!}
-                                        {!! Form::select('estado_be',$estados,0,['class'=>'form-control estado']);  !!}
+                                        {!! Form::select('estado_be',$estados,0,['class'=>'form-control estado','required'=>'']);  !!}
                                     </div>
                                     <div class="col-xs-3">
                                         {!! Form::label('Municipio','Municipio:')   !!}
-                                        <select class="form-control municipio" name="municipio_be">
-                                            <option>Debe Seleccionar un Municipio</option>
+                                        <select required="" class="form-control municipio" name="municipio_be">
+                                            <option value="">Debe Seleccionar un Municipio</option>
                                         </select>
                                     </div>
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Parroquia','Parroquias:')   !!}
 
-                                        <select class="form-control parroquias" name="parroquias_be">
-                                            <option name="parroquias">Debe Seleccionar una Parroquia</option>
+                                        <select required="" class="form-control parroquias" name="parroquias_be">
+                                            <option value="" name="parroquias">Debe Seleccionar una Parroquia</option>
                                         </select>
 
                                     </div>
@@ -173,7 +180,6 @@
                                 <div style="display:none; " class="row discapacidad">
 
                                     <div class="col-xs-3">
-
                                         {!! Form::label('Tipo','Presenta alguna discapacidad:'); !!}
                                         {!! Form::select('discapacidad[algunaDis]',$discapacidad,"",['class'=>'form-control quitar','disabled'=>true]) !!}
 
@@ -205,20 +211,20 @@
 
                                     <div class="col-xs-6">
                                         <label for="comment">Sector:</label>
-                                    <textarea name="sector_be" id='municipio' class="mayusculas form-control" rows="3"
-                                              id="comment"></textarea>
+                                        <textarea required="" name="sector_be" id='municipio'
+                                                  class="mayusculas form-control" rows="3" id="comment"></textarea>
                                     </div>
 
                                     <div class="col-xs-3 ">
 
-                                        {!! Form::label('celular):')  !!}
-                                        {!! Form::text('celular_be',null,['class'=>'form-control']);  !!}
+                                        {!! Form::label('celular:')  !!}
+                                        {!! Form::text('celular_be',null,['class'=>'numeros form-control','required'=>'']);  !!}
 
                                     </div>
                                     <div class="col-xs-3 ">
 
                                         {!! Form::label('Telefono(Casa):')  !!}
-                                        {!! Form::text('telefono_be',null,['class'=>'form-control']);  !!}
+                                        {!! Form::text('telefono_be',null,['class'=>'numeros form-control','required'=>'']);  !!}
 
                                     </div>
 
@@ -226,6 +232,8 @@
                                 </div>
 
                             </div>
+
+
                         </div>
 
                         <div class="panel panel-primary">
@@ -243,7 +251,7 @@
                                     <div class="col-xs-3">
 
                                         {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                        {!! Form::text('cedula_so',null,['class'=>"form-control limpiar",'onblur'=>"getData($('#valor').val())",'id'=>'valor','onclick'=>"Limpiar()"]) !!}
+                                        {!! Form::text('cedula_so',null,['class'=>" numeros form-control limpiar",'onblur'=>"getData($('#valor').val())",'id'=>'valor','onclick'=>"Limpiar()",'required'=>'','maxlength'=>8 ]) !!}
 
                                     </div>
 
@@ -268,7 +276,7 @@
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Edo.Civil','Edo.Civil')   !!}
-                                        {!! Form::select('edocivil_so',$EdoCivil,null,['class'=>'form-control'])   !!}
+                                        {!! Form::select('edocivil_so',$EdoCivil,null,['class'=>'form-control','required'=>''])   !!}
 
                                     </div>
 
@@ -294,26 +302,26 @@
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Ocupacion','Ocupacion:')   !!}
-                                        {!! Form::select('ocupacion_so',$ocupacion,'',['class'=>'form-control']);  !!}
+                                        {!! Form::select('ocupacion_so',$ocupacion,'',['class'=>'form-control','required'=>'']);  !!}
                                     </div>
 
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Estado','Estado:')   !!}
-                                        {!! Form::select('estado_so',$estados,0,['class'=>'form-control estado2']);  !!}
+                                        {!! Form::select('estado_so',$estados,0,['class'=>'form-control estado2','required'=>'']);  !!}
                                     </div>
                                     <div class="col-xs-3">
                                         {!! Form::label('Municipio','Municipio:')   !!}
-                                        <select class="form-control municipio2" name="municipio_so">
-                                            <option>Debe Seleccionar un Municipio</option>
+                                        <select required="" class="form-control municipio2" name="municipio_so">
+                                            <option value="">Debe Seleccionar un Municipio</option>
                                         </select>
                                     </div>
 
                                     <div class="col-xs-3 ">
                                         {!! Form::label('Parroquia','Parroquias:')   !!}
 
-                                        <select class="form-control parroquias2" name="parroquia_so">
-                                            <option name="parroquias">Debe Seleccionar una Parroquia</option>
+                                        <select required="" class="form-control parroquias2" name="parroquia_so">
+                                            <option value="" name="parroquias">Debe Seleccionar una Parroquia</option>
                                         </select>
 
                                     </div>
@@ -327,20 +335,20 @@
 
                                     <div class="col-xs-6">
                                         <label for="comment">Sector:</label>
-                                        <textarea name="sector_so" id='municipio' class="form-control" rows="3"
-                                                  id="comment"></textarea>
+                                        <textarea required="" name="sector_so" id='municipio' class="form-control"
+                                                  rows="3" id="comment"></textarea>
                                     </div>
 
                                     <div class="col-xs-3 ">
 
                                         {!! Form::label('celular:')  !!}
-                                        {!! Form::text('celular_so',null,['class'=>'form-control']);  !!}
+                                        {!! Form::text('celular_so',null,['class'=>'numeros form-control','required'=>'']);  !!}
 
                                     </div>
                                     <div class="col-xs-3 ">
 
                                         {!! Form::label('Telefono(Casa):')  !!}
-                                        {!! Form::text('telefono_so',null,['class'=>'form-control']);  !!}
+                                        {!! Form::text('telefono_so',null,['class'=>'numeros form-control','required'=>'']);  !!}
 
 
                                     </div>
@@ -351,20 +359,17 @@
                             </div>
                         </div>
 
+
                     </div>
 
-                    @include('solicitudes.socio_economico')
                     @include('solicitudes.descripcion')
+                    @include('solicitudes.socio_economico')
 
 
                 </div>
     </div>
 
-    {{--   <div class="col-xs-12 text-center">
 
-           {!! Form::submit('Registrar',['class'=>'btn btn-primary btn-lg']); !!}
-
-       </div>--}}
 
     <div id="info"></div>
 
@@ -425,8 +430,11 @@
 
         $(document).ready(function () {
 
+            $('#solicitud').parsley();
 
-            $('#solicitud').guardian();
+
+
+
 
 
             $('.coordinacion').click(function () {
@@ -436,17 +444,17 @@
                         if (tipo == 1) {
                             $(".discapacidad").show("slow");
                             $('.quitar').removeAttr("disabled");
+                            $('.quitar').attr("required", true);
                         } else {
                             $('.discapacidad').hide("slow");
                             $('.quitar').attr("disabled", true);
+                            $('.quitar').removeAttr("required");
+
 
                         }
 
                     }
             );
-
-
-            $('#dpMonths').datepicker();
 
 
             $('#action-button').click(function () {
@@ -603,8 +611,10 @@
             $('#activo_alimentacion').click(function () {
 
                 if ($(this).is(":checked")) {
+                    $('#alimentacion').attr("required", true);
                     $('#alimentacion').removeAttr("disabled");
                 } else {
+                    $('#alimentacion').removeAttr("required");
                     $('#alimentacion').attr("disabled", true);
                     $('#alimentacion').val('');
                 }
@@ -614,8 +624,10 @@
             $('#activo_spublicos').click(function () {
 
                 if ($(this).is(":checked")) {
+                    $('#servicios').attr("required", true);
                     $('#servicios').removeAttr("disabled");
                 } else {
+                    $('#servicios').removeAttr("required");
                     $('#servicios').attr("disabled", true);
                     $('#servicios').val('');
                 }
@@ -625,8 +637,10 @@
             $('#activo_telefono').click(function () {
 
                 if ($(this).is(":checked")) {
+                    $('#telefono').attr("required", true);
                     $('#telefono').removeAttr("disabled");
                 } else {
+                    $('#telefono').removeAttr("required");
                     $('#telefono').attr("disabled", true);
                     $('#telefono').val('');
                 }
@@ -635,9 +649,11 @@
             });
             $('#activo_gas').click(function () {
                 if ($(this).is(":checked")) {
+                    $('#gas').attr("required", true);
                     $('#gas').removeAttr("disabled");
                 } else {
                     $('#gas').attr("disabled", true);
+                    $('#gas').removeAttr("required");
                     $('#gas').val('');
                 }
 
@@ -645,9 +661,11 @@
             });
             $('#activo_agua').click(function () {
                 if ($(this).is(":checked")) {
+                    $('#agua').attr("required", true);
                     $('#agua').removeAttr("disabled");
                 } else {
                     $('#agua').attr("disabled", true);
+                    $('#agua').removeAttr("required");
                     $('#agua').val('');
                 }
 
@@ -656,8 +674,11 @@
 
             $('#activo_salud').click(function () {
                 if ($(this).is(":checked")) {
+                    $('#salud').attr("required", true);
                     $('#salud').removeAttr("disabled");
                 } else {
+
+                    $('#salud').removeAttr("required");
                     $('#salud').attr("disabled", true);
                     $('#salud').val('');
                 }
