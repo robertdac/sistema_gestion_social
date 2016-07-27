@@ -1,0 +1,97 @@
+<?php $__env->startSection('content'); ?>
+
+    <style >
+
+
+
+    </style>
+
+
+
+    <div style="  margin-top: 20px;"></div>
+
+    <div class="container-fluid">
+
+        <?php if(session('mensaje')): ?>
+            <div class="alert alert-success">
+                <?php echo e(session('mensaje')); ?>
+
+            </div>
+        <?php endif; ?>
+
+
+
+
+        <div class="row">
+            <div class="col-md-5 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <label>CONSULTA DE BENEFICIARIO</label>
+                    </div>
+                    <div class="panel-body">
+
+                        <?php foreach($errors->all('<li>:message</li>') as $message): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $message;; ?>
+
+                            </div>
+                        <?php endforeach; ?>
+
+                        <?php echo Form::open(['url' => 'filtro','id'=>'example1' ]); ?>
+
+                        <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
+
+                        <div class="form-group">
+                            <div class="col-md-3" >
+                              <?php echo Form::select('cedula[]',['V'=>'V','E'=>'E'],'',['class'=>'form-control','id'=>'nac']); ?>
+
+
+                            </div>
+
+                            <div class="col-md-7">
+                                <?php echo Form::text('cedula[]',null,["required"=>"required",'class'=>'numeros form-control','id'=>'cedula','maxlength'=>"8",'placeholder'=>"INTRODUZCA LA CÉDULA"]); ?>
+
+                            </div>
+
+                            <div  style=" margin-top: 10px" class="row-fluid col-md-6">
+                              <?php echo Form::checkbox('menorEdad',1,false,['id'=>'menorEdad']); ?>
+
+                              <?php echo ('¿Menor de edad?'); ?>
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+                                    Enviar
+                                </button>
+
+                            </div>
+                        </div>
+                        <?php echo Form::close(); ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+
+        $(document).ready(function () {
+            $('#example1').parsley();
+        });
+
+
+    </script>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

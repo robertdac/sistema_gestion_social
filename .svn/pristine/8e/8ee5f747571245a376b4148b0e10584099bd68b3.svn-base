@@ -1,0 +1,225 @@
+<?php $__env->startSection('content'); ?>
+    <h2 class="text-center">FICHA TECNICA </h2>
+    <div class="pull-left">
+
+        <?php echo link_to('nuevaSolicitud', 'REGRESAR', ['class' => 'btn btn-primary']); ?>
+
+
+    </div>
+
+    <div STYLE="margin-top: 70px" class="panel panel-primary">
+        <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <label for="email">Nacionalidad:</label>
+                    <?php echo Form::text('naci_be',$soli->beneficiario->nacionalidad,['class'=>'form-control','readonly'=>'true']); ?>
+
+
+                </div>
+                <div class="col-xs-3">
+
+                    <?php echo Form::label('cedula','Cedula de identidad:');; ?>
+
+                    <?php echo Form::text('cedula_be',$soli->beneficiario->cedula,['class'=>"form-control","readonly"=>"true"]); ?>
+
+
+                </div>
+
+
+                <div class="col-xs-3">
+                    <?php echo Form::label('nombre','Nombre:');; ?>
+
+                    <?php echo Form::text('nombre_be',$soli->beneficiario->nombres,['class'=>'form-control','disabled'=>1 ]); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('apellido','Apellido'); ?>
+
+                    <?php echo Form::text('apellido_be',$soli->beneficiario->apellidos,['class'=>'form-control','disabled'=>1 ]); ?>
+
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Edo.Civil','Edo.Civil'); ?>
+
+                    <?php echo Form::text('Edocivil_be',$soli->beneficiario->edoCivil->descripcion,['class'=>'form-control','disabled'=>1]); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php if($soli->beneficiario == 'M'): ?>
+                        <?php echo Form::label('masculimo','Masculino'); ?>
+
+                        <?php echo Form::radio('sexo_be','M',true); ?>
+
+
+                    <?php else: ?>
+                        <?php echo Form::label('femenino','Femenino'); ?>
+
+                        <?php echo Form::radio('sexo_be','F',true); ?>
+
+                    <?php endif; ?>
+                </div>
+
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('fecha','Fecha de Nacimiento:'); ?>
+
+                    <?php echo Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$soli->beneficiario->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control','disabled'=>1]); ?>
+
+                </div>
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Estatus','Estatus:'); ?>
+
+                    <?php echo Form::text('estatus',$soli->estatus->descripcion,['class'=>'form-control','disabled'=>1]); ?>
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Ocupacion','Ocupacion:'); ?>
+
+                    <?php echo Form::text('ocupacion_be',$soli->beneficiario->ocupacion->nombre,['class'=>'form-control','disabled'=>1]);; ?>
+
+                </div>
+
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Estado','Estado:'); ?>
+
+                    <?php echo Form::text('estado_be',$soli->beneficiario->estado->nombre,['class'=>'form-control', 'disabled'=>1]);; ?>
+
+                </div>
+                <div class="col-xs-3">
+                    <?php echo Form::label('Municipio','Municipio:'); ?>
+
+                    <?php echo Form::text('estado_be',$soli->beneficiario->municipio->nombre,['class'=>'form-control', 'disabled'=>1]);; ?>
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Parroquia','Parroquias:'); ?>
+
+                    <?php echo Form::text('estado_be',$soli->beneficiario->parroquia->nombre,['class'=>'form-control','disabled'=>1]);; ?>
+
+
+                </div>
+
+
+            </div>
+
+            <br>
+            <?php if(count($soli->beneficiario->beneficiario_discapacidad) > 0): ?>
+                <div class="row discapacidad">
+
+                    <div class="col-xs-3">
+
+                        <?php echo Form::label('Tipo','Presenta alguna discapacidad:');; ?>
+
+                        <?php echo Form::text('discapacidad[algunaDis]',$soli->beneficiario->beneficiario_discapacidad[0]->discapacidad->nombre,['class'=>'form-control quitar','disabled'=>true]); ?>
+
+
+                    </div>
+
+
+                    <div class="col-xs-3 grado">
+
+                        <?php echo Form::label('Tipo','Grado:');; ?>
+
+                        <?php echo Form::text('discapacidad[grado]',$soli->beneficiario->beneficiario_discapacidad[0]->GradoDiscapacidad->nombre,['class'=>'form-control quitar','disabled'=>true]); ?>
+
+
+                    </div>
+
+                    <div class="col-xs-3 grado">
+                        <?php echo Form::label('Tipo','Necesita ayuda tecnica:');; ?>
+
+                        <?php echo Form::select('discapacidad[ayudaTecnica]',[''=>'SELECCIONE..',1=>'SI',0=>'NO'],$soli->beneficiario->beneficiario_discapacidad[0]->ayuda_tecnica,['class'=>'form-control quitar','disabled'=>true]); ?>
+
+
+                    </div>
+                    <div class="col-xs-3 grado">
+                        <?php echo Form::label('Tipo','N° de certificado:');; ?>
+
+                        <?php echo Form::text('discapacidad[certificado]',$soli->beneficiario->beneficiario_discapacidad[0]->certificado_discp,['class'=>'form-control quitar','disabled'=>true]); ?>
+
+
+                    </div>
+
+                </div>
+                <br>
+            <?php endif; ?>
+            <div class="row">
+
+                <div class="col-xs-6">
+                    <label for="comment">Sector:</label>
+                                    <textarea name="sector_be" id='municipio' class="mayusculas form-control" rows="3"
+                                              id="comment"> <?php echo e($soli->beneficiario->direccion); ?> </textarea>
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('Telefono 1:'); ?>
+
+                    <?php echo Form::text('celular_be',$soli->beneficiario->telefonos[0]->numero,['class'=>'form-control','disabled'=>1]);; ?>
+
+
+                </div>
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('Telefono 2:'); ?>
+
+                    <?php echo Form::text('telefono_be',$soli->beneficiario->telefonos[1]->numero,['class'=>'form-control','disabled'=>1]);; ?>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

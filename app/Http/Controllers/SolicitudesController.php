@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
+
 class SolicitudesController extends Controller
 {
     protected $edo_civil;
@@ -78,6 +79,7 @@ class SolicitudesController extends Controller
         $this->parentesco = \App\Models\parentesco::where('estatus', '=', 1)->lists('nombre', 'id');
         $this->anexos = \App\Models\Anexos::where('estatus', '=', 1)->lists('nombre', 'id');
         $this->atencion = \App\Models\TipoAtencion::where('estatus', 1)->lists('nombre', 'id');
+        $this->tipoEsSalud = \App\Models\tipoEstablecimientoSalud::all()->lists('nombre', 'id');
 
 
     }
@@ -85,26 +87,39 @@ class SolicitudesController extends Controller
 
     public function index(Request $request)
     {
-        //JEFE DE  SUB-SECRETARIA
-        if (Auth::user()->id_perfil == 4) {
-            $solicitudes = \App\Models\Solicitudes::whereHas('coordinacion', function ($query) {
-                $query->where('idsubsecretaria', Auth::user()->id_subsecre);
-            })
-                ->where('id_estatus', '=', 2)
-                ->get();
-
-        } else {
-
-            $sol = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion');
-            $solicitudes = $sol->filtro($request->input('lolo'))->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)->where('id_estatus', '=', 1)->get();
-
-        }
 
 
-        if ($solicitudes->count() > 0) {
-            return view('solicitudes.index', ['solicitud' => $solicitudes]);
-        }
-        return redirect('filtro')->with('mensaje', 'No se encontraron registros');
+
+
+        $solicitudes = \App\Models\Solicitudes::where('id_coordinaciones', Auth::user()->id_coordinacion)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+
+        //dd($solicitudes);
+        return view('solicitudes.index', ['solicitud' => $solicitudes]);
+
+
+        /*  //JEFE DE  SUB-SECRETARIA
+          if (Auth::user()->id_perfil == 4) {
+              $solicitudes = \App\Models\Solicitudes::whereHas('coordinacion', function ($query) {
+                  $query->where('idsubsecretaria', Auth::user()->id_subsecre);
+              })
+                  // ->where('id_estatus', '=', 2)
+                  ->get();
+
+          } else {
+
+              $sol = \App\Models\Solicitudes::with('usuarios', 'estatus', 'beneficiario', 'coordinacion', 'tipoSolicitud', 'recepcion');
+              $solicitudes = $sol->filtro($request->input('lolo'))->where('id_coordinaciones', '=', Auth::user()->id_coordinacion)->where('id_estatus', '=', 1)->get();
+
+          }*/
+
+
+        /*   if ($solicitudes->count() > 0) {
+               return view('solicitudes.index', ['solicitud' => $solicitudes]);
+           }
+           return redirect('filtro')->with('mensaje', 'No se encontraron registros');*/
 
 
     }
@@ -118,9 +133,16 @@ class SolicitudesController extends Controller
     public function create($ci)
     {
         $cedula = Crypt::decrypt($ci);
-        //dd($cedula);
-        $datos = \App\Models\Saime::datos("'V'", $cedula);
 
+        if (isset($cedula[0])) {
+
+            $datos = \App\Models\Saime::datos("'" . $cedula[0] . "'", $cedula[1]);
+
+        } else {
+            $datos = \App\Models\Saime::datos("'V'", $cedula);
+
+
+        }
 
 
         //dd($datos[0]->intcedula);
@@ -151,7 +173,8 @@ class SolicitudesController extends Controller
             'nivel_instruccion' => ['' => 'SELECCIONE..'] + $this->nivel_instruccion,
             'parentesco' => ['' => 'SELECCIONE..'] + $this->parentesco,
             'anexos' => $this->anexos,
-            'gradoDis' => ['' => 'SELECCIONE..'] + $this->gradoDis
+            'gradoDis' => ['' => 'SELECCIONE..'] + $this->gradoDis,
+            'establecimientoSalud'=> $this->tipoEsSalud
 
         ]);
 
@@ -164,7 +187,6 @@ class SolicitudesController extends Controller
 
     }
 
-
     public function nuevaSolicitud()
     {
         return View('solicitudes.filtro');
@@ -173,15 +195,16 @@ class SolicitudesController extends Controller
 
     public function filtro(FiltroRequest $request)
     {
-        //   dd($request->input('menorEdad'));
-        $cedula = trim($request->input('cedula'));
+        //dd($request->input('cedula'));
+        // $cedula = trim($request->input('cedula'));
+        $cedula = $request->input('cedula');
 
         if ($cedula) {
 
             $epa = DB::table('personas')
                 ->join('solicitudes', 'personas.id', '=', 'solicitudes.id_beneficiario')
                 ->join('usuarios_solicitudes', 'solicitudes.id', '=', 'usuarios_solicitudes.id_solicitud')
-                ->where('personas.cedula', $cedula)
+                ->where('personas.cedula', $cedula[1])
                 ->orderBy('usuarios_solicitudes.estatus', 'desc')
                 ->get();
 
@@ -198,16 +221,13 @@ class SolicitudesController extends Controller
                     $fecha_aprobada = Carbon::parse($epa[0]->fecha_registro)->addMonth(6);
                     //comprueba si la primera fecha es mayor a la segunda fecha.
                     $fecha = $hoy->gt($fecha_aprobada);
-
-
                     // Session::flash('mensaje','El beneficiario obtuvo un finaciamiento, debe esperar 6 meses');
                     //return redirect('filtro');
 
-
                     if ($fecha == true) {
                         $ci = Crypt::encrypt($cedula);
-                        return $this->create($ci);
-                        // return redirect('solicitudes/' . $ci);
+                        //return $this->create($ci);
+                        return redirect('solicitudes/' . $ci);
 
                     } else {
                         //dd(Redirect::action('SolicitudesController@show',$epa[0]->id));
@@ -221,15 +241,15 @@ class SolicitudesController extends Controller
 
             }
             $ci = Crypt::encrypt($cedula);
-            return $this->create($ci);
-           // return redirect('solicitudes/' . $ci);
+            // return $this->create($ci);
+            return redirect('solicitudes/' . $ci);
         }
 
         //menor de edad sin cedula
         $ci = Crypt::encrypt(0);
-        return $this->create($ci);
+        //return $this->create($ci);
 
-        //return redirect('solicitudes/' . $ci);
+        return redirect('solicitudes/' . $ci);
 
 
     }
@@ -248,6 +268,8 @@ class SolicitudesController extends Controller
 
 //pendiente de validar las cedulas si son las misma como el beneficiario con el solicitante
         $beneficiario = \App\Models\Personas::where('cedula', '=', $request->input('cedula_be'))->first();
+
+        // dd($beneficiario);
 
         if ($beneficiario == null) {
 
@@ -412,14 +434,12 @@ class SolicitudesController extends Controller
 
     protected function fileStore($file, $idSol)
     {
-
         if (is_array($file)) {
             foreach ($file as $key => $value) {
                 if (!empty($value) || $value != NULL || $value != "") {
 
                     $imageName = $idSol . '.' . $value->getClientOriginalExtension();
                     $value->move(base_path() . '/public/documentos/', $imageName);
-
                     $anexos = new \App\Models\Anexos_solicitud;
                     $anexos->id_anexo = $key;
                     $anexos->id_solicitud = $idSol;
@@ -584,7 +604,6 @@ class SolicitudesController extends Controller
      */
     public function update(SolicitudesRequest $request, $id)
     {
-
         // dd($request->input());
 
         $soli = \App\Models\Solicitudes::with(
@@ -766,16 +785,17 @@ class SolicitudesController extends Controller
     {
 
         $id = $request->input('id');
+        $estatus = $request->input('estatus');
         $solicitudes = \App\Models\Solicitudes::find($id);
 
 
         //historico de solicitudes
-        $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => 2, 'fecha_registro' => \Carbon\Carbon::now()]);
+        $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => $estatus, 'fecha_registro' => \Carbon\Carbon::now()]);
         //$solicitudes->monto_sugerido = $request->input('monto_sugerido');
         //$solicitudes->id_tatencion = $request->input('atencion');
-        $solicitudes->id_estatus = 2;
-
+        $solicitudes->id_estatus = $estatus;
         $solicitudes->push();
+
 
         $recomendaciones = new Recomendaciones;
         $recomendaciones->id_solicitud = $id;
@@ -816,6 +836,7 @@ class SolicitudesController extends Controller
         $sub_secretaria = \App\Models\Sub_secretaria::where('id', '=', Auth::user()->id_secretaria)->lists('descripcion', 'id');
         $coordinacion = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->lists('nombre', 'id');
         $tiposolicitud = \App\Models\Coordinacion::find(Auth::user()->id_coordinacion)->tipo_solicitud()->lists('nombre', 'id');
+
 
         return view('solicitudes.aprobar', [
             'atencion' => ['' => 'SELECCIONE...'] + $this->atencion,
@@ -858,14 +879,15 @@ class SolicitudesController extends Controller
     public function aprobarUpdate(Request $request)
     {
         $id = $request->input('id');
+        $estatus = $request->input('estatus');
         $solicitudes = \App\Models\Solicitudes::find($id);
 
 
         //historico de solicitudes
-        $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => 3, 'fecha_registro' => \Carbon\Carbon::now()]);
+        $solicitudes->usuarios()->attach(Auth::user()->id, ['estatus' => $estatus, 'fecha_registro' => \Carbon\Carbon::now()]);
         //$solicitudes->monto_sugerido = $request->input('monto_sugerido');
         //$solicitudes->id_tatencion = $request->input('atencion');
-        $solicitudes->id_estatus = 3;
+        $solicitudes->id_estatus = $estatus;
 
         $solicitudes->push();
 

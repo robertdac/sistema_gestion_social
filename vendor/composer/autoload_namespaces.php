@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Symfony\\Component\\Security\\Core\\' => array($vendorDir . '/symfony/security-core'),
@@ -21,6 +20,7 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
+    'Misd\\Highcharts' => array($vendorDir . '/misd/highcharts/api', $vendorDir . '/misd/highcharts/src'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
     'Dotenv' => array($vendorDir . '/vlucas/phpdotenv/src'),

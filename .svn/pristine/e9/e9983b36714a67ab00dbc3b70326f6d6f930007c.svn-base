@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>SURAGS</title>
+
+    <?php echo Html::style('css/bootstrap.min.css'); ?>
+
+    <?php /*<?php echo Html::style('css/jumbotron-narrow.css'); ?>*/ ?>
+    <?php /* <?php echo Html::style('css/datepicker.css'); ?>*/ ?>
+    <?php echo Html::style('css/bootstrap-datepicker.css'); ?>
+
+    <?php echo Html::style('css/bootstrap-select.css'); ?>
+
+    <?php echo Html::script('js/jquery.js'); ?>
+
+
+    <?php echo Html::style('css/parsley.css'); ?>
+
+
+       <script src="https://code.highcharts.com/highcharts.js"></script>
+       <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+
+
+<div class="container">
+    <div <?php /*style="width: 1139px; height: 158px;"*/ ?>>
+        <?php echo HTML::image('cortes_agenda/instrucciones.png','banner', array("class"=>"img-responsive","style"=>"width: 1139px; height: 158px;" )); ?>
+
+    </div>
+    <?php if(Auth::check()): ?>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+
+                    <span class="navbar-brand">Bienvenido: <?php echo e(Auth::user()->nombres .' '.Auth::user()->apellidos); ?> </span>
+                </div>
+                <div>
+
+               <?php /*     $roles = \App\Models\Opciones::all();
+                    $usuario = \App\User::find(Auth::user()->id)->roles()->lists('nombre', 'id');*/ ?>
+
+
+                      <?php /*<?php echo $__env->make('menu',['roles'=>$roles,'usuario'=>$usuario], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>*/ ?>
+
+                  <?php   App\Models\opciones_perfiles::menu_complete(Auth::user()->id)   ?>
+
+                </div>
+
+
+            </div>
+        </nav>
+        <?php endif; ?>
+
+
+        <?php echo $__env->yieldContent('content'); ?>
+
+                <!-- Aqui se incluiran los codigos de las vistas que
+    use cada metodo de los controladores -->
+
+        <div class="footer">
+            <?php echo HTML::image('cortes_agenda/barra_inferior.png', 'alt-text',array("class"=>"img-responsive")); ?>
+
+        </div>
+</div>
+
+
+<!-- Incluimos el JS de boostrap con el Helper de Laravel -->
+<?php echo Html::script('js/bootstrap.min.js'); ?>
+
+<?php echo Html::script('js/bootstrap-filestyle.min.js'); ?>
+
+<?php echo Html::script('js/bootstrap-datepicker.js'); ?>
+
+<?php echo Html::script('js/bootstrap-datepicker.es.min.js'); ?>
+
+<?php echo Html::script('js/bootstrap-select.js'); ?>
+
+<?php echo Html::script('js/parsley.min.js'); ?>
+
+<?php echo Html::script('js/es.js'); ?>
+
+<?php echo Html::script('js/scriptPropios.js'); ?>
+
+
+
+<style>
+
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+
+</style>
+
+
+</body>
+</html>

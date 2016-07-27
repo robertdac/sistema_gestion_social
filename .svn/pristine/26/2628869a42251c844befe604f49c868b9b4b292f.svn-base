@@ -1,0 +1,551 @@
+<?php $__env->startSection('content'); ?>
+
+    <h2 class="text-center">APROBACION DE LA SOLICITUD</h2>
+
+    <?php echo Form::open(['url' => 'aprobar','id'=>'aprobar']); ?>
+
+
+    <?php /*
+        <?php echo e(dd($solicitudes)); ?>
+
+    */ ?>
+
+
+
+    <div class="panel panel-primary">
+        <div class=" text-center panel-heading">SECRETARIA DE GESTION SOCIAL</div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <?php echo Form::hidden('id',$solicitudes->id);; ?>
+
+
+                    <?php echo Form::label('sub secretaria'); ?>
+
+                    <?php echo Form::text('subSecretaria',$solicitudes->coordinacion->subsecretaria->descripcion,['class'=>' sub_secretaria form-control','disabled'=>true]); ?>
+
+                </div>
+
+                <div class="col-xs-7 ">
+                    <?php echo Form::label('coordinacion'); ?>
+
+                    <?php echo Form::text('coordinacion',$solicitudes->coordinacion->nombre ,['class'=>'form-control','disabled'=>true]); ?>
+
+
+                </div>
+
+
+                <div style=" margin-top: 10px" class="col-xs-4 ">
+                    <?php echo Form::label('Tipo de solicitud'); ?>
+
+
+                    <?php echo Form::text('tipoSolicitud', $solicitudes->tipoSolicitud->nombre  ,['class'=>'form-control','disabled'=>true]); ?>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="panel panel-primary">
+        <div class=" text-center panel-heading">DATOS DEL BENEFICIARIO</div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <label for="naci_be">Nacionalidad:</label>
+                    <?php $nac = $solicitudes->beneficiario->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                    <?php echo Form::text('naci_be',$naci,['class'=>'form-control','disabled'=>'true']); ?>
+
+                    <?php echo Form::hidden('nacionalidad',$nac); ?>
+
+
+                </div>
+                <div class="col-xs-3">
+
+                    <?php echo Form::label('cedula','Cedula de identidad:');; ?>
+
+                    <?php echo Form::text('cedula_be',$solicitudes->beneficiario->cedula,['class'=>"form-control","disabled"=>"true"]); ?>
+
+
+                </div>
+
+
+                <div class="col-xs-3">
+                    <?php echo Form::label('nombre','Nombre:');; ?>
+
+                    <?php echo Form::text('nombre_be',$solicitudes->beneficiario->nombres,['class'=>'form-control',"disabled"=>"true" ]); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('apellido','Apellido'); ?>
+
+                    <?php echo Form::text('apellido_be',$solicitudes->beneficiario->apellidos,['class'=>'form-control',"disabled"=>"true" ]); ?>
+
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Edo.Civil','Edo.Civil'); ?>
+
+                    <?php echo Form::select('Edocivil_be',$edo_civil,$solicitudes->beneficiario->id_edocivil,['class'=>'form-control']); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('masculimo','Masculino'); ?>
+
+                    <?php echo Form::radio('sexo_be','M',($solicitudes->beneficiario->sexo == 'M') ? 1 : 0); ?>
+
+                    <br>
+                    <?php echo Form::label('femenino','Femenino'); ?>
+
+                    <?php echo Form::radio('sexo_be','F',($solicitudes->beneficiario->sexo == 'F')? 1 : 0 ); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('fecha','Fecha de Nacimiento:'); ?>
+
+                    <?php echo Form::text('fecha_nacimiento_be',Carbon\Carbon::parse(str_replace('"','',$solicitudes->beneficiario->fecha_nacimiento))->format('d-m-Y'),['class'=>'form-control','disabled'=>true]); ?>
+
+                </div>
+
+            </div>
+            <br>
+
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Ocupacion','Ocupacion:'); ?>
+
+                    <?php echo Form::select('ocupacion_be',$ocupacion,$solicitudes->beneficiario->id_ocupacion,['class'=>'form-control']);; ?>
+
+                </div>
+
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Estado','Estado:'); ?>
+
+                    <?php echo Form::select('estado_be',$estado,$solicitudes->beneficiario->estado->id,['class'=>'form-control estado']);; ?>
+
+                </div>
+                <div class="col-xs-3">
+                    <?php echo Form::label('Municipio','Municipio:'); ?>
+
+                    <?php echo Form::select('municipio_be',$municipio,$solicitudes->beneficiario->id_municipio,['class'=>'form-control municipio']);; ?>
+
+
+                </div>
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Parroquia','Parroquias:'); ?>
+
+
+                    <?php echo Form::select('parroquias_be',$parroquia,$solicitudes->beneficiario->id_parroquia,['class'=>'form-control parroquias']);; ?>
+
+
+                </div>
+
+
+            </div>
+
+            <?php /*si el beneficiario posee alguna discapacidad*/ ?>
+            <?php if(isset($solicitudes->beneficiario->beneficiario_discapacidad[0])): ?>
+                <br>
+                <div class="row discapacidad">
+
+                    <div class="col-xs-3">
+
+                        <?php echo Form::label('Tipo','Presenta alguna discapacidad:');; ?>
+
+                        <?php echo Form::select('discapacidad[algunaDis]',$discapacidad,$solicitudes->beneficiario->beneficiario_discapacidad[0]->discapacidad->id,['class'=>'form-control']); ?>
+
+
+                    </div>
+
+
+                    <div class="col-xs-3 grado">
+
+                        <?php echo Form::label('Tipo','Grado:');; ?>
+
+                        <?php echo Form::select('discapacidad[grado]',$gradoDis,$solicitudes->beneficiario->beneficiario_discapacidad[0]->GradoDiscapacidad->id,['class'=>'form-control']); ?>
+
+
+                    </div>
+
+                    <div class="col-xs-3 grado">
+                        <?php echo Form::label('Tipo','Necesita ayuda tecnica:');; ?>
+
+                        <?php echo Form::select('discapacidad[ayudaTecnica]',[''=>'SELECCIONE..',1=>'SI',0=>'NO'],$solicitudes->beneficiario->beneficiario_discapacidad[0]->ayuda_tecnica,['class'=>'form-control']); ?>
+
+
+                    </div>
+                    <div class="col-xs-3 grado">
+                        <?php echo Form::label('Tipo','N° de certificado:');; ?>
+
+                        <?php echo Form::text('discapacidad[certificado]',$solicitudes->beneficiario->beneficiario_discapacidad[0]->certificado_discp,['class'=>'form-control']); ?>
+
+
+                    </div>
+
+                </div>
+            <?php endif; ?>
+
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-6">
+                    <label for="comment">Sector:</label>
+                                        <textarea name="sector_be" id='municipio' class="mayusculas form-control"
+                                                  rows="3"
+                                                  id="comment"><?php echo $solicitudes->beneficiario->direccion; ?></textarea>
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('celular_be','Celular:'); ?>
+
+                    <?php echo Form::text('celular_be',null,['class'=>'form-control']);; ?>
+
+
+                </div>
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('Telefono(Casa):'); ?>
+
+                    <?php echo Form::text('telefono_be',null,['class'=>'form-control']);; ?>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class=" text-center panel-heading">DATOS DEL SOLICITANTE</div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <label for="email">Nacionalidad:</label>
+                    <?php $nac = $solicitudes->solicitante->nacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
+                    <?php echo Form::text('naci_so',$naci,['class'=>'form-control','disabled'=>'true']); ?>
+
+                    <?php echo Form::hidden('nacionalidad',$nac); ?>
+
+
+                </div>
+                <div class="col-xs-3">
+
+                    <?php echo Form::label('cedula','Cedula de identidad:');; ?>
+
+                    <?php echo Form::text('cedula_so',$solicitudes->solicitante->cedula,['class'=>"form-control",'disabled'=>true]); ?>
+
+
+                </div>
+
+
+                <div class="col-xs-3">
+                    <?php echo Form::label('nombre','Nombre:');; ?>
+
+                    <?php echo Form::text('nombre_so',$solicitudes->solicitante->nombres,['class'=>'form-control limpiar','disabled'=>true ]); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('apellido','Apellido'); ?>
+
+                    <?php echo Form::text('apellido_so',$solicitudes->solicitante->apellidos,['class'=>'form-control limpiar','disabled'=>true ]); ?>
+
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Edo.Civil','Edo.Civil'); ?>
+
+                    <?php echo Form::select('edocivil_so',$edo_civil,$solicitudes->solicitante->id_edocivil,['class'=>'form-control']); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('masculimo','Masculino'); ?>
+
+                    <?php echo Form::radio('sexo_so','M',($solicitudes->solicitante->sexo == 'M') ? 1:0,['id'=>'macho','class'=>'limpiar']); ?>
+
+                    <br>
+
+                    <?php echo Form::label('femenino','Femenino'); ?>
+
+                    <?php echo Form::radio('sexo_so','F',($solicitudes->solicitante->sexo == 'F') ? 1:0,['id'=>'hembra','class'=>'limpiar']); ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('fecha','Fecha de Nacimiento:'); ?>
+
+                    <?php echo Form::text('fecha_nacimiento_so',Carbon\Carbon::parse(str_replace('"','',$solicitudes->solicitante->fecha_nacimiento))->format('d-m-Y'),['class'=>'limpiar form-control','disabled'=>true]); ?>
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Ocupacion','Ocupacion:'); ?>
+
+                    <?php echo Form::select('ocupacion_so',$ocupacion,$solicitudes->solicitante->id_ocupacion,['class'=>'form-control']);; ?>
+
+                </div>
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Estado','Estado:'); ?>
+
+                    <?php echo Form::select('estado_so',$estado,$solicitudes->solicitante->id_estado,['class'=>'form-control estado2']);; ?>
+
+                </div>
+                <div class="col-xs-3">
+                    <?php echo Form::label('Municipio','Municipio:'); ?>
+
+                    <?php echo Form::select('municipio_so',$municipio,$solicitudes->solicitante->id_municipio,['class'=>'form-control municipio2']);; ?>
+
+
+                </div>
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Parroquia','Parroquias:'); ?>
+
+                    <?php echo Form::select('parroquia_so',$parroquia,$solicitudes->solicitante->id_parroquia,['class'=>'form-control parroquias2']);; ?>
+
+
+                </div>
+
+
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-xs-6">
+                    <label for="comment">Sector:</label>
+                                        <textarea name="sector_so" id='municipio' class="form-control" rows="3"
+                                                  id="comment"><?php echo $solicitudes->solicitante->direccion; ?></textarea>
+                </div>
+
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('celular:'); ?>
+
+                    <?php echo Form::text('celular_so',null,['class'=>'form-control']);; ?>
+
+
+                </div>
+                <div class="col-xs-3 ">
+
+                    <?php echo Form::label('Telefono(Casa):'); ?>
+
+                    <?php echo Form::text('telefono_so',null,['class'=>'form-control']);; ?>
+
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="panel panel-primary">
+        <div class=" text-center panel-heading">DESCRIPCION DEL CASO</div>
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-xs-12 text-center">
+                    <label for="comment">Breve descripcion del caso:</label>
+                    <textarea name="descripcion_caso" class="form-control"
+                              rows="3"><?php echo $solicitudes->descripcion; ?> </textarea>
+                </div>
+            </div>
+            <br>
+
+            <div class="row text-center">
+
+                <div class="col-xs-12">
+                    <label for="comment">Observaciones de la solicitud:</label>
+                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment"><?php echo $solicitudes->observacion; ?>
+
+                    </textarea>
+                </div>
+
+
+            </div>
+            <br>
+
+            <div class="row text-center">
+
+                <div class="col-xs-12">
+                    <label for="comment">Recomendaciones del coordinador(a) :</label>
+                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment"><?php echo $solicitudes->recomendaciones[0]->comentarios; ?>
+
+                    </textarea>
+                </div>
+
+
+            </div>
+
+            <br>
+
+            <div class="row ">
+
+
+
+
+
+
+                <div class="col-xs-2">
+                    <label for="comment"><?php echo e(($solicitudes->usuarios[0]->pivot->estatus == 1)? 'Procesado:': 'Verificado:'); ?></label>
+                    <?php echo Form::text('monto_sugerido',$solicitudes->usuarios[0]->nombres.' '.$solicitudes->usuarios[0]->apellidos,['class'=>'form-control numeros','disabled'=>'true']);; ?>
+
+                    <br>
+                    <label for="comment"><?php echo e(($solicitudes->usuarios[1]->pivot->estatus == 2)? 'Procesado': 'Verificado:'); ?></label>
+                    <?php echo Form::text('nombres',$solicitudes->usuarios[1]->nombres.' '.$solicitudes->usuarios[1]->apellidos,['class'=>'form-control numeros','disabled'=>'true']);; ?>
+
+
+                </div>
+
+                <div class="col-xs-2">
+                    <label for="comment">Fecha:</label>
+                    <?php echo Form::text('fechas',Carbon\Carbon::parse(str_replace('"','',$solicitudes->usuarios[0]->pivot->fecha_registro))->format('d-m-Y'),['class'=>'form-control numeros','disabled'=>'true']);; ?>
+
+
+                    <br>
+                    <label for="comment">Fecha:</label>
+                    <?php echo Form::text('fechas',Carbon\Carbon::parse(str_replace('"','',$solicitudes->usuarios[1]->pivot->fecha_registro))->format('d-m-Y'),['class'=>'form-control numeros','disabled'=>'true']);; ?>
+
+
+                </div>
+
+                <div class="col-xs-4">
+
+
+                    <?php echo Form::label('Monto Solicitado:');; ?>
+
+                    <?php echo Form::text('atencion',$solicitudes->monto_solicitado,['class'=>'form-control','disabled'=>'true']);; ?>
+
+                    <br>
+                    <?php echo Form::label('Sugerencia de atención:');; ?>
+
+                    <?php echo Form::select('atencion',$atencion,$solicitudes->recomendaciones[0]->id_tipo_atencion,['class'=>'form-control','disabled'=>'true']);; ?>
+
+
+
+                </div>
+
+
+                <div class=" col-xs-3">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <?php echo Form::label('Monto sugerido:');; ?>
+
+                    <?php echo Form::text('monto_sugerido',$solicitudes->recomendaciones[0]->monto,['class'=>'form-control numeros','disabled'=>'true']);; ?>
+
+                </div>
+
+
+
+
+
+            </div>
+
+            <br>
+
+            <div class="row">
+
+                <div class=" col-xs-3">
+                    <?php echo Form::label('¿Aprobar o Rechazar ?');; ?>
+
+                    <?php echo Form::select('estatus',[''=>'SELECCIONE...','3'=>'APROBADO','4'=>'RECHAZADO'  ],"",['class'=>'aprobar  form-control','required'=>""]);; ?>
+
+                </div>
+
+                <div class=" col-xs-3">
+                    <?php echo Form::label('Modalidad de atencion:');; ?>
+
+                    <?php echo Form::select('atencion',$atencion,"",['class'=>'sugerencia form-control','required'=>""]);; ?>
+
+                </div>
+
+                <div class=" col-xs-3">
+                    <?php echo Form::label('Monto sugerido:');; ?>
+
+                    <?php echo Form::text('monto',null,['class'=>'monto_sugerido form-control numeros','required'=>""]);; ?>
+
+                </div>
+
+            </div>
+            <br>
+
+            <div class="row text-center">
+
+                <div class="col-xs-12">
+                    <label for="comment">Motivo :</label>
+                    <textarea name="motivo" class="form-control" rows="3" id="comment" required="required"> </textarea>
+                </div>
+
+
+            </div>
+
+
+            <br>
+
+            <div class="col-xs-12 text-center">
+
+                <?php echo Form::submit('Enviar',['class'=>'btn btn-primary btn-lg']);; ?>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <?php echo Form::close(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

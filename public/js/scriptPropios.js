@@ -6,6 +6,68 @@ $(document).ready(function () {
 
     $('#editForm').parsley();
     $('#solicitud').parsley();
+    $('#aprobar').parsley();
+    $('#verificar').parsley();
+
+
+    //Verificar la solicitud
+
+    //alert(APP_URL);
+
+    $('.Esalud').click(function () {
+
+        $.get(APP_URL + "/establecimientoSalud",
+            // $.get("{{ url('establecimientoSalud')}}",
+            {option: $(this).val()},
+            function (data) {
+                $('.Csalud').empty();
+                $.each(data, function (key, element) {
+                    $('.Csalud').append("<option value='" + key + "'>" + element + "</option>");
+
+                });
+            });
+    });
+
+
+    $('.aprobar').change(function () {
+
+        var apro = $(this).val();
+
+        if (apro == 4) {
+
+            $('.monto_sugerido').prop('readonly', true);
+            $('.monto_sugerido').val('N/A');
+            $('.sugerencia').prop('disabled', true);
+            $('.sugerencia').append("<option selected='selected' value='NULL' >N/A</option>");
+
+        } else {
+
+            $('.monto_sugerido').prop('readonly', false);
+            $('.monto_sugerido').val('');
+            $('.sugerencia').removeAttr('disabled')
+            $('option:selected', '.sugerencia').remove();
+
+
+        }
+
+
+    });
+
+
+    $('.sugerencia').change(function () {
+        var gdc = $(this).val();
+
+        if (gdc == 1 || gdc == 3 || gdc == 4) {
+            $('.monto_sugerido').prop('readonly', true);
+            $('.monto_sugerido').val('N/A');
+        } else {
+
+            $('.monto_sugerido').prop('readonly', false);
+            $('.monto_sugerido').val('');
+        }
+
+
+    });
 
 
     //filtro
@@ -15,9 +77,15 @@ $(document).ready(function () {
             $('#cedula').attr("disabled", true);
             $('#cedula').removeAttr("required");
 
+            $('#nac').val('');
+            $('#nac').attr("disabled", true);
+            $('#nac').removeAttr("required");
+
         } else {
             $('#cedula').removeAttr("disabled");
             $('#cedula').attr("required", true);
+            $('#nac').removeAttr("disabled");
+            $('#nac').attr("required", true);
 
 
         }
@@ -30,6 +98,8 @@ $(document).ready(function () {
     if ($('#menor').val() == '') {
         $("[name ='nombre_be']").removeAttr("readonly");
         $("[name ='apellido_be']").removeAttr("readonly");
+        $("[name='naci_be']").removeAttr('readonly');
+        $("[name='naci_be']").attr('required', true);
         $("[name='fecha_nacimiento_be']").removeAttr('readonly');
         $("[name='fecha_nacimiento_be']").val('');
         $("[name='fecha_nacimiento_be']").addClass('datepicker');
@@ -39,9 +109,6 @@ $(document).ready(function () {
         format: 'dd-mm-yyyy',
         language: 'es'
     });
-
-
-
 
 
     $('.casaComercial').change(function () {

@@ -1,0 +1,12 @@
+[2016-01-27 15:52:20] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/surags/app/Http/routes.php:235
+Stack trace:
+#0 {main}  
+[2016-01-27 15:52:31] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/surags/app/Http/routes.php:235
+Stack trace:
+#0 {main}  
+[2016-01-27 15:52:38] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/surags/app/Http/routes.php:235
+Stack trace:
+#0 {main}  
+[2016-01-27 15:52:44] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/surags/app/Http/routes.php:235
+Stack trace:
+#0 {main}  

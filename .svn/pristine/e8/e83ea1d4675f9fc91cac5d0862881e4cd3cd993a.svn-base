@@ -1,0 +1,121 @@
+<?php $__env->startSection('content'); ?>
+
+
+<style>
+
+.table{
+	margin-bottom: 0;
+	border-style: solid;
+	border-color: #ffff00;
+}
+
+#rayado td {
+
+	border-top: 3px solid #ffff00;
+	border-left: 3px solid #ffff00;
+	border-right: 3px solid #ffff00;
+	height:50px;
+	width:70px;
+	text-align: center;
+	font-weight: bolder;
+	color: #ffffff
+
+}
+
+#rayado_arriba td {
+
+	border-bottom: 3px solid #ffff00;
+	border-left: 3px solid #ffff00;
+	border-right: 3px solid #ffff00;
+	height:50px;
+	width:70px;
+	text-align: center;
+	font-weight: bolder;
+	color: #ffffff
+
+}
+
+
+
+
+
+</style>
+
+	<div style="background-color: #606062; border: solid; ">
+
+		<table class="table table-bordered">
+			<tr id="rayado_arriba">
+				<td>1<img width="50px"  height="70px"  alt="alt-text" class="img-responsive" src="http://localhost/surags/public/taxi/carro_arriba.png"></td>
+				<td >2</td>
+				<td>3</td>
+				<td>4</td>
+				<td>5</td>
+				<td>6</td>
+				<td>7</td>
+				<td>8</td>
+				<td>9</td>
+				<td>10</td>
+				<td>11</td>
+				<td>12</td>
+				<td>13</td>
+				<td>14</td>
+				<td>15</td>
+				<td>16</td>
+				<td>17</td>
+				<td>18</td>
+				<td>19</td>
+
+
+			</tr>
+
+		</table>
+
+	</div>
+
+    <div>
+		<img alt="alt-text" class="img-responsive" src="http://localhost/surags/public/taxi/concreto_estacionamiento.png">
+	</div>
+
+
+	<div class="col-xs-18" style="background-color: #606062; border:solid;">
+
+		<table class="table table-bordered">
+			<tr id="rayado" >
+				<td>20<img width="50px"  height="70px"  alt="alt-text" class="img-responsive" src="http://localhost/surags/public/taxi/carro_abajo.png"></td>
+				<td>21</td>
+				<td>22</td>
+				<td>23</td>
+				<td>24</td>
+				<td>25</td>
+				<td>26</td>
+				<td>27</td>
+				<td>28</td>
+				<td>29</td>
+				<td>30</td>
+				<td>31</td>
+				<td>32</td>
+				<td>33</td>
+				<td>34</td>
+				<td>35</td>
+				<td>36</td>
+				<td>37</td>
+				<td>38</td>
+			</tr>
+
+		</table>
+
+
+
+
+
+
+
+	</div>
+
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

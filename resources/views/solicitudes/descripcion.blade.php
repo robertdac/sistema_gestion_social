@@ -8,7 +8,7 @@
 
                 <div class="col-xs-12 text-center">
                     <label for="comment">Breve descripcion del caso:</label>
-                    <textarea  required="" name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
+                    <textarea required="" name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -19,7 +19,7 @@
 
                 <div class="col-xs-12">
                     <label for="comment">Observaciones de la solicitud:</label>
-                    <textarea required=""  name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
+                    <textarea required="" name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
                 </div>
 
 
@@ -45,8 +45,14 @@
 
 
             <div class=" col-xs-3">
+                {!!  Form::label('tipo de establecimiento de salud:');    !!}
+                {!! Form::select('centro_salud',$establecimientoSalud,0,['class'=>'form-control Esalud','data-live-search'=>"false"]); !!}
+
+            </div>
+
+            <div class=" col-xs-3">
                 {!!  Form::label('Centro de salud');    !!}
-                {!! Form::select('centro_salud',['SELECCIONE'],0,['class'=>'selectpicker form-control','data-live-search'=>"true"]); !!}
+                {!! Form::select('centro_salud',['SELECCIONE'],0,['class'=>'form-control Csalud']); !!}
 
             </div>
 
@@ -59,7 +65,8 @@
 
             <div class=" col-xs-3">
                 {!!  Form::label('Resumen de informe medico');    !!}
-                <textarea required="" name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
+                <textarea required="" name="resumen_infome_medico" class="form-control" rows="3"
+                          id="comment"></textarea>
 
             </div>
 
@@ -104,6 +111,7 @@
 
             </div>
             <br>
+
             <div class="row">
 
 
@@ -118,8 +126,6 @@
 
 
                 @endforeach
-
-
 
 
             </div>

@@ -1,0 +1,98 @@
+<?php $__env->startSection('content'); ?>
+
+    <h2 class="text-center">EDITAR TIPO DE DISCAPACIDAD</h2>
+
+
+    <?php echo Form::open(['url'=>"modificar_discapacidad/$discapacidad->id"]); ?>
+
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">DATOS PARA LA EDICION DEL TIPO DE DISCAPACIDAD</div>
+        <div class="panel-body">
+
+            <?php foreach($errors->all('<li>:message</li>') as $message): ?>
+
+                <div class="alert alert-danger">
+                    <?php echo $message;; ?>
+
+
+                </div>
+            <?php endforeach; ?>
+
+            <div class="row" >
+
+                <div class="col-xs-3">
+
+                    <?php echo Form::label('nombre','Nombre de la Discapacidad');; ?>
+
+                    <?php echo Form::text('nombre',$discapacidad->nombre,[ 'class'=>"form-control mayusculas "]); ?>
+
+
+                </div>
+
+
+                <div class="col-xs-3">
+                    <?php echo Form::label('descripcion','Descripcion de la Discapacidad:');; ?>
+
+                    <?php echo Form::text('descripcion',$discapacidad->descripcion,['class'=>'form-control mayusculas' ]); ?>
+
+
+                </div>
+
+
+
+
+                <div class="col-xs-3 ">
+                    <?php echo Form::label('Estatus','Estatus:'); ?>
+
+                    <?php echo Form::select('estatus',array('1'=>'ACTIVO','0'=>'INACTIVO'),$discapacidad->estatus,['class'=>'form-control']);; ?>
+
+
+                    <br>
+
+                    <?php echo Form::submit('Procesar',['class'=>'btn btn-primary']);; ?>
+
+
+                    <?php echo link_to('discapacidades', 'Volver', ['class' => 'btn btn-primary']); ?>
+
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <?php echo Form::close(); ?>
+
+
+
+    <script>
+
+
+        $(document).ready(function() {
+
+//MAYUSCULAS
+            $('.mayusculas').keyup(function()
+            {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+
+
+        });
+
+
+
+
+
+    </script>
+
+
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

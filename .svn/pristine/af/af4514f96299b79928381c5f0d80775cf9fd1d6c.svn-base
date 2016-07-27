@@ -1,0 +1,156 @@
+<div id="profile" role="tabpanel" class=" tab-pane">
+
+
+    <div class="panel panel-primary">
+        <div class=" text-center panel-heading">DESCRIPCION DEL CASO</div>
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-xs-12 text-center">
+                    <label for="comment">Breve descripcion del caso:</label>
+                    <textarea name="descripcion_caso" class="form-control" rows="3" id="comment"></textarea>
+                </div>
+
+
+            </div>
+            <br>
+
+            <div class="row text-center">
+
+                <div class="col-xs-12">
+                    <label for="comment">Observaciones de la solicitud:</label>
+                    <textarea name="observacion_caso" class="form-control" rows="3" id="comment"></textarea>
+                </div>
+
+
+            </div>
+
+            <br>
+
+            <div class="row">
+
+                <div class=" col-xs-3">
+                    <?php echo Form::label('Recepcion');; ?>
+
+                    <?php echo Form::select('recepcion',$recepcion,"",['class'=>'form-control']);; ?>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div role="tabpanel" class="panel panel-primary">
+        <div class=" text-center panel-heading">INFORME MEDICO ORIGINAL:</div>
+        <div class="panel-body">
+
+
+            <div class=" col-xs-3">
+                <?php echo Form::label('Centro de salud');; ?>
+
+                <?php echo Form::select('centro_salud',['SELECCIONE'],0,['class'=>'selectpicker form-control','data-live-search'=>"true"]);; ?>
+
+
+            </div>
+
+
+            <div class=" col-xs-3">
+                <?php echo Form::label('Medico tratante');; ?>
+
+                <?php echo Form::text('medico_tratante',null,['class'=>'form-control']);; ?>
+
+            </div>
+
+
+            <div class=" col-xs-3">
+                <?php echo Form::label('Resumen de informe medico');; ?>
+
+                <textarea name="resumen_infome_medico" class="form-control" rows="3" id="comment"></textarea>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div role="tabpanel" class="panel panel-primary">
+        <div class=" text-center panel-heading">PRESUPUESTO ORIGINAL:</div>
+        <div class="panel-body">
+
+            <div class=" col-xs-3">
+                <?php echo Form::label('Casa comercial');; ?>
+
+                <?php echo Form::select('casa_comercial',$casa_comercial,0,['class'=>'selectpicker form-control','data-live-search'=>"true"]);; ?>
+
+            </div>
+
+            <div class=" col-xs-3">
+                <?php echo Form::label('Monto Solicitado'); ?>
+
+                <?php echo Form::text('monto_solicitado',null,['class'=>'form-control','placeholder'=>'BS.']); ?>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div role="tabpanel" class="panel panel-primary">
+        <div class="text-center panel-heading">ANEXOS</div>
+        <div class="panel-body">
+
+            <div class="row">
+
+                <?php foreach($anexos as $inde => $nom): ?>
+                    <?php if($inde <> 5 && $inde <> 6 ): ?>
+                        <div class=" col-xs-3">
+                            <?php echo Form::label('nombre', $nom.':'); ?>
+
+                            <?php echo Form::file("file[$inde]",['class'=>'filestyle',"data-buttonText"=>"Buscar"]); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+
+                <?php endforeach; ?>
+
+            </div>
+            <br>
+            <div class="row">
+
+                <?php foreach($anexos as $inde => $nom): ?>
+
+                    <?php if($inde <> 1 && $inde <> 2 && $inde <> 3 && $inde <> 4 ): ?>
+                        <div class=" col-xs-3">
+                            <?php echo Form::label('nombre', $nom.':'); ?>
+
+                            <?php echo Form::file("file[$inde]",['class'=>'filestyle',"data-buttonText"=>"Buscar"]); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+
+                <?php endforeach; ?>
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,176 @@
+<?php $__env->startSection('content'); ?>
+
+    <?php $hijo = $roles; $nieto = $roles; $check = $roles;   ?>
+
+
+    <h2 class="text-center">EDITAR OPCIONES PARA EL <?php echo e($nombre->perfiles->nombre); ?>
+
+        : <?php echo e($nombre->nombres.' '.$nombre->apellidos); ?></h2>
+
+    <?php echo Form::open(['url'=>'roles']); ?>
+
+
+    <div class="panel panel-primary">
+
+        <div class="text-center panel-heading">EDICIÓN DE LAS OPCIONES DEL USUARIO</div>
+        <div class="panel-body">
+            <?php foreach($errors->all('<li>:message</li>') as $message): ?>
+
+                <div class="alert alert-danger">
+                    <?php echo $message;; ?>
+
+
+                </div>
+            <?php endforeach; ?>
+
+            <table class="table table-responsive table-hover">
+                <tr>
+                    <th width="65%">    </th>
+                    <td width="35%" ></td>
+                </tr>
+                <?php for($i=0; $i < count($roles); $i++): ?>
+                    <?php if($roles[$i]->padre == 0): ?>
+                        <tr>
+                            <th>
+                                <label id="padre<?php echo e($roles[$i]->id); ?>"> <?php echo e($roles[$i]->id.'-'. $roles[$i]->nombre); ?>  </label>
+                            </th>
+                            <td>
+
+                                <?php if(isset($usuario[$roles[$i]->id]) && $usuario[$roles[$i]->id] == $roles[$i]->nombre  ): ?>
+                                    <?php echo Form::checkbox('idopcion[]',$roles[$i]->id,true); ?>
+
+                                <?php else: ?>
+                                    <?php echo Form::checkbox('idopcion[]',$roles[$i]->id,false); ?>
+
+                                <?php endif; ?>
+
+                            </td>
+
+                        </tr>
+                        <?php $sub = 1;  ?>
+
+                        <?php for($j=0; $j < count($hijo); $j++): ?>
+                            <?php if($roles[$i]->id == $hijo[$j]->padre): ?>
+                                <tr class="hijo<?php echo e($roles[$i]->id); ?>">
+                                    <th style="padding-left: 25px">
+                                        <label> <?php echo e($roles[$i]->id.'.'.$sub.'-'.$hijo[$j]->nombre); ?> </label>
+                                    </th>
+                                    <td>
+                                        <?php if(isset($usuario[$hijo[$j]->id]) && $usuario[$hijo[$j]->id] == $hijo[$j]->nombre  ): ?>
+                                            <?php echo Form::checkbox('idopcion[]',$hijo[$j]->id,true); ?>
+
+                                        <?php else: ?>
+                                            <?php echo Form::checkbox('idopcion[]',$hijo[$j]->id); ?>
+
+
+                                        <?php endif; ?>
+
+                                    </td>
+                                </tr>
+                                <?php $sub++;  ?>
+                                <?php for($k=0; $k < count($nieto); $k++): ?>
+                                    <?php if($hijo[$j]->id == $nieto[$k]->padre): ?>
+
+                                        <tr class="nieto<?php echo e($roles[$i]->id); ?>">
+                                            <th style="padding-left:50px">
+                                                <label> <?php echo e($nieto[$k]->nombre); ?> </label>
+                                            </th>
+                                            <td>
+                                                <?php if(isset($usuario[$nieto[$k]->id]) && $usuario[$nieto[$k]->id] == $nieto[$k]->nombre  ): ?>
+                                                    <?php echo Form::checkbox('idopcion[]',$nieto[$k]->id,true); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo Form::checkbox('idopcion[]',$nieto[$k]->id); ?>
+
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                    <?php endif; ?>
+                <?php endfor; ?>
+
+
+            </table>
+
+
+            <div class="row">
+
+                <div class="text-center col-xs-12">
+
+
+                    <?php echo Form::hidden('id',$nombre->id); ?>
+
+                    <?php echo link_to(URL::previous(), 'Volver', ['class' => 'btn btn-primary']); ?>
+
+                    <?php echo Form::submit('Enviar',['class'=>'btn btn-primary']);; ?>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <?php echo Form::close(); ?>
+
+
+
+
+    <style>
+
+        .hijo2, .nieto2,
+        .hijo3, .nieto3,
+        .hijo4, .nieto4,
+        .hijo5, .nieto5 {
+
+            display: none;
+
+        }
+
+        #padre2, #padre3,
+        #padre4, #padre5 {
+
+            cursor: pointer;
+
+        }
+
+
+    </style>
+
+
+
+    <script>
+        $("#padre2").click(function () {
+            $(".hijo2").toggle("slow");
+            $(".nieto2").toggle("slow");
+        });
+        $("#padre3").click(function () {
+            $(".hijo3").toggle("slow");
+            $(".nieto3").toggle("slow");
+        });
+        $("#padre4").click(function () {
+            $(".hijo4").toggle("slow");
+            $(".nieto4").toggle("slow");
+        });
+
+        $("#padre5").click(function () {
+            $(".hijo5").toggle("slow");
+            $(".nieto5").toggle("slow");
+        });
+
+
+    </script>
+
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -90,7 +90,7 @@
                                     <div class="col-xs-3">
                                         <label for="email">Nacionalidad:</label>
                                         <?php $nac = $datos[0]->strnacionalidad;  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
-                                        {!! Form::text('naci_be',$naci,['class'=>'form-control','readonly'=>'true']) !!}
+                                        {!! Form::select('naci_be',['V'=>'VENEZOLANO(A)','E'=>'EXTRANJERO(A)'],$datos[0]->strnacionalidad,['class'=>'form-control','readonly'=>'true']) !!}
                                         {!! Form::hidden('nacionalidad',$nac)  !!}
 
                                     </div>
@@ -243,17 +243,19 @@
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <label for="email">Nacionalidad:</label>
-                                        <?php $nac = str_replace('(', '', $datos[0]->strnacionalidad);  ($nac == 'V') ? $naci = 'VENEZOLANO(A)' : $naci = 'EXTRANJERO(A)';   ?>
-                                        {!! Form::text('naci_so',$naci,['class'=>'form-control','readonly'=>'true']) !!}
+                                        {!! Form::select('naci_so',['V'=>'VENEZOLANO(A)','E'=>'EXTRANJERO(A)'],NULL,['id'=>'nacionalidad','class'=>'form-control','required'=>'true']) !!}
                                         {!! Form::hidden('nacionalidad',$nac)  !!}
 
                                     </div>
                                     <div class="col-xs-3">
 
                                         {!! Form::label('cedula','Cedula de identidad:');  !!}
-                                        {!! Form::text('cedula_so',null,['class'=>" numeros form-control limpiar",'onblur'=>"getData($('#valor').val())",'id'=>'valor','onclick'=>"Limpiar()",'required'=>'','maxlength'=>8 ]) !!}
+                                        {!! Form::text('cedula_so',null,['class'=>" numeros form-control limpiar",'onblur'=>"getData($('#nacionalidad option:selected').val(),$('#valor').val())",'id'=>'valor','onclick'=>"Limpiar()",'required'=>'','maxlength'=>8 ]) !!}
 
                                     </div>
+
+
+
 
 
                                     <div class="col-xs-3">
@@ -390,12 +392,13 @@
 
     </form>
 
-    <script>
-        function getData(id) {
+    <script type="text/javascript">
+        function getData(nac,id) {
 
             $.ajax({
+
                 url: "{{ url('consulta') }}",
-                data: "id=" + id
+                data: 'nac=' + nac + '&id=' + id
                 ,
                 error: function () {
                     //  $('#info').html('<p>An error has occurred</p>');
@@ -428,12 +431,12 @@
         }
 
 
+
+
+
+
         $(document).ready(function () {
-
             $('#solicitud').parsley();
-
-
-
 
 
 
@@ -455,6 +458,7 @@
 
                     }
             );
+
 
 
             $('#action-button').click(function () {
@@ -489,6 +493,13 @@
              $("#muestra").hide()
              }
              });*/
+
+
+
+
+
+
+
 
 
             $('.sub_secretaria').change(function () {

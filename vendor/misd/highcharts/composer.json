@@ -1,0 +1,32 @@
+{
+    "name":"misd/highcharts",
+    "type":"library",
+    "description":"Allows the programmatic creation of Highcharts",
+    "keywords":["highcharts", "charts", "chart", "graphs", "graph"],
+    "homepage":"https://github.com/misd-service-development/php-highcharts",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Chris Wilkinson",
+            "email":"chris.wilkinson@admin.cam.ac.uk"
+        }
+    ],
+    "support":{
+        "issues":"https://github.com/misd-service-development/php-highcharts/issues"
+    },
+    "require":{
+        "php":">=5.3.3",
+        "zendframework/zend-json":"~2.1.2"
+    },
+    "require-dev":{
+        "symfony/event-dispatcher":"~2.1"
+    },
+    "suggest":{
+        "symfony/event-dispatcher":""
+    },
+    "autoload":{
+        "psr-0":{
+            "Misd\\Highcharts":["api/", "src/"]
+        }
+    }
+}

@@ -1,0 +1,188 @@
+<?php $__env->startSection('content'); ?>
+
+
+    <h2 class="text-center">Solicitudes </h2>
+
+    <?php if(Session::has('mensaje')): ?>
+        <div class="alert alert-success"><?php echo e(Session::get('mensaje')); ?></div>
+    <?php endif; ?>
+
+
+    <?php echo Form::open(['action'=>'CoordinacionController@index','method'=>'get']); ?>
+
+    <div class=" col-xs-3 pull-right input-group">
+        <?php echo Form::text('lolo',null,['class'=>'form-control mayusculas','placeholder'=>'NOMBRE'] );; ?>
+
+        <span class="input-group-btn">
+          <?php echo Form::submit('BUSCAR',['class'=>'btn btn-default']); ?>
+
+      </span>
+    </div>
+    <?php echo Form::close(); ?>
+
+
+
+    <div STYLE="margin-bottom: 20px" class="pull-left">
+
+        <?php echo link_to('filtro', 'NUEVA SOLICITUD', ['class' => 'btn btn-primary']); ?>
+
+
+    </div>
+
+
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Tipo de solicitud</th>
+            <th>cedula</th>
+            <th>Beneficiario</th>
+            <th>Monto Solicitado</th>
+            <th>Estatus</th>
+            <th>Acción</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <?php foreach($solicitud as $sol): ?>
+
+            <tr>
+                <td><?php echo $sol->coordinacion->abreviacion.' '.$sol->id; ?></td>
+                <td><?php echo $sol->tipoSolicitud->nombre; ?></td>
+                <td><?php echo $sol->beneficiario->cedula; ?></td>
+                <td><?php echo $sol->beneficiario->nombres." ".$sol->beneficiario->apellidos; ?></td>
+                <td><?php echo $sol->monto_solicitado; ?></td>
+                <td><?php echo $sol->estatus->descripcion; ?></td>
+
+                <td class=" text-center">
+
+                    <a title="VERIFICAR" href="<?php echo e(url("verificar/$sol->id")); ?> "><span
+                                class="glyphicon glyphicon-pencil"></span></a>
+
+            </tr>
+
+            </td>
+
+
+        <?php endforeach; ?>
+
+
+        </tbody>
+    </table>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div style=" text-align: center">
+        <?php /*
+                <?php echo $coordinacion->render();; ?>
+
+        */ ?>
+
+    </div>
+
+
+
+    <script>
+
+
+        /*        $('.verFicha').click(function () {
+         $.ajax({
+         url: "",
+         data: {
+         format: 'json'
+         },
+         error: function () {
+         $('#info').html('<p>An error has occurred</p>');
+         },
+         dataType: 'jsonp',
+         success: function (data) {
+
+         // alert(data[0].descripcion);
+
+         var $title = $('<h1>').text(data[0].descripcion);
+         //var $description = $('<p>').text(data.talks[0].talk_description);
+         $('#modal-body').append($title);
+         //.append($description);
+         },
+         type: 'GET'
+         });
+         });*/
+
+
+        $('.verFicha').on('click',function(){
+            // var id=$(this).data('id');
+            //alert(id);
+            $('.modal-body').html('loading');
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo e(url("ficha/$sol->id")); ?>',
+                // data:{id: id},
+                dataType: 'json',
+                success: function(data) {
+                    $('.modal-body').html(data[0].id);
+                },
+                error:function(err){
+                    alert("error"+JSON.stringify(err));
+                }
+            })
+        });
+
+
+        $('.mayusculas').keyup(function () {
+            $(this).val($(this).val().toUpperCase());
+        });
+
+
+    </script>
+
+
+
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

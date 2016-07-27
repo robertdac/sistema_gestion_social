@@ -14,15 +14,93 @@
 //Route::get('/', 'WelcomeController@index');
 
 Route::get('/', 'HomeController@index');
-
-
 Route::get('prueba', function () {
+    return view('prueba');
 
-   // $roles = \App\Models\Opciones::all();
-   // $usuario = \App\User::find(Auth::user()->id)->roles()->lists('nombre', 'id');
+    $solo=[];
+    dd($solo);
+
+
+    $user= \App\Models\Cargos::all()->count('nombre');
+
+    dd(json_encode($user));
 
 
 
+    $json = ['robert' => 'de abreu'];
+
+    $string = '
+
+{
+    "area": [
+        {
+            "area": "kothrud"
+        },
+        {
+            "area": "katraj"
+        }
+    ]
+}
+
+';
+
+
+    $string = '   chart: {
+        type: "column"
+                } ';
+
+
+    dd(json_decode($string));
+
+
+    return view('prueba');
+
+    $stocksTable = \Khill\Lavacharts\Lavacharts::DataTable();  // Lava::DataTable() if using Laravel
+
+    dd($stocksTable);
+
+    $stocksTable->addDateColumn('Day of Month')
+        ->addNumberColumn('Projected')
+        ->addNumberColumn('Official');
+
+
+// Random Data For Example
+    for ($a = 1; $a < 30; $a++) {
+        $stocksTable->addRow([
+            '2015-10-' . $a, rand(800, 1000), rand(800, 1000)
+        ]);
+    }
+
+
+    dd(json_encode(url('/')));
+
+
+    //dd(url('cortes_agenda/logoGDC.png'));
+
+    $img = Image::make(url('cortes_agenda/logoGDC.png'))->resize(300, 200);
+    $img->save(url('cortes_agenda/NEWlogoGDC.png'));
+
+    //dd($img);
+    /*return $img->response('png');*/
+
+    //$est=\App\Models\tipoEstablecimientoSalud::find(11)->establecimientoSalud()->get();
+    $est9 = \App\Models\establecimientoSalud::find(155)->tipoEstablecimiento()->get();
+
+    dd($est9);
+
+
+    // $roles = \App\Models\Opciones::all();
+    // $usuario = \App\User::find(Auth::user()->id)->roles()->lists('nombre', 'id');
+
+
+    //dd(DB::raw("select DATE(created_at) * from solicitudes"));
+
+    //$q->where(DB::raw("DATE(created_at) = '".date('Y-m-d')."'"));
+
+    $esta = \App\Models\Solicitudes::where('id_estatus', 3)
+        ->whereDate('updated_at', '=', '2016-04-12')
+        ->get();
+    //dd($esta->toJson());
 
 
     return view('prueba');
@@ -32,7 +110,8 @@ Route::get('prueba', function () {
 
 Route::get('consulta', function () {
     $cedula = Input::get('id');
-    return \App\Models\Saime::datos("'V'", $cedula);
+    $nac = Input::get('nac');
+    return \App\Models\Saime::datos("'" . $nac . "'", $cedula);
 });
 
 
@@ -47,7 +126,6 @@ Route::get('parroquias', function () {
     $id = Input::get('option');
     $lost = App\Models\Municipios::find($id)->parroquias->lists('nombre', 'id');
     return $lost;
-
 });
 
 
@@ -58,6 +136,17 @@ Route::get('coordinaciones', function () {
         return $coor;
     }
     return $coor = [0 => 'Debe Seleccionar una coordinacion'];
+
+});
+
+
+Route::get('establecimientoSalud', function () {
+    $id = Input::get('option');
+    if ($id <> 0) {
+        $esta = App\Models\tipoEstablecimientoSalud::find($id)->establecimientoSalud()->lists('nombre', 'id');
+        return $esta;
+    }
+    return $esta = [0 => 'Debe Seleccionar un establecimiento'];
 
 });
 
@@ -74,16 +163,16 @@ Route::get('tipo_solicitud', function () {
 	var_dump($posts);
 });*/
 
-//Route::get('filtro', 'FiltroController@index');
+Route::get('filtro', 'FiltroController@index');
 Route::post('filtro', 'SolicitudesController@filtro');
 
 Route::get('ReporteBeneficiario', 'ReporteBeneficiarioController@index');
 Route::post('ReporteBeneficiario', 'ReporteBeneficiarioController@create');
 
 Route::get('informe_socio_economico/{id}', 'InformeSocioEconomicoController@index');
-Route::get('nuevaSolicitud','SolicitudesController@nuevaSolicitud');
+Route::get('nuevaSolicitud', 'SolicitudesController@nuevaSolicitud');
 Route::get('solicitudes', 'SolicitudesController@index');
-//Route::get('solicitudes/{ci}', 'SolicitudesController@create');
+Route::get('solicitudes/{ci}', 'SolicitudesController@create');
 Route::post('solicitudes', 'SolicitudesController@store');
 Route::get('editar_solicitudes/{id}', 'SolicitudesController@edit');
 Route::post('editar_solicitudes/{id}', 'SolicitudesController@update');
@@ -104,8 +193,8 @@ Route::get('nuevo_usuario', 'UserController@create');
 Route::post('usuarios', 'UserController@store');
 Route::get('editar_usuario/{id}', 'UserController@edit');
 Route::post('modificar_usuario/{id}', 'UserController@update');
-Route::get('roles/{id}','UserController@roles');
-Route::post('roles','UserController@rolesUpdate');
+Route::get('roles/{id}', 'UserController@roles');
+Route::post('roles', 'UserController@rolesUpdate');
 
 
 Route::get('discapacidades', 'DiscapacidadController@index');

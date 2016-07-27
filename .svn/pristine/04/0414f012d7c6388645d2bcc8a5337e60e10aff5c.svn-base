@@ -1,0 +1,82 @@
+<?php $__env->startSection('content'); ?>
+
+    <h2 class="text-center">NUEVA RECEPCION</h2>
+
+
+    <?php echo Form::open(['url'=>'recepcion']); ?>
+
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">REGISTRO PARA NUEVA RECEPCION </div>
+        <div class="panel-body">
+            <?php foreach($errors->all('<li>:message</li>') as $message): ?>
+                <div class="alert alert-danger">
+                    <?php echo $message;; ?>
+
+                </div>
+            <?php endforeach; ?>
+
+            <div   class="row">
+
+                <div class="col-xs-3">
+
+                    <?php echo Form::label('nombre','Nombre de la Recepcion:');; ?>
+
+                    <?php echo Form::text('nombre',old('nombre'),[ 'class'=>"form-control mayusculas "]); ?>
+
+
+                </div>
+
+
+                <div class="col-xs-3">
+                    <?php echo Form::label('descripcion','Descripcion de la Recepcion:');; ?>
+
+                    <?php echo Form::text('descripcion',old('descripcion'),['class'=>'form-control mayusculas' ]); ?>
+
+
+                    <br>
+
+                    <?php echo Form::submit('Registrar',['class'=>'btn btn-primary']);; ?>
+
+                    <?php echo link_to('recepcion', 'Volver', ['class' => 'btn btn-primary']); ?>
+
+
+                </div>
+
+        </div>
+
+    </div>
+    </div>
+
+    <?php echo Form::close(); ?>
+
+
+
+    <script>
+
+
+        $(document).ready(function() {
+
+//MAYUSCULAS
+            $('.mayusculas').keyup(function()
+            {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+
+          });
+
+
+
+
+
+
+
+    </script>
+
+
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

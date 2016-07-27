@@ -1,0 +1,9 @@
+<?php echo Form::open();; ?>
+
+<?php echo Form::text('someInput[]');; ?>
+
+<?php echo Form::text('someInput[]');; ?>
+
+<?php echo Form::submit('send');; ?>
+
+<?php echo Form::close();; ?>

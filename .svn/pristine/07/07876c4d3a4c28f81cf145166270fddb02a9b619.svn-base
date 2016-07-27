@@ -1,0 +1,95 @@
+<?php $__env->startSection('content'); ?>
+
+
+<h2 class="text-center" >TIPOS DE SUB-SECRETARIA </h2>
+
+<?php if(Session::has('mensaje')): ?>
+    <div class="alert alert-success"><?php echo e(Session::get('mensaje')); ?></div>
+<?php endif; ?>
+
+
+    <?php echo Form::open(['action'=>'SubSecretariaController@index','method'=>'get']); ?>
+
+
+    <div class=" col-xs-3 pull-right input-group">
+        <?php echo Form::text('lolo',null,['class'=>'form-control mayusculas','placeholder'=>'NOMBRE'] );; ?>
+
+        <span class="input-group-btn">
+          <?php echo Form::submit('BUSCAR',['class'=>'btn btn-default']); ?>
+
+      </span>
+    </div>
+<?php echo Form::close(); ?>
+
+
+
+<div STYLE="margin-bottom: 20px" class="pull-left">
+
+    <?php echo link_to('nueva_subsecretaria', 'NUEVA SUB-SECRETARIA', ['class' => 'btn btn-primary']); ?>
+
+
+</div>
+
+
+
+<table  class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Sub secretaria</th>
+        <th>Dependencia</th>
+        <th>Estatus</th>
+        <th>Accion</th>
+
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <?php foreach($secretaria as $us): ?>
+
+
+        <tr>
+            <td><?php echo $us['descripcion']; ?></td>
+            <td><?php echo $us->secretaria['descripcion']; ?></td>
+            <td><?php echo ($us->estatus == 1) ? 'ACTIVO':'INACTIVO'; ?></td>
+
+            <td class=" text-center" >
+<?php /*
+                <a  title="" href="<?php echo e(url("ver_discapacidad/$us->iduser")); ?> "  > <span style="margin-right: 10px; " class="glyphicon glyphicon-eye-open"></span></a>
+*/ ?>
+                <a title="Editar" href="<?php echo e(url("editar_subsecretaria/$us->id")); ?> " ><span class="glyphicon glyphicon-pencil"></span></a> </td>
+
+
+        </tr>
+
+
+
+
+    <?php endforeach; ?>
+
+
+
+
+    </tbody>
+</table>
+<div style=" text-align: center">
+    <?php echo $secretaria->render();; ?>
+
+
+</div>
+
+
+
+<script>
+    $('.mayusculas').keyup(function()
+    {
+        $(this).val($(this).val().toUpperCase());
+    });
+
+</script>
+
+
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

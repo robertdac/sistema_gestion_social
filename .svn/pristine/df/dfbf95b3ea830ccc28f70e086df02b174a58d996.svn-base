@@ -1,0 +1,97 @@
+<?php $__env->startSection('content'); ?>
+
+
+    <h2 class="text-center" >Solicitudes </h2>
+
+    <?php if(Session::has('mensaje')): ?>
+        <div class="alert alert-success"><?php echo e(Session::get('mensaje')); ?></div>
+    <?php endif; ?>
+
+
+    <?php echo Form::open(['action'=>'CoordinacionController@index','method'=>'get']); ?>
+
+    <div class=" col-xs-3 pull-right input-group">
+        <?php echo Form::text('lolo',null,['class'=>'form-control mayusculas','placeholder'=>'NOMBRE'] );; ?>
+
+        <span class="input-group-btn">
+          <?php echo Form::submit('BUSCAR',['class'=>'btn btn-default']); ?>
+
+      </span>
+    </div>
+    <?php echo Form::close(); ?>
+
+
+
+    <div STYLE="margin-bottom: 20px" class="pull-left">
+
+        <?php echo link_to('filtro', 'NUEVA SOLICITUD', ['class' => 'btn btn-primary']); ?>
+
+
+    </div>
+
+
+
+    <table  class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Tipo de solicitud</th>
+            <th>cedula</th>
+            <th>Beneficiario</th>
+            <th>Monto Solicitado</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <?php foreach($solicitud as $sol): ?>
+
+            <tr>
+                <td><?php echo $sol->coordinacion->abreviacion.' '.$sol->id; ?></td>
+                <td><?php echo $sol->tipoSolicitud->nombre; ?></td>
+                <td><?php echo $sol->personas->cedula; ?></td>
+                <td><?php echo $sol->personas->nombres." ".$sol->personas->apellidos; ?></td>
+                <td><?php echo $sol->monto_solicitado; ?></td>
+
+
+                <td class=" text-center">
+                    <a title="Editar" href="<?php echo e(url("editar_coordinacion/$sol->id")); ?> "><span
+                                class="glyphicon glyphicon-pencil"></span></a>
+                    <a title="Informe Socio Economico" href="<?php echo e(url("informe_socio_economico/$sol->id")); ?> "> <span style="margin-right: 10px; " class="glyphicon glyphicon-list-alt"></span></a>
+
+            </tr>
+
+            </td>
+
+
+        <?php endforeach; ?>
+
+
+
+
+        </tbody>
+    </table>
+    <div style=" text-align: center">
+<?php /*
+        <?php echo $coordinacion->render();; ?>
+
+*/ ?>
+
+    </div>
+
+
+
+    <script>
+        $('.mayusculas').keyup(function()
+        {
+            $(this).val($(this).val().toUpperCase());
+        });
+
+    </script>
+
+
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

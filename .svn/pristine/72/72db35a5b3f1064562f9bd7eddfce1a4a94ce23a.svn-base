@@ -1,0 +1,104 @@
+<?php $__env->startSection('content'); ?>
+
+    <h2 class="text-center" >Usuarios del Sistema</h2>
+
+    <?php if(Session::has('mensaje')): ?>
+        <div class="alert alert-success"><?php echo e(Session::get('mensaje')); ?></div>
+    <?php endif; ?>
+
+        <div class="col-xs-3 pull-right">
+
+    <?php echo Form::open(['action' => 'UserController@index','method'=>'get']); ?>
+
+        <div class="input-group">
+          <?php echo Form::text('lolo',null,['class'=>'form-control mayusculas '] );; ?>
+
+
+      <span class="input-group-btn">
+          <?php echo Form::submit('BUSCAR',['class'=>'btn btn-default']); ?>
+
+
+      </span>
+        </div>
+    </div>
+    <?php echo Form::close(); ?>
+
+
+
+    <div STYLE="margin-bottom: 20px" class="pull-left">
+
+        <?php echo link_to('nuevo_usuario', 'CREAR USUARIO', ['class' => 'btn btn-primary']); ?>
+
+
+    </div>
+
+
+
+
+
+
+
+    <table  class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Cedula</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Estatus</th>
+            <th>Acción</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <?php foreach($user as $us): ?>
+
+        <tr>
+            <td><?php echo $us->cedula; ?></td>
+            <td><?php echo $us->nombres; ?></td>
+            <td><?php echo $us->apellidos; ?></td>
+            <td><?php echo $us->email; ?></td>
+            <td><?php echo $us->per; ?></td>
+            <td><?php echo ($us->estatus == 1) ? 'ACTIVO':'INACTIVO'; ?></td>
+
+                     <td style=" width: 15px" >
+                <a  href="<?php echo e(url("ver_usuario/$us->iduser")); ?> "  > <span style="margin-right: 10px; " class="glyphicon glyphicon-eye-open"></span></a>
+                <a  href="<?php echo e(url("editar_usuario/$us->iduser")); ?> " ><span class="glyphicon glyphicon-pencil"></span></a> </td>
+
+
+        </tr>
+
+
+
+
+        <?php endforeach; ?>
+
+
+
+
+        </tbody>
+    </table>
+    <div style=" text-align: center">
+        <?php echo $user->render();; ?>
+
+
+    </div>
+
+
+
+    <script>
+        $('.mayusculas').keyup(function()
+        {
+            $(this).val($(this).val().toUpperCase());
+        });
+
+    </script>
+
+
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

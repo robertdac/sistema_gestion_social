@@ -1,0 +1,137 @@
+<div class="panel panel-primary">
+    <div class=" text-center panel-heading">III. CONFORMACION DEL GRUPO FAMILIAR:</div>
+    <div class="panel-body">
+        <p class=" alert-info text-center"></p>
+
+        <div class="table-responsive">
+            <table id="ingresos" class="table table-bordered">
+                <tr class="info">
+                    <th class="text-center" colspan="12">INGRESOS POR PERSONA</th>
+                </tr>
+
+                <tr>
+                    <th class="col-xs-1"> Jefe de Familia</th>
+                    <th class="col-xs-2">Nombre y Apellido</th>
+                    <th>Edad</th>
+                    <th>Parentesco</th>
+                    <th>Ocupacion Actual</th>
+                    <th>Nivel de Instruccion</th>
+                    <th>Ingresos</th>
+                    <th class="col-xs-1">Cantidad en Bs.</th>
+                    <?php /*    <th></th>*/ ?>
+
+                </tr>
+
+                <tbody class="input_fields_wrap">
+                <?php $totali = 0; ?>
+
+
+
+                <?php foreach($informe[0]->ingresos_grupo as $ingresos): ?>
+                    <tr>
+                        <td class="text-center">  <?php if($ingresos->jefe_familia == 1 ): ?>  <span
+                                    class="glyphicon glyphicon-ok"></span>  <?php endif; ?>     </td>
+                        <td> <?php echo $ingresos->nombre_apellido; ?>  </td>
+                        <td><?php echo $ingresos->edad; ?> </td>
+                        <td> <?php echo $ingresos->parentesco['nombre']; ?> </td>
+                        <td> <?php echo $ingresos->ocupacion['nombre']; ?> </td>
+                        <td> <?php echo $ingresos->nivel_instruccion['nombre']; ?> </td>
+                        <td><?php echo $ingresos->consulta_ingresos['nombre']; ?> </td>
+                        <td><?php echo $ingresos->cantidad; ?></td>
+
+                        <?php $totali += $ingresos->cantidad   ?>
+                    </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <br>
+
+        <table id="egresos" class="table table-bordered">
+            <tr class="info">
+                <th colspan="12" class="text-center">
+                    EGRESO MENSUAL POR GRUPO FAMILIAR
+                </th>
+            </tr>
+
+            <tr>
+                <?php foreach($informe[0]->egresos_grupo as $egresos): ?>
+                    <th> <?php echo $egresos->nombre; ?></th>
+
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+
+                <?php $totale = 0; ?>
+                <?php foreach($informe[0]->egresos_grupo as $egresos): ?>
+                    <td> <?php echo $egresos->cantidad; ?></td>
+                    <?php  $totale += $egresos->cantidad  ?>
+                <?php endforeach; ?>
+
+            </tr>
+
+        </table>
+
+        <div>
+            <br>
+
+            <div class="row">
+                <div class="col-xs-4"> <?php echo Form::label('Tipo','Otros Ingresos:');; ?></div>
+                <div class="col-xs-4"> <?php echo Form::label('Tipo','Ingreso Total:');; ?></div>
+                <div class="col-xs-4"> <?php echo Form::label('Tipo','Egreso Total:');; ?></div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-4"> <?php echo Form::text("otrosIngresos",null,["class"=>"form-control" ]);; ?></div>
+                <div class="col-xs-4"> <?php echo Form::text("ingresoTotal",$totali,['id'=>"income_sum",'readonly'=>true,"class"=>"form-control total"]);; ?></div>
+                <div class="col-xs-4"> <?php echo Form::text("egresoTotal", $totale ,[ 'id'=>"income_sum2","class"=>"form-control",'readonly'=>true]);; ?></div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="panel panel-primary">
+    <div class=" text-center panel-heading">IV. DATOS SOCIO-DEMOGRAFICO DEL GRUPO FAMILIAR:</div>
+
+    <div class="panel-body">
+
+        <table>
+
+            <tr class="table table-bordered">
+                <th colspan="12" class="text-center">
+                    TENENCIA DE LA VIVIENDA:
+                </th>
+
+                <?php foreach($socio['vivienda'] as $vivi): ?>
+                    <th> <?php echo $vivi->nombre; ?></th>
+
+                <?php endforeach; ?>
+
+
+
+            </tr>
+
+
+
+
+
+        </table>
+
+
+
+
+
+
+
+
+    </div>
+
+
+</div>

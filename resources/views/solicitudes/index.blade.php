@@ -28,7 +28,7 @@
 
 
 
-    <table class="table table-bordered table-striped">
+    <table id="sol" class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>Codigo</th>
@@ -56,14 +56,20 @@
                 <td>{!!$sol->estatus->descripcion  !!}</td>
 
                 <td class=" text-center">
-                    <a  data-toggle="modal" data-target="#myModal" title="Ver ficha" href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span class="glyphicon glyphicon-pencil"></span></a>
-                    <a target="_blank" title="Informe Socio Economico" href="{{ url("informe_socio_economico/$sol->id")  }} "> <span style="margin-right: 10px; " class="glyphicon glyphicon-list-alt"></span></a>
+                    <a data-toggle="modal" data-target="#myModal" title="Ver ficha"
+                       href="{{ url("ficha/$sol->id")  }} "><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a title="Editar" href="{{ url("editar_solicitudes/$sol->id")  }} "><span
+                                class="glyphicon glyphicon-pencil"></span></a>
+                    <a target="_blank" title="Informe Socio Economico"
+                       href="{{ url("informe_socio_economico/$sol->id")  }} "> <span style="margin-right: 10px; "
+                                                                                     class="glyphicon glyphicon-list-alt"></span></a>
                     {{--SOLO COORDINADORES PUEDEN VERIFICAR LA SOLICITUD --}}
-                        @if(Auth::user()->id_perfil == 5  )
-                    <a title="Verificar" href="{{ url("verificar/$sol->id")  }} "> <span style="margin-right: 10px;"class="glyphicon glyphicon-ok"></span></a>
-                        @elseif(Auth::user()->id_perfil == 4)
-                        <a title="Aprobar" href="{{ url("aprobar/$sol->id")  }} "> <span style="margin-right: 10px;"class="glyphicon glyphicon-ok"></span></a>
+                    @if(Auth::user()->id_perfil == 5  && $sol->estatus->id == 1  )
+                        <a title="Verificar" href="{{ url("verificar/$sol->id")  }} "> <span style="margin-right: 10px;"
+                                                                                             class="glyphicon glyphicon-ok"></span></a>
+                    @elseif(Auth::user()->id_perfil == 4 && $sol->estatus->id == 2)
+                        <a title="Aprobar" href="{{ url("aprobar/$sol->id")  }} "> <span style="margin-right: 10px;"
+                                                                                         class="glyphicon glyphicon-ok"></span></a>
 
                 @endif
             </tr>
@@ -105,27 +111,76 @@
     </div>
 
 
+    <style>
+
+        #sol_filter {
+
+        }
+
+
+    </style>
+
+
+
+
 
     <script>
 
 
-  /*      $('.verFicha').on('click', function () {
-            // var id=$(this).data('id');
-          //  alert(id);
-            $('.modal-body').html('loading');
-            $.ajax({
-                type: 'GET',
-                url: '',
-                // data:{id: id},
-               /!* dataType: 'json',
-                success: function (data) {
-                    $('.modal-body').html(data[0].id);
-                },
-                error: function (err) {
-                    alert("error" + JSON.stringify(err));
-                }*!/
-            })
-        });*/
+        /*      $('.verFicha').on('click', function () {
+         // var id=$(this).data('id');
+         //  alert(id);
+         $('.modal-body').html('loading');
+         $.ajax({
+         type: 'GET',
+         url: '',
+         // data:{id: id},
+         /!* dataType: 'json',
+         success: function (data) {
+         $('.modal-body').html(data[0].id);
+         },
+         error: function (err) {
+         alert("error" + JSON.stringify(err));
+         }*!/
+         })
+         });*/
+
+
+        $(document).ready(function () {
+
+
+            $('#sol_filter').addClass("col-xs-3 pull-right input-group");
+
+
+            $('#sol').DataTable({
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+            });
+
+        });
 
 
         $('.mayusculas').keyup(function () {

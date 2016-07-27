@@ -1,0 +1,73 @@
+<?php $__env->startSection('content'); ?>
+
+    <div class="container">
+        <div class="content">
+
+
+
+            <?php echo Form::text('cedula1',null,['id'=>'valor','onblur'=>"getData($('#valor').val())"]); ?>
+
+            <br>
+            <?php echo Form::text('cedula',null,['class'=>'aqui']); ?>
+
+
+
+            <button id="action-button">Click me to load info!</button>
+            <div id="info"></div>
+
+
+        </div>
+    </div>
+    </body>
+
+
+    <script>
+
+        [{  "strnacionalidad": "V",
+            "intcedula": 1,
+            "strnombre_primer": "ISAIAS",
+            "strnombre_segundo": "",
+            "strapellido_primer": "MEDINA",
+            "strapellido_segundo": "ANGARITA",
+            "dtmnacimiento": "1897-07-06 00:00:00",
+            "strgenero": "F",
+            "clvestado_civil": 0,
+            "strestado_civil": null
+        }]
+
+
+        //$(document).ready(function () {
+
+            function getData(id) {
+
+                        $.ajax({
+                        url: "<?php echo e(url('consulta')); ?>",
+                        data: "id=" + id
+                        ,
+                        error: function () {
+                            $('#info').html('<p>An error has occurred</p>');
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $("[name=cedula]").val(data[0].strnombre_primer);
+
+                        },
+                        type: 'GET'
+                    });
+               // });
+
+
+            }
+       // });
+    </script>
+
+
+
+
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

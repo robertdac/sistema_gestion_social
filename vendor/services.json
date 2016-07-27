@@ -1,6 +1,8 @@
 {
     "providers": [
+        "Intervention\\Image\\ImageServiceProvider",
         "Aivo\\Highchart\\HighchartServiceProvider",
+        "Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Collective\\Html\\HtmlServiceProvider",
         "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
@@ -32,7 +34,9 @@
         "App\\Providers\\RouteServiceProvider"
     ],
     "eager": [
+        "Intervention\\Image\\ImageServiceProvider",
         "Aivo\\Highchart\\HighchartServiceProvider",
+        "Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Illuminate\\Auth\\AuthServiceProvider",
         "Illuminate\\Routing\\ControllerServiceProvider",

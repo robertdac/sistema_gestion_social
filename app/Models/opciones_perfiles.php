@@ -12,7 +12,6 @@ class opciones_perfiles extends Model
 
     static function  menu($id, $user)
     {
-
         /*          return DB::select('SELECT * FROM surags.opciones WHERE id IN(SELECT id_opcion FROM surags.opciones_perfiles where id_opcion NOT IN ( 1, 7 ) )');*/
 
         return DB::select("select o.id, o.nombre,o.url ,Deriv1.Count from opciones o inner join opciones_perfiles op on o.id = op.id_opcion
@@ -22,7 +21,6 @@ class opciones_perfiles extends Model
     GROUP BY padre
     )Deriv1 ON o.id = Deriv1.padre
     WHERE o.padre =" . $id . " AND o.estatus = 1 AND op.id_usuario=" . $user . " ORDER BY op.id_opcion ASC ");
-
 
     }
 
